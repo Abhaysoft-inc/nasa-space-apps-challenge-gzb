@@ -1,0 +1,59 @@
+{
+  "ch1": {
+    "bg": "/games/bion-m1/backgrounds/ch1_lab_bg.jpg",
+    "layers": [
+      "/games/bion-m1/layers/ch1_racks_mg.png",
+      "/games/bion-m1/layers/ch1_table_fg.png"
+    ],
+    "characters": {
+      "sarahIdle": "/games/bion-m1/characters/sarah_idle.png",
+      "sarahPoint": "/games/bion-m1/characters/sarah_point.png"
+    },
+    "props": {
+      "habitat": "/games/bion-m1/props/mouse_habitat.png"
+    }
+  },
+  "ch2": {
+    "bg": "/games/bion-m1/backgrounds/ch2_pad_bg.jpg",
+    "rocket": "/games/bion-m1/layers/ch2_rocket.png",
+    "smoke": "/games/bion-m1/layers/ch2_ground_smoke.png",
+    "exhaust": "/games/bion-m1/effects/ch2_exhaust_spritesheet.png"
+  },
+  "ch3": {
+    "controlBg": "/games/bion-m1/backgrounds/ch3_control_bg.jpg",
+    "hudFrame": "/games/bion-m1/ui/ch3_hud_frame.png",
+    "graphCard": "/games/bion-m1/ui/ch3_graph_card.png",
+    "habitatBg": "/games/bion-m1/backgrounds/ch3_habitat_bg.jpg",
+    "mice": [
+      "/games/bion-m1/props/mouse_float_a.png",
+      "/games/bion-m1/props/mouse_float_b.png",
+      "/games/bion-m1/props/mouse_float_spin.png"
+    ]
+  },
+  "ch4": {
+    "vignette": "/games/bion-m1/backgrounds/ch4_discovery_vignette.jpg",
+    "pre": "/games/bion-m1/props/ch4_bone_pre.jpg",
+    "day14": "/games/bion-m1/props/ch4_bone_day14.jpg",
+    "highlight": "/games/bion-m1/effects/ch4_loss_highlight.png"
+  },
+  "ch5": {
+    "blueprint": "/games/bion-m1/ui/ch5_blueprint_panel.png",
+    "device": "/games/bion-m1/props/ch5_exercise_device.png",
+    "knob": "/games/bion-m1/ui/ch5_knob.png",
+    "slider": "/games/bion-m1/ui/ch5_slider.png"
+  },
+  "ch6": {
+    "bg": "/games/bion-m1/backgrounds/ch6_steppe_bg.jpg",
+    "capsule": "/games/bion-m1/props/ch6_capsule.png",
+    "team": "/games/bion-m1/layers/ch6_recovery_team.png",
+    "heli": "/games/bion-m1/layers/ch6_heli.png"
+  },
+  "ui": {
+    "dialog": "/games/bion-m1/ui/dialog_bubble.png",
+    "vignette": "/games/bion-m1/effects/screen_vignette.png",
+    "particles": [
+      "/games/bion-m1/effects/particles_soft_large.png",
+      "/games/bion-m1/effects/particles_soft_small.png"
+    ]
+  }
+}
