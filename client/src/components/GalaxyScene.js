@@ -284,6 +284,7 @@ export default function GalaxyScene({ onPaperClick, currentEra, selectedCategory
           )}
           onClick={() => onPaperClick(paper)}
           onHover={setHoveredPaper}
+          isPlaying={isPlaying}
         />
       ))}
 
@@ -296,6 +297,7 @@ export default function GalaxyScene({ onPaperClick, currentEra, selectedCategory
             conn.fromId === selectedPaper?.id || 
             conn.toId === selectedPaper?.id
           }
+          isPlaying={isPlaying}
         />
       ))}
 
