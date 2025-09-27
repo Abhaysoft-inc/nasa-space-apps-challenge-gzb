@@ -6,6 +6,10 @@ const PaperHeader = ({ paperData }) => {
             <h1 className="text-3xl font-bold text-gray-900 mb-4">
                 {paperData.title}
             </h1>
+            {/* Authors - One Line under title */}
+            <p className="text-sm text-gray-600 mb-4 whitespace-nowrap overflow-hidden text-ellipsis">
+                <span className="font-medium">By:</span> {paperData.authors.join(', ')}
+            </p>
 
             {/* Paper Metadata */}
             <div className="flex flex-wrap gap-2 mb-6">
@@ -57,25 +61,6 @@ const PaperHeader = ({ paperData }) => {
                         PubMed Central ID: {paperData.pmcid}
                         <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900"></div>
                     </div>
-                </div>
-            </div>
-
-            {/* Authors */}
-            <div className="mb-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">Authors</h3>
-                <div className="flex flex-wrap gap-2">
-                    {paperData.authors.map((author, index) => (
-                        <span key={index} className="bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-sm">
-                            {author}
-                        </span>
-                    ))}
-                </div>
-            </div>
-
-            {/* Additional Info */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-600">
-                <div>
-                    <span className="font-medium">PMC ID:</span> {paperData.pmcid}
                 </div>
             </div>
         </div>
