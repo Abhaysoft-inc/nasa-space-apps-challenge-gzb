@@ -92,6 +92,7 @@ export default function SpaceExplorationLanding() {
               selectedCategory={selectedCategory}
               searchTerm={searchTerm}
               selectedPaper={selectedPaper}
+              isPlaying={isPlaying}
             />
             
             {/* Cosmic Environment */}
@@ -103,7 +104,7 @@ export default function SpaceExplorationLanding() {
               factor={0.6} 
               saturation={0.0} 
               fade={true} 
-              speed={0.1}
+              speed={isPlaying ? 0.1 : 0}
             />
             
             {/* Dynamic Lighting (brighter to ensure visibility) */}
@@ -120,8 +121,8 @@ export default function SpaceExplorationLanding() {
               enableRotate={true}
               minDistance={20}
               maxDistance={300}
-              autoRotate={!selectedPaper}
-              autoRotateSpeed={1.0}
+              autoRotate={!selectedPaper && isPlaying}
+              autoRotateSpeed={isPlaying ? 1.0 : 0}
               dampingFactor={0.08}
               enableDamping={true}
               rotateSpeed={0.8}
@@ -137,7 +138,7 @@ export default function SpaceExplorationLanding() {
             camera={{ position: [0, 0, 60], fov: 70 }}
             gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
           >
-            <Stars raycast={null} radius={400} depth={80} count={3000} factor={0.5} fade speed={0.05} />
+            <Stars raycast={null} radius={400} depth={80} count={3000} factor={0.5} fade speed={isPlaying ? 0.05 : 0} />
           </Canvas>
         </div>
 

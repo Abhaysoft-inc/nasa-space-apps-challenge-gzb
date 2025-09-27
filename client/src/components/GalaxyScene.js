@@ -223,7 +223,7 @@ const generateAbstract = (category) => {
   return `This groundbreaking study examines ${category.toLowerCase()} in space environments, providing critical insights for future Mars missions and long-duration spaceflight. Our research reveals significant implications for astronaut health and mission success.`;
 };
 
-export default function GalaxyScene({ onPaperClick, currentEra, selectedCategory, searchTerm, selectedPaper }) {
+export default function GalaxyScene({ onPaperClick, currentEra, selectedCategory, searchTerm, selectedPaper, isPlaying = true }) {
   const groupRef = useRef();
   const [hoveredPaper, setHoveredPaper] = useState(null);
   const { camera } = useThree();
@@ -261,9 +261,9 @@ export default function GalaxyScene({ onPaperClick, currentEra, selectedCategory
     return conns;
   }, [visiblePapers]);
 
-  // Auto-rotate galaxy
+  // Auto-rotate galaxy (pause when not playing)
   useFrame((state, delta) => {
-    if (groupRef.current && !selectedPaper) {
+    if (groupRef.current && !selectedPaper && isPlaying) {
       groupRef.current.rotation.y += delta * 0.06;
       groupRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.2) * 0.05;
     }
@@ -318,7 +318,7 @@ export default function GalaxyScene({ onPaperClick, currentEra, selectedCategory
 }
 
 // Scientific Research Visual Component with Real Imagery
-function ResearchStar({ paper, isSelected, isHovered, isHighlighted, onClick, onHover }) {
+function ResearchStar({ paper, isSelected, isHovered, isHighlighted, onClick, onHover, isPlaying }) {
   const meshRef = useRef();
   const glowRef = useRef();
   const [texture, setTexture] = useState(null);
@@ -375,20 +375,28 @@ function ResearchStar({ paper, isSelected, isHovered, isHighlighted, onClick, on
     };
   }, [paper.imageUrl, paper.fallbackUrl, textureLoader]);
 
-  // Animation loop
+  // Animation loop (paused when not playing)
   useFrame((state) => {
     if (meshRef.current) {
-      // Very gentle rotation
-      meshRef.current.rotation.y += 0.002;
-      meshRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.2 + paper.id * 0.1) * 0.02;
-      // Very subtle floating
-      meshRef.current.position.y = paper.position[1] + Math.sin(state.clock.elapsedTime * 0.4 + paper.id * 0.2) * 0.03;
+      if (isPlaying) {
+        // Very gentle rotation
+        meshRef.current.rotation.y += 0.002;
+        meshRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.2 + paper.id * 0.1) * 0.02;
+        // Very subtle floating
+        meshRef.current.position.y = paper.position[1] + Math.sin(state.clock.elapsedTime * 0.4 + paper.id * 0.2) * 0.03;
+      } else {
+        meshRef.current.position.y = paper.position[1];
+      }
     }
 
     if (glowRef.current) {
-      // Tiny subtle glow
-      const glowIntensity = 0.08 + Math.sin(state.clock.elapsedTime * 0.6 + paper.id * 0.05) * 0.05;
-      glowRef.current.material.opacity = glowIntensity;
+      if (isPlaying) {
+        // Tiny subtle glow
+        const glowIntensity = 0.08 + Math.sin(state.clock.elapsedTime * 0.6 + paper.id * 0.05) * 0.05;
+        glowRef.current.material.opacity = glowIntensity;
+      } else {
+        glowRef.current.material.opacity = 0.12; // steady glow
+      }
     }
   });
 
@@ -516,7 +524,7 @@ function ResearchStar({ paper, isSelected, isHovered, isHighlighted, onClick, on
 }
 
 // Citation Connection Lines
-function CitationLink({ connection, isVisible }) {
+function CitationLink({ connection, isVisible, isPlaying = true }) {
   const meshRef = useRef();
 
   // Compute cylinder transform to connect two points
@@ -535,10 +543,15 @@ function CitationLink({ connection, isVisible }) {
 
   useFrame((state) => {
     if (!isVisible || !meshRef.current) return;
-    const t = state.clock.elapsedTime;
-    const a = 0.15 + Math.sin(t * 0.8 + connection.fromId * 0.1) * 0.1;
     const mat = meshRef.current.material;
-    if (mat) mat.opacity = Math.max(0.08, a);
+    if (!mat) return;
+    if (isPlaying) {
+      const t = state.clock.elapsedTime;
+      const a = 0.15 + Math.sin(t * 0.8 + connection.fromId * 0.1) * 0.1;
+      mat.opacity = Math.max(0.08, a);
+    } else {
+      mat.opacity = 0.2;
+    }
   });
 
   if (!isVisible) return null;
