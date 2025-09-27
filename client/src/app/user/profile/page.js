@@ -1,6 +1,10 @@
 import React from 'react'
 import Image from 'next/image'
 import ContributionHeatmap from '../../../components/profile/ContributionHeatmap'
+import LearningPathways from '../../../components/profile/LearningPathways'
+import ProgressOrbitMap from '../../../components/profile/ProgressOrbitMap'
+import NextRecommendations from '../../../components/profile/NextRecommendations'
+import KnowledgeGamesSection from '../../../components/profile/KnowledgeGamesSection'
 
 export default function ProfilePage() {
     // Mock data (replace with real data when backend is ready)
@@ -44,8 +48,28 @@ export default function ProfilePage() {
 
     // Derived stats
     const weeklyActivity = getWeeklyActivity()
-    const contributions = getContributionData(52) // generate up to a year; renderer will cap to fit
+    const contributions = getContributionData(52)
     const topicDistribution = topics.map(t => ({ name: t.name, value: t.read }))
+
+    // Learning Path & Recommendations (mock)
+    const stages = [
+        { id: 'fundamentals', title: 'Space Biology Fundamentals', blurb: 'Core concepts and terminology', progress: 1 },
+        { id: 'microgravity', title: 'Microgravity Effects', blurb: 'Physiology and cellular changes', progress: 0.6, requires: ['fundamentals'] },
+        { id: 'applications', title: 'Mission Applications', blurb: 'Translate science to mission design', progress: 0.15, requires: ['microgravity'] },
+    ]
+    const completedIds = ['fundamentals']
+    const orbitNodes = [
+        { id: 'f', label: 'Fundamentals', completed: true },
+        { id: 'm', label: 'Microgravity', completed: false },
+        { id: 'r', label: 'Radiation', completed: false },
+        { id: 'a', label: 'Applications', completed: false },
+    ]
+    const progressRatio = 0.35
+    const recs = [
+        { id: 'p1', title: 'Bone Density Changes in Microgravity', authors: 'Chen et al.', tags: ['Human Biology','ISS'], reason: 'Builds on your interest in physiology' },
+        { id: 'p2', title: 'Plant Growth Strategies for Mars', authors: 'Rodriguez et al.', tags: ['Plant Biology','Mars'], reason: 'Related to Microgravity Effects pathway' },
+        { id: 'p3', title: 'Shielding Against Cosmic Rays', authors: 'Kim et al.', tags: ['Radiation','Materials'], reason: 'High impact potential for missions' },
+    ]
 
     return (
         <div className="min-h-screen bg-gray-50">
@@ -81,6 +105,11 @@ export default function ProfilePage() {
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     {/* Left: Progress and Activity */}
                     <div className="lg:col-span-2 space-y-8">
+                        {/* Learning Pathways */}
+                        <LearningPathways stages={stages} completedIds={completedIds} />
+
+                        {/* Visual Progress Map */}
+                        <ProgressOrbitMap nodes={orbitNodes} progress={progressRatio} />
 
                         {/* Activity: Heatmap + Weekly Bars */}
                         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
@@ -98,6 +127,12 @@ export default function ProfilePage() {
                                 </div>
                             </div>
                         </div>
+
+                        {/* Recommendations */}
+                        <NextRecommendations items={recs} />
+
+                        {/* Knowledge Assessment Games */}
+                        <KnowledgeGamesSection seed={3} />
 
 
 
