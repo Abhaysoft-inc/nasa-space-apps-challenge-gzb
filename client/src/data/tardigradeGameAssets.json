@@ -1,0 +1,180 @@
+{
+  "gameTitle": "Tardigrade: The Ultimate Survivors",
+  "chapters": [
+    {
+      "id": 1,
+      "title": "Discovery in the Lab",
+      "description": "Dr. Elena Rodriguez discovers mysterious microscopic creatures in a pond sample",
+      "duration": "3-5 minutes",
+      "learningObjectives": [
+        "Understanding tardigrade biology and appearance",
+        "Scientific method and observation skills",
+        "Introduction to extremophile organisms"
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Extreme Testing",
+      "description": "Design and conduct experiments to test tardigrade survival limits",
+      "duration": "5-8 minutes",
+      "learningObjectives": [
+        "Experimental design principles",
+        "Understanding extreme environmental conditions",
+        "Concept of cryptobiosis and suspended animation"
+      ]
+    },
+    {
+      "id": 3,
+      "title": "NASA Partnership",
+      "description": "Collaborate with NASA to explore space applications",
+      "duration": "3-4 minutes",
+      "learningObjectives": [
+        "Real-world applications of basic research",
+        "Space exploration challenges",
+        "Interdisciplinary scientific collaboration"
+      ]
+    },
+    {
+      "id": 4,
+      "title": "Space Mission",
+      "description": "Send tardigrades to the International Space Station",
+      "duration": "4-6 minutes",
+      "learningObjectives": [
+        "Space environment conditions",
+        "Real ISS experiments with tardigrades",
+        "Scientific data analysis and interpretation"
+      ]
+    },
+    {
+      "id": 5,
+      "title": "Future Applications",
+      "description": "Explore how tardigrade research protects Mars astronauts",
+      "duration": "3-5 minutes",
+      "learningObjectives": [
+        "Biomimicry and bio-inspired engineering",
+        "Mars mission challenges",
+        "Future of space exploration"
+      ]
+    }
+  ],
+  "researchPapers": [
+    {
+      "title": "Tardigrades Use Intrinsically Disordered Proteins to Survive Desiccation",
+      "year": "2017",
+      "journal": "Molecular Cell",
+      "summary": "Study revealing how tardigrades use unique proteins to survive extreme dehydration",
+      "relevance": "Explains the molecular mechanisms behind tardigrade resilience"
+    },
+    {
+      "title": "Tardigrades survive exposure to space in low Earth orbit",
+      "year": "2008", 
+      "journal": "Current Biology",
+      "summary": "First study documenting tardigrade survival in actual space conditions",
+      "relevance": "Provides the scientific foundation for space applications in the game"
+    },
+    {
+      "title": "The biology of tardigrade disordered proteins in extreme stress tolerance",
+      "year": "2020",
+      "journal": "Communications Biology",
+      "summary": "Advanced research on the specific proteins that enable tardigrade survival",
+      "relevance": "Modern understanding of tardigrade biology for medical applications"
+    },
+    {
+      "title": "Production of reactive oxygen species and involvement of bioprotectants during anhydrobiosis",
+      "year": "2020",
+      "journal": "Biology Open",
+      "summary": "Research on how tardigrades protect themselves from cellular damage during dehydration",
+      "relevance": "Understanding antioxidant mechanisms relevant to radiation protection"
+    }
+  ],
+  "scientificFacts": [
+    {
+      "fact": "Tardigrades can survive temperatures as low as -272°C (near absolute zero) and as high as 150°C",
+      "source": "Multiple tardigrade survival studies",
+      "gameRelevance": "Justifies extreme temperature testing in Chapter 2"
+    },
+    {
+      "fact": "68% of tardigrades survived 10 days of space exposure on the FOTON-M3 mission in 2007",
+      "source": "Jönsson et al., 2008",
+      "gameRelevance": "Basis for NASA partnership and space mission chapters"
+    },
+    {
+      "fact": "Tardigrades can lose up to 99% of their body water and survive decades in this state",
+      "source": "Guidetti & Jönsson, 2002",
+      "gameRelevance": "Explains cryptobiosis mechanism central to game narrative"
+    },
+    {
+      "fact": "The DSUP (Damage Suppressor) protein is unique to tardigrades and protects DNA from damage",
+      "source": "Hashimoto et al., 2016",
+      "gameRelevance": "Scientific basis for genetic research path in Chapter 3"
+    },
+    {
+      "fact": "Tardigrades can withstand radiation doses 1000 times higher than what would kill humans",
+      "source": "Horikawa et al., 2006",
+      "gameRelevance": "Justifies radiation protection applications for Mars missions"
+    }
+  ],
+  "gameElements": {
+    "scoring": {
+      "discoveryPoints": 10,
+      "experimentPoints": 15,
+      "partnershipePoints": 25,
+      "missionPoints": 50,
+      "applicationPoints": 35
+    },
+    "achievements": [
+      {
+        "id": "first_discovery",
+        "title": "Microscope Master",
+        "description": "Successfully identified tardigrades in the lab",
+        "icon": "🔬",
+        "points": 100
+      },
+      {
+        "id": "extreme_survivor", 
+        "title": "Extreme Conditions Expert",
+        "description": "Achieved >90% tardigrade survival in harsh conditions",
+        "icon": "🏆",
+        "points": 200
+      },
+      {
+        "id": "nasa_partner",
+        "title": "Space Research Collaborator", 
+        "description": "Successfully partnered with NASA",
+        "icon": "🚀",
+        "points": 150
+      },
+      {
+        "id": "space_pioneer",
+        "title": "Space Biology Pioneer",
+        "description": "Completed successful space mission",
+        "icon": "🛰️",
+        "points": 300
+      },
+      {
+        "id": "mars_protector",
+        "title": "Mars Mission Enabler",
+        "description": "Developed applications for Mars colonization",
+        "icon": "🔴",
+        "points": 500
+      }
+    ]
+  },
+  "educationalLinks": [
+    {
+      "title": "NASA Astrobiology Institute - Tardigrades",
+      "url": "https://astrobiology.nasa.gov/",
+      "description": "Official NASA resources on tardigrades and astrobiology"
+    },
+    {
+      "title": "International Space Station Research",
+      "url": "https://www.nasa.gov/mission_pages/station/research/",
+      "description": "Learn about real biological experiments conducted on the ISS"
+    },
+    {
+      "title": "Extremophiles and Astrobiology",
+      "url": "https://www.nasa.gov/audience/forstudents/k-4/stories/extreme-life.html",
+      "description": "NASA educational content about life in extreme environments"
+    }
+  ]
+}

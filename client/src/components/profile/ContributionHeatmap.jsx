@@ -49,10 +49,10 @@ export default function ContributionHeatmap({
 
     const levels = [
         "bg-gray-100",
-        "bg-green-100",
-        "bg-green-200",
-        "bg-green-400",
-        "bg-green-600",
+        "bg-gray-200",
+        "bg-gray-400",
+        "bg-gray-600",
+        "bg-gray-800",
     ]
 
     return (
@@ -87,10 +87,10 @@ export default function ContributionHeatmap({
             <div className="mt-2 flex items-center gap-2 text-[10px] text-gray-500">
                 <span>Less</span>
                 <span className="w-3 h-3 rounded bg-gray-100" />
-                <span className="w-3 h-3 rounded bg-green-100" />
-                <span className="w-3 h-3 rounded bg-green-200" />
-                <span className="w-3 h-3 rounded bg-green-400" />
-                <span className="w-3 h-3 rounded bg-green-600" />
+                <span className="w-3 h-3 rounded bg-gray-200" />
+                <span className="w-3 h-3 rounded bg-gray-400" />
+                <span className="w-3 h-3 rounded bg-gray-600" />
+                <span className="w-3 h-3 rounded bg-gray-800" />
                 <span>More</span>
             </div>
         </div>

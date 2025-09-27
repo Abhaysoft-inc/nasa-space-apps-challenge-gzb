@@ -49,13 +49,15 @@ export default function SpaceExplorationLanding() {
       {/* Background video */}
       <video
         className="absolute inset-0 w-full h-full object-cover -z-20"
-        src="/Landing_bg.mp4"
         autoPlay
         muted
         loop
         playsInline
         aria-hidden
-      />
+      >
+        <source src="/landing_bg.mp4" type="video/mp4" />
+        <source src="/Landing_bg.mp4" type="video/mp4" />
+      </video>
   {/* Removed tinted overlay to preserve original video colors */}
       {/* Space Header */}
       <SpaceHeader 

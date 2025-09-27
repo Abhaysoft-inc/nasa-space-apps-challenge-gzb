@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 
 export default function Navbar() {
     const pathname = usePathname();
+    // Hide navbar on home (galaxy) and landing pages
     const hide = pathname === "/" || pathname === "/landing" || pathname?.startsWith("/landing/");
     if (hide) return null;
 
@@ -14,8 +15,8 @@ export default function Navbar() {
                     <div className="h-14 flex items-center justify-between">
                         <div className="flex items-center gap-3">
                             <Link href="/" className="inline-flex items-center gap-2">
-                                <span className="inline-flex items-center justify-center w-8 h-8 rounded bg-gradient-to-br from-yellow-500 to-orange-600 text-white font-semibold">B</span>
-                                <span className="text-sm font-semibold text-gray-900">Space Biolores</span>
+                                <img src={'/logo2.png'} className="w-8 rounded-full" />
+                                <span className="text-lg font-semibold text-gray-900">Biolores</span>
                             </Link>
                         </div>
                         <div className="hidden md:flex items-center gap-6">

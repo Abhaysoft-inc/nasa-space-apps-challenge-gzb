@@ -3,6 +3,8 @@
 import React, { useEffect, useMemo, useState } from "react"
 import assets from "@/data/bionM1Assets.json"
 import Link from "next/link"
+import FullScreenScene from "./FullScreenScene"
+import StoryChoice from "./StoryChoice"
 
 export default function BionM1Game(){
   const [chapter, setChapter] = useState(1)

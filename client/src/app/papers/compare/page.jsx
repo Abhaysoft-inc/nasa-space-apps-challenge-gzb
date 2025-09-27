@@ -185,6 +185,35 @@ export default function ComparePage() {
                         </div>
                     </div>
                 )}
+
+                {/* Consensus & Disagreement section (hard-coded) */}
+                {items.length > 0 && (
+                    <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="rounded-2xl border border-gray-200 bg-white shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-0.5">
+                            <div className="px-4 py-3 border-b border-gray-100 flex items-center gap-2">
+                                <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-emerald-500 text-white text-xs">✓</span>
+                                <h3 className="text-gray-900 font-semibold">Areas of Consensus</h3>
+                            </div>
+                            <ul className="p-4 space-y-2 text-sm text-gray-800">
+                                <li className="flex gap-2"><span className="mt-1 w-1.5 h-1.5 rounded-full bg-emerald-500"></span> All papers acknowledge microgravity as a primary driver of observed physiological changes.</li>
+                                <li className="flex gap-2"><span className="mt-1 w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Use of standardized data collection protocols and ISS-aligned experimental timelines.</li>
+                                <li className="flex gap-2"><span className="mt-1 w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Consensus that long-duration exposure increases the magnitude of effects.</li>
+                            </ul>
+                        </div>
+
+                        <div className="rounded-2xl border border-gray-200 bg-white shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-0.5">
+                            <div className="px-4 py-3 border-b border-gray-100 flex items-center gap-2">
+                                <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-rose-500 text-white text-xs">!</span>
+                                <h3 className="text-gray-900 font-semibold">Areas of Disagreement</h3>
+                            </div>
+                            <ul className="p-4 space-y-2 text-sm text-gray-800">
+                                <li className="flex gap-2"><span className="mt-1 w-1.5 h-1.5 rounded-full bg-rose-500"></span> Divergent interpretations of radiation’s contribution vs. microgravity in total effect size.</li>
+                                <li className="flex gap-2"><span className="mt-1 w-1.5 h-1.5 rounded-full bg-rose-500"></span> Conflicting statistical significance due to small sample sizes and differing controls.</li>
+                                <li className="flex gap-2"><span className="mt-1 w-1.5 h-1.5 rounded-full bg-rose-500"></span> Disagreement on recovery timelines post-landing (days vs. weeks) across studies.</li>
+                            </ul>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     )
