@@ -68,6 +68,13 @@ export default function SpaceHeroPage() {
     // Keep the moon fully opaque once it starts entering
     // (we remove opacity animation to avoid any transparent look)
     const leftWidth = '55%';
+    // Mars section scroll animations
+    const marsSectionRef = useRef(null);
+    const { scrollYProgress: marsProgress } = useScroll({ target: marsSectionRef, offset: ["start start", "end start"] });
+    const marsHeaderY = useTransform(marsProgress, [0, 0.7, 1], [0, -40, -80]);
+    const marsHeaderOpacity = useTransform(marsProgress, [0, 0.6, 0.8], [1, 0.4, 0]);
+    const marsLabelOpacity = useTransform(marsProgress, [0.6, 0.9], [0, 1]);
+    const marsX = useTransform(marsProgress, [0, 1], ["-50%", "0%"]);
 
     const planets = {
         moon: {
@@ -153,16 +160,16 @@ export default function SpaceHeroPage() {
 
                 {/* Left Hero Section - Dynamic width based on selection */}
                 <div className={`flex flex-col justify-center p-8 z-20 transition-all duration-1000 ease-out ${selectedPlanet ? 'w-1/2' : 'w-1/3'}`}>
-                <div className="space-y-6">
+                <div className="space-y-4">
                     {selectedPlanet ? (
                         <>
-                            <h1 className="text-5xl font-bold bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent leading-tight">
+                            <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent leading-tight">
                                 {planets[selectedPlanet].heroText.title}
                             </h1>
-                            <p className="text-xl text-gray-300 leading-relaxed">
+                            <p className="text-base md:text-lg text-gray-300 leading-relaxed">
                                 {planets[selectedPlanet].heroText.subtitle}
                             </p>
-                            <div className="flex space-x-4 mt-8">
+                            <div className="flex space-x-4 mt-6">
                                 <button className="px-6 py-3 bg-gradient-to-r from-orange-500 to-red-600 rounded-full font-semibold hover:from-orange-600 hover:to-red-700 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl">
                                     Explore {planets[selectedPlanet].name}
                                 </button>
@@ -176,13 +183,13 @@ export default function SpaceHeroPage() {
                         </>
                     ) : (
                         <>
-                            <h1 className="text-5xl font-bold bg-white  bg-clip-text text-transparent leading-tight">
+                            <h1 className="text-4xl md:text-5xl font-bold bg-white  bg-clip-text text-transparent leading-tight">
                                 Explore Biolores From Space
                             </h1>
-                            <p className="text-xl text-gray-300 leading-relaxed">
+                            <p className="text-base md:text-lg text-gray-300 leading-relaxed">
                                 Embark on an interplanetary journey through space and time. Click on the celestial bodies to discover their secrets and unlock the mysteries of our solar system.
                             </p>
-                            <div className="flex space-x-4 mt-8">
+                            <div className="flex space-x-4 mt-6">
                                 <button className="px-6 py-3 bg-[#e77d11] rounded-full font-semibold  transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl">
                                     Start Journey
                                 </button>
@@ -381,6 +388,74 @@ export default function SpaceHeroPage() {
                                             <p>Antarctic stations and volcanic fields simulate isolation, dust, and cold for testing life support and biology payloads.</p>
                                         </div>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Section 3: Mars research scroll section */}
+                    <section ref={marsSectionRef} className="relative min-h-screen h-screen overflow-hidden">
+                        {/* Sticky header (navbar style) that retracts */}
+                        <div className="sticky top-0 z-30">
+                            <motion.div style={{ y: marsHeaderY, opacity: marsHeaderOpacity }} className="p-6">
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center space-x-3">
+                                        <span className="text-white font-semibold text-xl">Biolore</span>
+                                    </div>
+                                    <div className="hidden md:flex items-center space-x-8">
+                                        <a href="/" className="text-white/80 hover:text-white transition-colors duration-300 ">Home</a>
+                                        <a href="/papers" className="text-white/80 hover:text-white transition-colors duration-300 ">Research</a>
+                                        <a href="/games" className="text-white/80 hover:text-white transition-colors duration-300 ">Games</a>
+                                        <a href="/mission" className="text-white/80 hover:text-white transition-colors duration-300">Mission</a>
+                                        <button className=" text-white px-6 py-2 rounded-full font-medium transition-all duration-300 transform hover:scale-105 bg-orange-500/90 backdrop-blur-2xl  ">Learn</button>
+                                    </div>
+                                </div>
+                            </motion.div>
+                            {/* Mars label that appears when fully open */}
+                            <motion.div style={{ opacity: marsLabelOpacity }} className="absolute top-6 left-6">
+                                <div className="px-4 py-2 rounded-lg border border-white/20 bg-black/30 backdrop-blur text-white font-semibold">Mars</div>
+                            </motion.div>
+                        </div>
+
+                        {/* Mars GLB slides in from left, leftWidth, full height */}
+                        <motion.div
+                            className="absolute top-0 left-0 h-full z-10 flex items-center justify-start"
+                            style={{ x: marsX, width: leftWidth }}
+                        >
+                            <div className="relative h-full w-full">
+                                <Canvas
+                                    style={{ width: '100%', height: '100%' }}
+                                    gl={{ alpha: true, antialias: true }}
+                                    camera={{ position: [0, 0, 10], fov: 45 }}
+                                >
+                                    <ambientLight intensity={0.4} />
+                                    <directionalLight position={[10, 10, 5]} intensity={1.1} />
+                                    <pointLight position={[-10, -10, -5]} intensity={0.4} color="#4169e1" />
+                                    <pointLight position={[5, -5, 10]} intensity={0.3} color="#ffa500" />
+                                    <Suspense fallback={null}>
+                                        <MarsModel isSelected />
+                                        <OrbitControls enableZoom={false} enablePan={false} autoRotate autoRotateSpeed={0.4} />
+                                    </Suspense>
+                                </Canvas>
+                            </div>
+                        </motion.div>
+
+                        {/* Right-side hardcoded Mars research text */}
+                        <div className="relative z-20 h-full" style={{ marginLeft: leftWidth }}>
+                            <div className="h-full flex items-center">
+                                <div className="max-w-3xl px-6 md:px-12">
+                                    <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">Mars Research Highlights</h2>
+                                    <p className="text-lg text-gray-200 mb-4">
+                                        Investigations on Mars inform habitability, human health, and systems needed for sustained surface operations under dust, cold, and radiation.
+                                    </p>
+                                    <ul className="space-y-3 text-gray-200 text-base list-disc pl-5">
+                                        <li><span className="font-semibold text-white">Regolith Mechanics:</span> Trafficability, excavation, and construction with in-situ materials for habitats and berms.</li>
+                                        <li><span className="font-semibold text-white">Atmospheric Dust & Toxicology:</span> Fine dust behavior, filtration, and health impacts in habitat systems.</li>
+                                        <li><span className="font-semibold text-white">Radiation & Shielding:</span> Dose mapping, storm shelters, and biological responses under galactic cosmic rays.</li>
+                                        <li><span className="font-semibold text-white">ISRU Water & Oxygen:</span> Subsurface ice prospecting and oxygen production from CO₂ or regolith.</li>
+                                        <li><span className="font-semibold text-white">Human Physiology (0.38 g):</span> Locomotion, cardiovascular load, bone/muscle adaptation in Martian gravity.</li>
+                                        <li><span className="font-semibold text-white">Planetary Protection:</span> Clean sampling and bioburden control for life detection missions.</li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
