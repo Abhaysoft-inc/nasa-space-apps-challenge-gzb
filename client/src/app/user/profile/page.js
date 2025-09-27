@@ -1,5 +1,6 @@
 import React from 'react'
 import Image from 'next/image'
+import ContributionHeatmap from '../../../components/profile/ContributionHeatmap'
 
 export default function ProfilePage() {
     // Mock data (replace with real data when backend is ready)
@@ -43,7 +44,7 @@ export default function ProfilePage() {
 
     // Derived stats
     const weeklyActivity = getWeeklyActivity()
-    const contributions = getContributionData(16) // 16 weeks like LeetCode heatmap
+    const contributions = getContributionData(52) // generate up to a year; renderer will cap to fit
     const topicDistribution = topics.map(t => ({ name: t.name, value: t.read }))
 
     return (
@@ -80,6 +81,26 @@ export default function ProfilePage() {
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     {/* Left: Progress and Activity */}
                     <div className="lg:col-span-2 space-y-8">
+
+                        {/* Activity: Heatmap + Weekly Bars */}
+                        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                            <div className="flex items-center justify-between mb-4">
+                                <h2 className="text-lg font-semibold text-gray-900">Activity</h2>
+                                <span className="text-xs text-gray-500">Recent activity</span>
+                            </div>
+
+                            <div className="space-y-6">
+                                <ContributionHeatmap data={contributions} cellSize={12} gap={4} minWeeks={18} maxWeeks={52} />
+
+                                <div>
+                                    <p className="text-sm font-medium text-gray-900 mb-2">This Week</p>
+                                    <MiniBarChart data={weeklyActivity} />
+                                </div>
+                            </div>
+                        </div>
+
+
+
                         {/* Progress by Topic */}
                         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
                             <div className="flex items-center justify-between mb-4">
@@ -108,23 +129,6 @@ export default function ProfilePage() {
                                         </div>
                                     )
                                 })}
-                            </div>
-                        </div>
-
-                        {/* Activity: Heatmap + Weekly Bars */}
-                        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                            <div className="flex items-center justify-between mb-4">
-                                <h2 className="text-lg font-semibold text-gray-900">Activity</h2>
-                                <span className="text-xs text-gray-500">Past {Math.ceil(contributions.length / 7)} weeks</span>
-                            </div>
-
-                            <div className="space-y-6">
-                                <ContributionHeatmap data={contributions} />
-
-                                <div>
-                                    <p className="text-sm font-medium text-gray-900 mb-2">This Week</p>
-                                    <MiniBarChart data={weeklyActivity} />
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -210,41 +214,6 @@ function StatBlock({ label, value, hint }) {
     )
 }
 
-function ContributionHeatmap({ data }) {
-    // data: flat array of length weeks*7, values 0..4
-    const weeks = Math.ceil(data.length / 7)
-    const cells = Array.from({ length: weeks * 7 }, (_, i) => data[i] || 0)
-    const levels = [
-        'bg-gray-100',
-        'bg-green-100',
-        'bg-green-200',
-        'bg-green-400',
-        'bg-green-600',
-    ]
-    return (
-        <div>
-            <div className="grid grid-flow-col auto-cols-max gap-1">
-                {Array.from({ length: weeks }).map((_, w) => (
-                    <div key={w} className="grid grid-rows-7 gap-1">
-                        {Array.from({ length: 7 }).map((_, d) => {
-                            const v = cells[w * 7 + d]
-                            return <div key={d} title={`${v} reads`} className={`w-3 h-3 rounded ${levels[v]}`}></div>
-                        })}
-                    </div>
-                ))}
-            </div>
-            <div className="mt-2 flex items-center gap-2 text-[10px] text-gray-500">
-                <span>Less</span>
-                <span className="w-3 h-3 rounded bg-gray-100" />
-                <span className="w-3 h-3 rounded bg-green-100" />
-                <span className="w-3 h-3 rounded bg-green-200" />
-                <span className="w-3 h-3 rounded bg-green-400" />
-                <span className="w-3 h-3 rounded bg-green-600" />
-                <span>More</span>
-            </div>
-        </div>
-    )
-}
 
 function MiniBarChart({ data }) {
     const max = Math.max(1, ...data.map(d => d.value))
