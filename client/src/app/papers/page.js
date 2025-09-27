@@ -62,7 +62,11 @@ export default function PapersIndexPage() {
     const [query, setQuery] = useState('')
     const [activeTags, setActiveTags] = useState([])
     const [activeDomains, setActiveDomains] = useState([])
-    const [activeYears, setActiveYears] = useState([])
+    // Year range for timeline slider [min, max]
+    const [yearRange, setYearRange] = useState(() => {
+        const years = PAPERS.map(p => p.year)
+        return [Math.min(...years), Math.max(...years)]
+    })
 
     const allTags = useMemo(() => {
         const set = new Set()
@@ -86,10 +90,10 @@ export default function PapersIndexPage() {
             const matchesQuery = !q || p.title.toLowerCase().includes(q)
             const matchesTags = activeTags.length === 0 || activeTags.every(t => p.tags?.includes(t))
             const matchesDomains = activeDomains.length === 0 || activeDomains.includes(p.domain)
-            const matchesYears = activeYears.length === 0 || activeYears.includes(p.year)
-            return matchesQuery && matchesTags && matchesDomains && matchesYears
+            const matchesYearRange = p.year >= yearRange[0] && p.year <= yearRange[1]
+            return matchesQuery && matchesTags && matchesDomains && matchesYearRange
         })
-    }, [query, activeTags, activeDomains, activeYears])
+    }, [query, activeTags, activeDomains, yearRange])
 
     const toggleTag = (tag) => {
         setActiveTags(prev => prev.includes(tag) ? prev.filter(t => t !== tag) : [...prev, tag])
@@ -97,14 +101,30 @@ export default function PapersIndexPage() {
     const toggleDomain = (domain) => {
         setActiveDomains(prev => prev.includes(domain) ? prev.filter(d => d !== domain) : [...prev, domain])
     }
-    const toggleYear = (year) => {
-        setActiveYears(prev => prev.includes(year) ? prev.filter(y => y !== year) : [...prev, year])
+
+    // Dropdown handlers
+    const onDomainsChange = (e) => {
+        const values = Array.from(e.target.selectedOptions, o => o.value)
+        setActiveDomains(values)
+    }
+
+    // Timeline slider handlers
+    const onMinYearChange = (e) => {
+        const v = Number(e.target.value)
+        setYearRange(([lo, hi]) => [Math.min(v, hi), hi])
+    }
+    const onMaxYearChange = (e) => {
+        const v = Number(e.target.value)
+        setYearRange(([lo, hi]) => [lo, Math.max(v, lo)])
     }
 
     const clearFilters = () => {
         setActiveTags([])
         setActiveDomains([])
-        setActiveYears([])
+        // Reset to full year range
+        if (allYears.length) {
+            setYearRange([allYears[allYears.length - 1], allYears[0]])
+        }
     }
 
     return (
@@ -121,7 +141,7 @@ export default function PapersIndexPage() {
                         <div className="sticky top-6 bg-white rounded-xl border border-gray-200 shadow-sm p-4 md:p-5">
                                     <div className="mb-5 flex items-center justify-between">
                                         <h2 className="text-base font-semibold text-gray-900">Filters</h2>
-                                        {(activeTags.length > 0 || activeDomains.length > 0 || activeYears.length > 0) && (
+                                        {(activeTags.length > 0 || activeDomains.length > 0 || (allYears.length > 0 && (yearRange[0] !== allYears[allYears.length - 1] || yearRange[1] !== allYears[0]))) && (
                                             <button
                                                 type="button"
                                                 onClick={clearFilters}
@@ -132,25 +152,20 @@ export default function PapersIndexPage() {
                                         )}
                                     </div>
 
-                                    {/* Domain filter */}
+                                    {/* Domain filter (dropdown) */}
                                     <div className="mb-6">
                                         <h3 className="text-sm font-medium text-gray-900 mb-2">Domain</h3>
-                                        <div className="flex flex-wrap gap-2">
+                                        <select
+                                            multiple
+                                            value={activeDomains}
+                                            onChange={onDomainsChange}
+                                            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                            size={Math.min(8, allDomains.length)}
+                                        >
                                             {allDomains.map(domain => (
-                                                <button
-                                                    key={domain}
-                                                    type="button"
-                                                    onClick={() => toggleDomain(domain)}
-                                                    className={
-                                                        `px-3 py-1.5 rounded-full text-xs border ${activeDomains.includes(domain)
-                                                            ? 'bg-blue-600 text-white border-blue-600'
-                                                            : 'bg-gray-100 text-gray-700 border-gray-200 hover:bg-gray-200'}`
-                                                    }
-                                                >
-                                                    {domain}
-                                                </button>
+                                                <option key={domain} value={domain}>{domain}</option>
                                             ))}
-                                        </div>
+                                        </select>
                                     </div>
 
                                     {/* Tags filter */}
@@ -174,24 +189,35 @@ export default function PapersIndexPage() {
                                         </div>
                                     </div>
 
-                                    {/* Year filter */}
+                                    {/* Year filter (timeline slider) */}
                                     <div>
                                         <h3 className="text-sm font-medium text-gray-900 mb-2">Year</h3>
-                                        <div className="flex flex-wrap gap-2">
-                                            {allYears.map(year => (
-                                                <button
-                                                    key={year}
-                                                    type="button"
-                                                    onClick={() => toggleYear(year)}
-                                                    className={
-                                                        `px-3 py-1.5 rounded-full text-xs border ${activeYears.includes(year)
-                                                            ? 'bg-blue-600 text-white border-blue-600'
-                                                            : 'bg-gray-100 text-gray-700 border-gray-200 hover:bg-gray-200'}`
-                                                    }
-                                                >
-                                                    {year}
-                                                </button>
-                                            ))}
+                                        <div className="mb-2 text-xs text-gray-600 flex items-center justify-between">
+                                            <span>{yearRange[0]}</span>
+                                            <span className="font-medium">{yearRange[0]} - {yearRange[1]}</span>
+                                            <span>{yearRange[1]}</span>
+                                        </div>
+                                        <div className="space-y-2">
+                                            {/* Min year slider */}
+                                            <input
+                                                type="range"
+                                                min={allYears[allYears.length - 1]}
+                                                max={allYears[0]}
+                                                step={1}
+                                                value={yearRange[0]}
+                                                onChange={onMinYearChange}
+                                                className="w-full"
+                                            />
+                                            {/* Max year slider */}
+                                            <input
+                                                type="range"
+                                                min={yearRange[0]}
+                                                max={allYears[0]}
+                                                step={1}
+                                                value={yearRange[1]}
+                                                onChange={onMaxYearChange}
+                                                className="w-full"
+                                            />
                                         </div>
                                     </div>
                         </div>
