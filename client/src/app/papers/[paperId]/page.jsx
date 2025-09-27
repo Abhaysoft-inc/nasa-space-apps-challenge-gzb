@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import PaperHeader from '../../../components/papers/PaperHeader'
 import PaperSummary from '../../../components/papers/PaperSummary'
 import PaperContent from '../../../components/papers/PaperContent'
@@ -10,6 +10,11 @@ import ProfileSidebarCard from '../../../components/profile/ProfileSidebarCard'
 const PapersPage = () => {
     const [chatInput, setChatInput] = useState('')
     const [chatMessages, setChatMessages] = useState([])
+    const [isListening, setIsListening] = useState(false)
+    const [isGenerating, setIsGenerating] = useState(false)
+    const [chatError, setChatError] = useState(null)
+    const recognitionRef = useRef(null)
+    const sessionRef = useRef(0) // increments to invalidate in-flight responses on reset
     // const [isChatOpen, setIsChatOpen] = useState(false)
 
     // Sample paper data
@@ -46,19 +51,196 @@ const PapersPage = () => {
         }
     ]
 
-    const handleChatSubmit = (e) => {
+    const requestChatCompletion = async (prompt) => {
+        const payload = {
+            message: prompt,
+            paper: {
+                title: paperData.title,
+                summary: paperData.summary,
+                keywords: paperData.keywords,
+                authors: paperData.authors,
+                source: paperData.source,
+                date: paperData.date,
+            }
+        }
+
+        const res = await fetch('/api/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+        })
+
+        if (!res.ok) {
+            throw new Error('Chat service unavailable')
+        }
+
+        const data = await res.json()
+        if (data?.reply) return data.reply
+        return 'I could not find a confident answer yet, but I will keep learning from this paper.'
+    }
+
+    useEffect(() => {
+        if (typeof window === 'undefined') return
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
+        if (!SpeechRecognition) return
+        const recognition = new SpeechRecognition()
+        recognition.lang = 'en-US'
+        recognition.interimResults = false
+        recognition.maxAlternatives = 1
+        recognitionRef.current = recognition
+
+        return () => {
+            recognition.stop()
+            recognitionRef.current = null
+        }
+    }, [])
+
+    const handleVoiceInput = () => {
+        if (isGenerating) return
+        const recognition = recognitionRef.current
+        if (!recognition) {
+            alert('Voice search is not supported in this browser.')
+            return
+        }
+        if (isListening) {
+            recognition.stop()
+            setIsListening(false)
+            return
+        }
+        try {
+            setIsListening(true)
+            recognition.onresult = (event) => {
+                const transcript = event.results?.[0]?.[0]?.transcript
+                if (transcript) {
+                    setChatInput(transcript)
+                }
+                setIsListening(false)
+            }
+            recognition.onerror = () => {
+                setIsListening(false)
+            }
+            recognition.onend = () => {
+                setIsListening(false)
+            }
+            recognition.start()
+        } catch (err) {
+            setIsListening(false)
+            console.error('Voice recognition failed', err)
+        }
+    }
+
+    const handleTextToSpeech = (text) => {
+        if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
+            alert('Text-to-speech is not supported in this browser.')
+            return
+        }
+        const synth = window.speechSynthesis
+        synth.cancel()
+        const utterance = new SpeechSynthesisUtterance(text)
+        utterance.lang = 'en-US'
+        synth.speak(utterance)
+    }
+
+    const handleCopyResponse = async (text) => {
+        try {
+            await navigator.clipboard.writeText(text)
+        } catch (err) {
+            console.error('Copy failed', err)
+        }
+    }
+
+    const handleRegenerateResponse = async (index) => {
+        if (isGenerating) return
+        const target = chatMessages[index]
+        if (!target || target.type !== 'ai') return
+
+        const findPrompt = () => {
+            if (target?.prompt) return target.prompt
+            for (let j = index - 1; j >= 0; j -= 1) {
+                if (chatMessages[j]?.type === 'user') {
+                    return chatMessages[j].message
+                }
+            }
+            return null
+        }
+
+        const prompt = findPrompt()
+        if (!prompt) return
+
+        const sessionId = sessionRef.current
+        setIsGenerating(true)
+        setChatError(null)
+        try {
+            const freshReply = await requestChatCompletion(`${prompt}\n\nPlease provide a refreshed perspective or additional insights.`)
+            if (sessionId !== sessionRef.current) return
+            setChatMessages(prev => {
+                const next = [...prev]
+                next.splice(index, 1, {
+                    type: 'ai',
+                    message: freshReply,
+                    prompt,
+                })
+                return next
+            })
+        } catch (err) {
+            console.error('Regenerate failed', err)
+            setChatError('Unable to regenerate right now. Please try again in a moment.')
+        } finally {
+            setIsGenerating(false)
+        }
+    }
+
+    const handleChatSubmit = async (e) => {
         e.preventDefault()
-        if (chatInput.trim()) {
-            setChatMessages([...chatMessages, { type: 'user', message: chatInput }])
-            // Simulate AI response
-            setTimeout(() => {
+        const trimmed = chatInput.trim()
+        if (!trimmed || isGenerating) return
+
+        setChatInput('')
+        setChatError(null)
+        setChatMessages(prev => [...prev, { type: 'user', message: trimmed }])
+        const sessionId = sessionRef.current
+        setIsGenerating(true)
+
+        try {
+            const aiReply = await requestChatCompletion(trimmed)
+            if (sessionId !== sessionRef.current) return
+            setChatMessages(prev => [...prev, { type: 'ai', message: aiReply, prompt: trimmed }])
+        } catch (err) {
+            console.error('Chat request failed', err)
+            if (sessionId === sessionRef.current) {
+                setChatError('We could not fetch a response right now. Showing a fallback note.')
                 setChatMessages(prev => [...prev, {
                     type: 'ai',
-                    message: 'This is a simulated AI response about the paper. In a real implementation, this would connect to an AI service to answer questions about the research paper.'
+                    message: 'Sorry, I could not reach the research assistant service right now. Please try again shortly.',
+                    prompt: trimmed,
+                    error: true
                 }])
-            }, 1000)
-            setChatInput('')
+            }
+        } finally {
+            setIsGenerating(false)
         }
+    }
+
+    const handleResetChat = () => {
+        // Invalidate any in-flight responses
+        sessionRef.current += 1
+        // Stop voice recognition if active
+        try {
+            const rec = recognitionRef.current
+            if (rec) rec.stop()
+        } catch {}
+        // Stop any ongoing speech synthesis
+        try {
+            if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+                window.speechSynthesis.cancel()
+            }
+        } catch {}
+        // Clear UI state
+        setIsListening(false)
+        setIsGenerating(false)
+        setChatError(null)
+        setChatInput('')
+        setChatMessages([])
     }
 
     return (
@@ -71,19 +253,89 @@ const PapersPage = () => {
                         <PaperSummary paperData={paperData} />
                         {chatMessages.length > 0 && (
                             <div className="mt-6 bg-white rounded-2xl shadow-sm border border-gray-100 p-4 md:p-6">
-                                <h3 className="text-lg font-semibold text-gray-900 mb-3">AI Q&A</h3>
+                                <div className="flex items-center justify-between mb-3">
+                                    <h3 className="text-lg font-semibold text-gray-900">AI Q&A</h3>
+                                    <button
+                                        type="button"
+                                        onClick={handleResetChat}
+                                        className="inline-flex items-center gap-1 text-xs px-2 py-1 rounded-full border border-gray-200 bg-white hover:bg-gray-100 text-gray-600"
+                                        title="Reset chat history"
+                                    >
+                                        <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                            <path d="M21 12a9 9 0 11-9-9" />
+                                            <path d="M21 3v7h-7" />
+                                        </svg>
+                                        Reset
+                                    </button>
+                                </div>
                                 <div className="space-y-3">
                                     {chatMessages.map((m, i) => (
                                         <div key={i} className={`flex ${m.type === 'user' ? 'justify-end' : 'justify-start'}`}>
-                                            <div className={`max-w-[85%] md:max-w-[70%] rounded-2xl px-4 py-2 text-sm border ${m.type === 'user'
-                                                    ? 'bg-blue-50 text-blue-900 border-blue-100'
-                                                    : 'bg-gray-50 text-gray-800 border-gray-100'
-                                                }`}>
-                                                {m.message}
+                                            <div className={`flex flex-col gap-1 ${m.type === 'user' ? 'items-end' : 'items-start'}`}>
+                                                <div className={`max-w-[85%] md:max-w-[70%] rounded-2xl px-4 py-2 text-sm border ${m.type === 'user'
+                                                        ? 'bg-blue-50 text-blue-900 border-blue-100'
+                                                        : 'bg-gray-50 text-gray-800 border-gray-100'
+                                                    }`}>
+                                                    {m.message}
+                                                </div>
+                                                {m.type === 'ai' && (
+                                                    <div className="flex gap-2 text-[11px] text-gray-500">
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => handleTextToSpeech(m.message)}
+                                                            className="inline-flex items-center gap-1 px-2 py-1 rounded-full border border-gray-200 bg-white hover:bg-gray-100"
+                                                            title="Listen to response"
+                                                        >
+                                                            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                                                <path d="M11 5L6 9H2v6h4l5 4V5z" />
+                                                                <path d="M15.54 8.46a5 5 0 010 7.07" />
+                                                                <path d="M19.07 5.93a9 9 0 010 12.73" />
+                                                            </svg>
+                                                            TTS
+                                                        </button>
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => handleCopyResponse(m.message)}
+                                                            className="inline-flex items-center gap-1 px-2 py-1 rounded-full border border-gray-200 bg-white hover:bg-gray-100"
+                                                            title="Copy response"
+                                                        >
+                                                            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                                                <rect x="9" y="9" width="13" height="13" rx="2" />
+                                                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                                                            </svg>
+                                                            Copy
+                                                        </button>
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => handleRegenerateResponse(i)}
+                                                            className="inline-flex items-center gap-1 px-2 py-1 rounded-full border border-gray-200 bg-white hover:bg-gray-100"
+                                                            title="Regenerate response"
+                                                        >
+                                                            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                                                <path d="M21 12a9 9 0 11-9-9" />
+                                                                <path d="M21 3v7h-7" />
+                                                            </svg>
+                                                            Retry
+                                                        </button>
+                                                    </div>
+                                                )}
                                             </div>
                                         </div>
                                     ))}
+                                    {isGenerating && (
+                                        <div className="flex justify-start">
+                                            <div className="flex flex-col items-start">
+                                                <div className="inline-flex items-center gap-2 rounded-2xl border border-gray-200 bg-gray-50 px-4 py-2 text-xs text-gray-600">
+                                                    <span className="w-2.5 h-2.5 rounded-full bg-blue-500 animate-ping" />
+                                                    <span>Analyzing paper…</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
+                                {chatError && (
+                                    <p className="text-xs text-red-500 mt-3">{chatError}</p>
+                                )}
                             </div>
                         )}
                         <PaperContent />
@@ -141,6 +393,26 @@ const PapersPage = () => {
                                             className="flex-1 px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                                         />
                                         <button
+                                            type="button"
+                                            onClick={handleVoiceInput}
+                                            className={`w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center transition-colors ${isListening ? 'bg-blue-100 border-blue-300 text-blue-600' : 'bg-white hover:bg-gray-100 text-gray-600'}`}
+                                            title={isListening ? 'Listening…' : 'Voice search'}
+                                        >
+                                            {isListening ? (
+                                                <svg className="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                                    <circle cx="12" cy="12" r="9" strokeOpacity="0.3" />
+                                                    <path d="M21 12a9 9 0 01-9 9" />
+                                                </svg>
+                                            ) : (
+                                                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                                    <path d="M12 1a3 3 0 00-3 3v6a3 3 0 006 0V4a3 3 0 00-3-3z" />
+                                                    <path d="M19 10v2a7 7 0 01-14 0v-2" />
+                                                    <path d="M12 19v4" />
+                                                    <path d="M8 23h8" />
+                                                </svg>
+                                            )}
+                                        </button>
+                                        <button
                                             type="submit"
                                             disabled={!chatInput.trim()}
                                             className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-2 rounded-full hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 text-sm font-medium"
@@ -194,6 +466,26 @@ const PapersPage = () => {
                                         placeholder="What would you like to know about this research?"
                                         className="flex-1 px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                                     />
+                                    <button
+                                        type="button"
+                                        onClick={handleVoiceInput}
+                                        className={`w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center transition-colors ${isListening ? 'bg-blue-100 border-blue-300 text-blue-600' : 'bg-white hover:bg-gray-100 text-gray-600'}`}
+                                        title={isListening ? 'Listening…' : 'Voice search'}
+                                    >
+                                        {isListening ? (
+                                            <svg className="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                                <circle cx="12" cy="12" r="9" strokeOpacity="0.3" />
+                                                <path d="M21 12a9 9 0 01-9 9" />
+                                            </svg>
+                                        ) : (
+                                            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                                <path d="M12 1a3 3 0 00-3 3v6a3 3 0 006 0V4a3 3 0 00-3-3z" />
+                                                <path d="M19 10v2a7 7 0 01-14 0v-2" />
+                                                <path d="M12 19v4" />
+                                                <path d="M8 23h8" />
+                                            </svg>
+                                        )}
+                                    </button>
                                     <button
                                         type="submit"
                                         disabled={!chatInput.trim()}
