@@ -83,23 +83,26 @@ export default function SpaceHeroPage() {
     };
 
     return (
-        <div className="min-h-screen flex overflow-hidden relative">
-            {/* Video Background */}
-            <video
-                autoPlay
-                muted
-                loop
-                playsInline
-                className="absolute inset-0 w-full h-full object-cover z-0"
-            >
-                <source src="/Landing_bg.mp4" type="video/mp4" />
-            </video>
+        <div className="w-full relative">
+            {/* Section 1: Hero */}
+            <section className="relative min-h-screen flex">
+                {/* Video Background */}
+                <video
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    className="absolute inset-0 w-full h-full object-cover z-0"
+                >
+                    <source src="/landing_bg.mp4" type="video/mp4" />
+                    <source src="/Landing_bg.mp4" type="video/mp4" />
+                </video>
 
-            {/* Overlay for better text readability */}
-            <div className="absolute inset-0 bg-black/30 z-10"></div>
+                {/* Overlay for better text readability */}
+                <div className="absolute inset-0 bg-black/30 z-10"></div>
 
-            {/* Navigation Menu */}
-            <nav className="absolute top-0 left-0 right-0 z-30 p-6">
+                {/* Navigation Menu */}
+                <nav className="absolute top-0 left-0 right-0 z-30 p-6">
                 <div className="flex items-center justify-between">
                     {/* Logo */}
                     <div className="flex items-center space-x-3">
@@ -134,10 +137,10 @@ export default function SpaceHeroPage() {
                         </button>
                     </div>
                 </div>
-            </nav>
+                </nav>
 
-            {/* Left Hero Section - Dynamic width based on selection */}
-            <div className={`flex flex-col justify-center p-8 z-20 transition-all duration-1000 ease-out ${selectedPlanet ? 'w-1/2' : 'w-1/3'}`}>
+                {/* Left Hero Section - Dynamic width based on selection */}
+                <div className={`flex flex-col justify-center p-8 z-20 transition-all duration-1000 ease-out ${selectedPlanet ? 'w-1/2' : 'w-1/3'}`}>
                 <div className="space-y-6">
                     {selectedPlanet ? (
                         <>
@@ -178,10 +181,10 @@ export default function SpaceHeroPage() {
                         </>
                     )}
                 </div>
-            </div>
+                </div>
 
-            {/* Right Planet Section - Dynamic width based on selection */}
-            <div className={`relative flex items-center justify-center z-20 transition-all duration-1000 ease-out ${selectedPlanet ? 'w-1/2' : 'w-2/3'}`}>
+                {/* Right Planet Section - Dynamic width based on selection */}
+                <div className={`relative flex items-center justify-center z-20 transition-all duration-1000 ease-out ${selectedPlanet ? 'w-1/2' : 'w-2/3'}`}>
                 {/* Horizontal Planet Container */}
                 <div className={`flex items-center justify-center transition-all duration-1000 ease-out ${selectedPlanet ? 'gap-0' : 'gap-32'} relative w-full h-full`}>
                     {/* Moon 3D Model */}
@@ -302,7 +305,18 @@ export default function SpaceHeroPage() {
                         }}
                     />
                 ))}
-            </div>
+                </div>
+            </section>
+
+            {/* Section 2: Simple content to enable scroll */}
+            <section className="min-h-screen flex items-center justify-center bg-gradient-to-b from-black/40 to-black/20">
+                <div className="max-w-3xl px-6 text-center">
+                    <h2 className="text-4xl font-bold text-white mb-4">Keep Exploring</h2>
+                    <p className="text-lg text-gray-200">
+                        Scroll enabled. Add more sections or content here. We can also bring in a Moon-focused section with animations when you’re ready.
+                    </p>
+                </div>
+            </section>
         </div>
     );
 }
