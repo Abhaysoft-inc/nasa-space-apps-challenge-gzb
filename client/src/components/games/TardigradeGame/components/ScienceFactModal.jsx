@@ -16,8 +16,11 @@ const ScienceFactModal = ({ fact, onClose }) => {
       >
         <div className="text-center mb-6">
           <h3 className="text-3xl text-white font-bold mb-2 flex items-center justify-center">
-            <span className="mr-3">🔬</span>
-            Real Science Fact
+            <svg className="mr-3 w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M8 2h8v2H8V2zm0 4h8v1.5l-2 2v4.17c1.16.41 2 1.52 2 2.83s-.84 2.42-2 2.83V20h2v2H8v-2h2v-.67c-1.16-.41-2-1.52-2-2.83s.84-2.42 2-2.83V9.5l-2-2V4z"/>
+              <circle cx="12" cy="15" r="3"/>
+            </svg>
+            Scientific Research Data
           </h3>
           <div className="w-16 h-1 bg-gradient-to-r from-purple-400 to-blue-400 mx-auto rounded-full"></div>
         </div>
@@ -44,10 +47,12 @@ const ScienceFactModal = ({ fact, onClose }) => {
         <div className="flex justify-center">
           <button
             onClick={onClose}
-            className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8 py-3 rounded-lg font-semibold transform hover:scale-105 transition-all duration-300 shadow-lg"
+            className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8 py-3 rounded-lg font-semibold transform hover:scale-105 transition-all duration-300 shadow-lg flex items-center justify-center"
           >
-            <span className="mr-2">🚀</span>
-            Continue Mission
+            <svg className="mr-2 w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg>
+            Continue Research
           </button>
         </div>
         

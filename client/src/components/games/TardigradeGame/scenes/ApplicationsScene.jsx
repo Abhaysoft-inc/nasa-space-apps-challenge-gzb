@@ -8,12 +8,64 @@ const ApplicationsScene = ({ onChoice, gameState }) => {
   
   const missionPath = gameState.playerChoices.find(choice => choice.path)?.path || 'genetics';
 
+  const getApplicationIcon = (iconName) => {
+    const iconClass = "w-12 h-12 text-current";
+    
+    switch(iconName) {
+      case 'dna':
+        return (
+          <svg className={iconClass} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93C7.05 19.44 3 15.08 3 10c0-.55.45-1 1-1s1 .45 1 1c0 3.86 3.14 7 7 7 .55 0 1 .45 1 1s-.45 1-1 1z"/>
+            <path d="M8 8l8 8M16 8l-8 8"/>
+          </svg>
+        );
+      case 'tool':
+        return (
+          <svg className={iconClass} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+          </svg>
+        );
+      case 'shield':
+        return (
+          <svg className={iconClass} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+        );
+      case 'refresh':
+        return (
+          <svg className={iconClass} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <polyline points="23 4 23 10 17 10"/>
+            <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+          </svg>
+        );
+      case 'pill':
+        return (
+          <svg className={iconClass} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <rect x="3" y="11" width="18" height="10" rx="2" ry="2"/>
+            <circle cx="12" cy="5" r="2"/>
+            <path d="M12 7v4"/>
+            <line x1="8" y1="16" x2="16" y2="16"/>
+          </svg>
+        );
+      case 'medical':
+        return (
+          <svg className={iconClass} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+            <path d="M12 8v8"/>
+            <path d="M8 12h8"/>
+          </svg>
+        );
+      default:
+        return <div className={iconClass}></div>;
+    }
+  };
+
   const applications = {
     genetics: [
       {
         id: 'gene-therapy',
         title: 'Genetic Enhancement for Astronauts',
-        icon: '🧬',
+        icon: 'dna',
         description: 'Develop gene therapy to give astronauts tardigrade-like radiation resistance',
         impact: 'Could protect Mars crew from 95% of cosmic radiation damage',
         timeline: '10-15 years',
@@ -22,7 +74,7 @@ const ApplicationsScene = ({ onChoice, gameState }) => {
       {
         id: 'dna-repair',
         title: 'Advanced DNA Repair Systems',
-        icon: '🔧',
+        icon: 'tool',
         description: 'Create synthetic DNA repair mechanisms based on tardigrade biology',
         impact: 'Revolutionary treatment for radiation sickness and cancer',
         timeline: '5-8 years',
@@ -33,7 +85,7 @@ const ApplicationsScene = ({ onChoice, gameState }) => {
       {
         id: 'bio-shielding',
         title: 'Bio-Inspired Spacecraft Shielding',
-        icon: '🛡️',
+        icon: 'shield',
         description: 'Lightweight radiation shielding based on tardigrade body structure',
         impact: '60% weight reduction with 40% better protection',
         timeline: '3-5 years',
@@ -42,7 +94,7 @@ const ApplicationsScene = ({ onChoice, gameState }) => {
       {
         id: 'adaptive-materials',
         title: 'Self-Healing Spacecraft Materials',
-        icon: '🔄',
+        icon: 'refresh',
         description: 'Materials that can repair themselves like tardigrades in cryptobiosis',
         impact: 'Dramatically extend spacecraft lifespan',
         timeline: '7-10 years',
@@ -53,7 +105,7 @@ const ApplicationsScene = ({ onChoice, gameState }) => {
       {
         id: 'protection-drugs',
         title: 'Tardigrade Protein Supplements',
-        icon: '💊',
+        icon: 'pill',
         description: 'Protective supplements containing tardigrade proteins for astronauts',
         impact: 'Immediate protection available for Mars missions',
         timeline: '2-3 years',
@@ -62,7 +114,7 @@ const ApplicationsScene = ({ onChoice, gameState }) => {
       {
         id: 'medical-treatment',
         title: 'Radiation Exposure Treatment',
-        icon: '🏥',
+        icon: 'medical',
         description: 'New treatments for radiation poisoning using tardigrade biology',
         impact: 'Save lives from nuclear accidents and space radiation',
         timeline: '4-6 years',
@@ -83,7 +135,7 @@ const ApplicationsScene = ({ onChoice, gameState }) => {
           className="text-center mb-8"
         >
           <h1 className="text-5xl font-bold text-white mb-4 bg-gradient-to-r from-yellow-400 to-pink-400 bg-clip-text text-transparent">
-            🚀 The Future of Space Exploration
+            Future of Space Exploration
           </h1>
           <p className="text-xl text-gray-300">
             Chapter 5: Your discoveries are transforming humanity's journey to Mars
@@ -132,7 +184,9 @@ const ApplicationsScene = ({ onChoice, gameState }) => {
               onClick={() => setSelectedApplication(app.id)}
             >
               <div className="text-center mb-4">
-                <div className="text-6xl mb-3">{app.icon}</div>
+                <div className="mb-3">
+                  {getApplicationIcon(app.icon)}
+                </div>
                 <h4 className="text-xl text-blue-400 font-semibold">{app.title}</h4>
               </div>
               
@@ -180,8 +234,13 @@ const ApplicationsScene = ({ onChoice, gameState }) => {
           className="bg-gradient-to-br from-red-900/80 to-orange-900/80 rounded-xl p-8 border border-red-400/30 mb-8"
         >
           <h3 className="text-3xl text-red-400 mb-6 text-center flex items-center justify-center">
-            <span className="mr-3">🔴</span>
-            Mars Mission 2035: The Tardigrade Solution
+            <svg className="mr-3 w-8 h-8" viewBox="0 0 24 24" fill="currentColor">
+              <circle cx="12" cy="12" r="10" fill="#dc2626"/>
+              <circle cx="12" cy="12" r="8" fill="#ef4444" opacity="0.8"/>
+              <circle cx="9" cy="10" r="1" fill="#7f1d1d"/>
+              <circle cx="15" cy="14" r="1.5" fill="#7f1d1d"/>
+            </svg>
+            Mars Colonization Initiative 2035
           </h3>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -260,7 +319,12 @@ const ApplicationsScene = ({ onChoice, gameState }) => {
           className="text-center space-y-6"
         >
           <div className="bg-gradient-to-br from-yellow-900/80 to-orange-900/80 rounded-xl p-8 border border-yellow-400/30">
-            <h3 className="text-3xl text-yellow-400 mb-4">🎉 Mission Accomplished!</h3>
+            <div className="flex items-center justify-center mb-4">
+              <svg className="w-12 h-12 text-yellow-400" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+              </svg>
+            </div>
+            <h3 className="text-3xl text-yellow-400 mb-4 text-center">Mission Accomplished</h3>
             <p className="text-xl text-gray-200 mb-6">
               From a tiny water bear in a pond sample to the key that unlocks Mars exploration—
               you've witnessed how fundamental research transforms the future of humanity.

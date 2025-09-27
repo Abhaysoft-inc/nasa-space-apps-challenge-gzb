@@ -68,43 +68,126 @@ export default function GamesCenter(){
             {/* NEW: Featured Tardigrade Story Game */}
             <section className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-semibold text-gray-900">🔬 NEW: Interactive Science Story</h2>
-                <a href="/games/tardigrade-story" className="text-sm text-indigo-600 hover:text-indigo-700">Play Story →</a>
+                <h2 className="text-lg font-semibold text-gray-900">Featured: Interactive Science Stories</h2>
+                <span className="text-sm text-indigo-600">Choose Your Experience →</span>
               </div>
-              <div className="grid md:grid-cols-[1fr,2fr] gap-4 items-center">
-                <div className="rounded-xl overflow-hidden border border-gray-200">
+              
+              {/* Story Game Options */}
+              <div className="grid md:grid-cols-3 gap-4">
+                
+                {/* Original Interactive Story */}
+                <div className="rounded-xl overflow-hidden border border-gray-200 hover:shadow-lg transition-all duration-300 hover:scale-[1.02]">
                   <div className="aspect-[16/9] bg-gradient-to-br from-purple-600 to-blue-600 relative flex items-center justify-center">
-                    <div className="text-6xl animate-pulse">🐻</div>
+                    {/* Professional tardigrade visualization */}
+                    <svg width="60" height="40" viewBox="0 0 80 50" className="filter drop-shadow-lg">
+                      <ellipse cx="40" cy="25" rx="35" ry="15" fill="#60a5fa" opacity="0.9"/>
+                      <path d="M15 25 Q40 12 65 25 Q40 38 15 25" fill="#3b82f6" opacity="0.7"/>
+                      <circle cx="20" cy="32" r="2.5" fill="#1d4ed8"/>
+                      <circle cx="25" cy="35" r="2.5" fill="#1d4ed8"/>
+                      <circle cx="55" cy="35" r="2.5" fill="#1d4ed8"/>
+                      <circle cx="60" cy="32" r="2.5" fill="#1d4ed8"/>
+                      <circle cx="20" cy="18" r="2.5" fill="#1d4ed8"/>
+                      <circle cx="25" cy="15" r="2.5" fill="#1d4ed8"/>
+                      <circle cx="55" cy="15" r="2.5" fill="#1d4ed8"/>
+                      <circle cx="60" cy="18" r="2.5" fill="#1d4ed8"/>
+                      <circle cx="10" cy="25" r="8" fill="#3b82f6" opacity="0.9"/>
+                      <circle cx="7" cy="22" r="1.5" fill="#dc2626"/>
+                      <circle cx="7" cy="28" r="1.5" fill="#dc2626"/>
+                    </svg>
                     <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(255,255,255,0.1),transparent_60%)]" />
                   </div>
-                </div>
-                <div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">Tardigrade: The Ultimate Survivors</h3>
-                  <p className="text-gray-600 mb-4">
-                    Discover the amazing water bears that can survive in space! Follow Dr. Elena Rodriguez as she 
-                    uncovers the secrets of Earth's most resilient creatures and partners with NASA to protect astronauts on Mars missions.
-                  </p>
-                  <div className="flex items-center gap-3 text-sm text-gray-500 mb-4">
-                    <span className="flex items-center gap-1">
-                      <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-                      15-20 min
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></svg>
-                      Interactive Story
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 11H6m0 0H3m3 0v3m0-3V8"/></svg>
-                      Real Science
-                    </span>
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    <span className="px-2 py-1 bg-purple-100 text-purple-700 rounded-md text-xs font-medium">Space Biology</span>
-                    <span className="px-2 py-1 bg-blue-100 text-blue-700 rounded-md text-xs font-medium">Extremophiles</span>
-                    <span className="px-2 py-1 bg-green-100 text-green-700 rounded-md text-xs font-medium">NASA Research</span>
-                    <span className="px-2 py-1 bg-red-100 text-red-700 rounded-md text-xs font-medium">Mars Mission</span>
+                  <div className="p-3">
+                    <h3 className="text-md font-bold text-gray-900 mb-1">Interactive Story</h3>
+                    <p className="text-gray-600 text-xs mb-2">
+                      Make choices that affect the story outcome!
+                    </p>
+                    <a href="/games/tardigrade-story" className="inline-flex items-center text-xs font-medium text-indigo-600 hover:text-indigo-700">
+                      Play Interactive →
+                    </a>
                   </div>
                 </div>
+
+                {/* 3D Animated Story */}
+                <div className="rounded-xl overflow-hidden border border-gray-200 hover:shadow-lg transition-all duration-300 hover:scale-[1.02] relative">
+                  <div className="absolute top-2 right-2 z-10">
+                    <span className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+                      3D
+                    </span>
+                  </div>
+                  <div className="aspect-[16/9] bg-gradient-to-br from-emerald-600 to-cyan-600 relative flex items-center justify-center overflow-hidden">
+                    {/* 3D-style tardigrade */}
+                    <div className="relative animate-pulse">
+                      <svg width="70" height="45" viewBox="0 0 90 60" className="filter drop-shadow-2xl">
+                        <defs>
+                          <radialGradient id="tardigrade3D" cx="50%" cy="30%">
+                            <stop offset="0%" stopColor="#60a5fa" />
+                            <stop offset="100%" stopColor="#1d4ed8" />
+                          </radialGradient>
+                        </defs>
+                        <ellipse cx="45" cy="30" rx="40" ry="18" fill="url(#tardigrade3D)" opacity="0.9"/>
+                        <circle cx="15" cy="30" r="12" fill="url(#tardigrade3D)"/>
+                        <circle cx="10" cy="25" r="2" fill="#fbbf24"/>
+                        <circle cx="10" cy="32" r="2" fill="#fbbf24"/>
+                      </svg>
+                    </div>
+                    <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(255,255,255,0.1),transparent_60%)]" />
+                  </div>
+                  <div className="p-3">
+                    <h3 className="text-md font-bold text-gray-900 mb-1">3D Chronicle</h3>
+                    <p className="text-gray-600 text-xs mb-2">
+                      Watch stunning 3D visuals and animations!
+                    </p>
+                    <a href="/games/tardigrade-animated" className="inline-flex items-center text-xs font-medium text-emerald-600 hover:text-emerald-700">
+                      Watch 3D →
+                    </a>
+                  </div>
+                </div>
+
+                {/* NEW: Visual Novel */}
+                <div className="rounded-xl overflow-hidden border border-gray-200 hover:shadow-lg transition-all duration-300 hover:scale-[1.02] relative">
+                  <div className="absolute top-2 right-2 z-10">
+                    <span className="bg-gradient-to-r from-pink-400 to-violet-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+                      NEW VN
+                    </span>
+                  </div>
+                  <div className="aspect-[16/9] bg-gradient-to-br from-violet-600 to-pink-600 relative flex items-center justify-center overflow-hidden">
+                    {/* Visual Novel Style Character */}
+                    <div className="relative">
+                      <div className="w-16 h-20 bg-gradient-to-b from-white/20 to-purple-300/30 rounded-lg border border-white/30 flex items-center justify-center backdrop-blur-sm">
+                        <div className="text-2xl">👩‍🔬</div>
+                      </div>
+                      <div className="absolute -right-6 top-2 w-12 h-16 bg-gradient-to-b from-white/15 to-blue-300/30 rounded-lg border border-white/30 flex items-center justify-center backdrop-blur-sm">
+                        <div className="text-lg">👨‍🚀</div>
+                      </div>
+                    </div>
+                    
+                    {/* Dialogue box effect */}
+                    <div className="absolute bottom-2 left-2 right-2 bg-black/60 rounded px-2 py-1 backdrop-blur-sm">
+                      <div className="text-white text-xs leading-tight">
+                        "These tiny creatures could..."
+                      </div>
+                    </div>
+                    
+                    <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(255,255,255,0.1),transparent_60%)]" />
+                  </div>
+                  <div className="p-3">
+                    <h3 className="text-md font-bold text-gray-900 mb-1">Visual Novel</h3>
+                    <p className="text-gray-600 text-xs mb-2">
+                      Character-driven story with dialogue!
+                    </p>
+                    <a href="/games/tardigrade-visual-novel" className="inline-flex items-center text-xs font-medium text-violet-600 hover:text-violet-700">
+                      Play Visual Novel →
+                    </a>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="mt-4 p-4 bg-gray-50 rounded-lg">
+                <h4 className="font-semibold text-gray-900 mb-1">Tardigrade: The Ultimate Survivors</h4>
+                <p className="text-gray-600 text-sm">
+                  Discover the amazing water bears that can survive in space! Follow Dr. Elena Rodriguez as she 
+                  uncovers the secrets of Earth's most resilient creatures and partners with NASA to protect astronauts on Mars missions.
+                </p>
               </div>
             </section>
             

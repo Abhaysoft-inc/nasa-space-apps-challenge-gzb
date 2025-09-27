@@ -99,7 +99,7 @@ const ExperimentScene = ({ onChoice, gameState, updateGameState }) => {
           className="text-center mb-8"
         >
           <h1 className="text-5xl font-bold text-white mb-4 bg-gradient-to-r from-green-400 to-blue-400 bg-clip-text text-transparent">
-            🧪 Extreme Survival Testing
+            Environmental Stress Analysis
           </h1>
           <p className="text-xl text-gray-300">
             Chapter 2: Design your experiment to test tardigrade resilience
@@ -115,8 +115,10 @@ const ExperimentScene = ({ onChoice, gameState, updateGameState }) => {
             className="bg-gradient-to-br from-black/80 to-gray-900/80 rounded-xl p-8 border border-green-400/30"
           >
             <h3 className="text-2xl text-green-400 mb-6 flex items-center">
-              <span className="mr-3">⚡</span>
-              Environmental Controls
+              <svg className="mr-3 w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+              </svg>
+              Environmental Parameters
             </h3>
             
             <div className="space-y-8">
@@ -227,8 +229,10 @@ const ExperimentScene = ({ onChoice, gameState, updateGameState }) => {
                 </div>
               ) : (
                 <div className="flex items-center justify-center">
-                  <span className="mr-2">🧪</span>
-                  Start Experiment
+                  <svg className="mr-2 w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M9 2v6h6V2h2v6.17c1.16.41 2 1.52 2 2.83s-.84 2.42-2 2.83V20h2v2H5v-2h2v-6.17c-1.16-.41-2-1.52-2-2.83s.84-2.42 2-2.83V2h2z"/>
+                  </svg>
+                  Initialize Testing Protocol
                 </div>
               )}
             </button>
@@ -241,9 +245,12 @@ const ExperimentScene = ({ onChoice, gameState, updateGameState }) => {
                   setPressure(0);
                   setRadiation(1000);
                 }}
-                className="bg-purple-600 hover:bg-purple-700 text-white py-2 px-3 rounded-lg text-sm transition-colors"
+                className="bg-purple-600 hover:bg-purple-700 text-white py-2 px-3 rounded-lg text-sm transition-colors flex items-center justify-center"
               >
-                🚀 Space Conditions
+                <svg className="w-4 h-4 mr-1" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                </svg>
+                Space Conditions
               </button>
               <button
                 onClick={() => {
@@ -251,9 +258,13 @@ const ExperimentScene = ({ onChoice, gameState, updateGameState }) => {
                   setPressure(2);
                   setRadiation(0);
                 }}
-                className="bg-red-600 hover:bg-red-700 text-white py-2 px-3 rounded-lg text-sm transition-colors"
+                className="bg-red-600 hover:bg-red-700 text-white py-2 px-3 rounded-lg text-sm transition-colors flex items-center justify-center"
               >
-                🔥 Autoclave
+                <svg className="w-4 h-4 mr-1" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 6v6l4 2"/>
+                  <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" strokeWidth="1"/>
+                </svg>
+                Autoclave
               </button>
               <button
                 onClick={() => {
@@ -261,9 +272,12 @@ const ExperimentScene = ({ onChoice, gameState, updateGameState }) => {
                   setPressure(1);
                   setRadiation(0);
                 }}
-                className="bg-green-600 hover:bg-green-700 text-white py-2 px-3 rounded-lg text-sm transition-colors"
+                className="bg-green-600 hover:bg-green-700 text-white py-2 px-3 rounded-lg text-sm transition-colors flex items-center justify-center"
               >
-                🌱 Normal Lab
+                <svg className="w-4 h-4 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M8 2h8v2H8V2zm0 4h8v1.5l-2 2v4.17c1.16.41 2 1.52 2 2.83s-.84 2.42-2 2.83V20h2v2H8v-2h2v-.67c-1.16-.41-2-1.52-2-2.83s.84-2.42 2-2.83V9.5l-2-2V4z"/>
+                </svg>
+                Normal Lab
               </button>
             </div>
           </motion.div>
@@ -276,8 +290,11 @@ const ExperimentScene = ({ onChoice, gameState, updateGameState }) => {
             className="bg-gradient-to-br from-black/80 to-blue-900/80 rounded-xl p-8 border border-blue-400/30"
           >
             <h3 className="text-2xl text-blue-400 mb-6 flex items-center">
-              <span className="mr-3">🔬</span>
-              Live Monitoring
+              <svg className="mr-3 w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M8 2h8v2H8V2zm0 4h8v1.5l-2 2v4.17c1.16.41 2 1.52 2 2.83s-.84 2.42-2 2.83V20h2v2H8v-2h2v-.67c-1.16-.41-2-1.52-2-2.83s.84-2.42 2-2.83V9.5l-2-2V4z"/>
+                <circle cx="12" cy="15" r="3"/>
+              </svg>
+              Real-time Monitoring
             </h3>
             
             <TardigradeVisualization 

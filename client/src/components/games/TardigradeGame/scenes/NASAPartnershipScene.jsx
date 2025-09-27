@@ -43,7 +43,7 @@ const NASAPartnershipScene = ({ onChoice, gameState }) => {
             <img src="/nasa-logo.svg" alt="NASA" className="w-24 h-24" />
           </div>
           <h1 className="text-5xl font-bold text-white mb-4 bg-gradient-to-r from-blue-400 to-white bg-clip-text text-transparent">
-            🚀 NASA Partnership
+            NASA Collaboration Initiative
           </h1>
           <p className="text-xl text-gray-300">
             Chapter 3: Your research has reached the highest levels of space exploration
@@ -83,16 +83,24 @@ const NASAPartnershipScene = ({ onChoice, gameState }) => {
                 {/* NASA Director */}
                 <div className="bg-gradient-to-br from-blue-800 to-indigo-800 rounded-lg p-4 border border-blue-400/30">
                   <div className="text-center mb-3">
-                    <div className="text-6xl mb-2">👩‍🚀</div>
-                    <h4 className="text-blue-300 font-semibold">NASA Director Sarah Chen</h4>
-                    <p className="text-xs text-gray-400">Astrobiology Division</p>
+                    <div className="w-16 h-16 mx-auto mb-2 bg-blue-600 rounded-full flex items-center justify-center">
+                      <svg className="w-8 h-8 text-white" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                      </svg>
+                    </div>
+                    <h4 className="text-blue-300 font-semibold">Director Sarah Chen</h4>
+                    <p className="text-xs text-gray-400">NASA Astrobiology Division</p>
                   </div>
                 </div>
 
                 {/* Dr. Rodriguez */}
                 <div className="bg-gradient-to-br from-green-800 to-teal-800 rounded-lg p-4 border border-green-400/30">
                   <div className="text-center mb-3">
-                    <div className="text-6xl mb-2">👩‍🔬</div>
+                    <div className="w-16 h-16 mx-auto mb-2 bg-green-600 rounded-full flex items-center justify-center">
+                      <svg className="w-8 h-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M8 2h8v2H8V2zm0 4h8v1.5l-2 2v4.17c1.16.41 2 1.52 2 2.83s-.84 2.42-2 2.83V20h2v2H8v-2h2v-.67c-1.16-.41-2-1.52-2-2.83s.84-2.42 2-2.83V9.5l-2-2V4z"/>
+                      </svg>
+                    </div>
                     <h4 className="text-green-300 font-semibold">Dr. Elena Rodriguez</h4>
                     <p className="text-xs text-gray-400">Stanford University</p>
                   </div>
@@ -141,8 +149,12 @@ const NASAPartnershipScene = ({ onChoice, gameState }) => {
                     })}
                     className="group bg-gradient-to-br from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white p-6 rounded-xl transform hover:scale-105 transition-all duration-300"
                   >
-                    <div className="text-4xl mb-3">🧬</div>
-                    <h5 className="text-lg font-semibold mb-2">Genetic Analysis</h5>
+                    <div className="mb-3">
+                      <svg className="w-12 h-12 mx-auto text-current" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93C7.05 19.44 3 15.08 3 10c0-.55.45-1 1-1s1 .45 1 1c0 3.86 3.14 7 7 7 .55 0 1 .45 1 1s-.45 1-1 1z"/>
+                      </svg>
+                    </div>
+                    <h5 className="text-lg font-semibold mb-2">Genomic Analysis</h5>
                     <p className="text-sm opacity-90">
                       Sequence tardigrade DNA to identify radiation-resistant genes
                     </p>
@@ -162,7 +174,12 @@ const NASAPartnershipScene = ({ onChoice, gameState }) => {
                     })}
                     className="group bg-gradient-to-br from-purple-600 to-violet-600 hover:from-purple-700 hover:to-violet-700 text-white p-6 rounded-xl transform hover:scale-105 transition-all duration-300"
                   >
-                    <div className="text-4xl mb-3">🛡️</div>
+                    <div className="mb-3">
+                      <svg className="w-12 h-12 mx-auto text-current" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                        <path d="M9 12l2 2 4-4"/>
+                      </svg>
+                    </div>
                     <h5 className="text-lg font-semibold mb-2">Bio-Engineering</h5>
                     <p className="text-sm opacity-90">
                       Design spacecraft shielding based on tardigrade biology
@@ -183,7 +200,14 @@ const NASAPartnershipScene = ({ onChoice, gameState }) => {
                     })}
                     className="group bg-gradient-to-br from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 text-white p-6 rounded-xl transform hover:scale-105 transition-all duration-300"
                   >
-                    <div className="text-4xl mb-3">💊</div>
+                    <div className="mb-3">
+                      <svg className="w-12 h-12 mx-auto text-current" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                        <path d="M9 9h6v6H9z"/>
+                        <path d="M12 6v12"/>
+                        <path d="M6 12h12"/>
+                      </svg>
+                    </div>
                     <h5 className="text-lg font-semibold mb-2">Medical Research</h5>
                     <p className="text-sm opacity-90">
                       Develop protective treatments using tardigrade proteins

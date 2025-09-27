@@ -118,23 +118,35 @@ const TardigradeVisualization = ({
           
           {/* Condition Overlays */}
           {temperature < -100 && (
-            <div className="absolute inset-0 bg-blue-500/20 flex items-center justify-center text-4xl">
-              ❄️
+            <div className="absolute inset-0 bg-blue-500/20 flex items-center justify-center">
+              <div className="bg-blue-900/80 px-4 py-2 rounded-lg border border-blue-400">
+                <div className="text-blue-200 text-sm font-mono">CRYOGENIC CONDITIONS</div>
+                <div className="text-blue-100 text-xs">{temperature}°C</div>
+              </div>
             </div>
           )}
           {temperature > 100 && (
-            <div className="absolute inset-0 bg-red-500/20 flex items-center justify-center text-4xl">
-              🔥
+            <div className="absolute inset-0 bg-red-500/20 flex items-center justify-center">
+              <div className="bg-red-900/80 px-4 py-2 rounded-lg border border-red-400">
+                <div className="text-red-200 text-sm font-mono">THERMAL STRESS</div>
+                <div className="text-red-100 text-xs">{temperature}°C</div>
+              </div>
             </div>
           )}
           {pressure === 0 && (
-            <div className="absolute inset-0 bg-purple-500/20 flex items-center justify-center text-4xl">
-              🌌
+            <div className="absolute inset-0 bg-purple-500/20 flex items-center justify-center">
+              <div className="bg-purple-900/80 px-4 py-2 rounded-lg border border-purple-400">
+                <div className="text-purple-200 text-sm font-mono">VACUUM CHAMBER</div>
+                <div className="text-purple-100 text-xs">0.0 atm</div>
+              </div>
             </div>
           )}
           {radiation > 1000 && (
-            <div className="absolute inset-0 bg-yellow-500/20 flex items-center justify-center text-4xl">
-              ☢️
+            <div className="absolute inset-0 bg-yellow-500/20 flex items-center justify-center">
+              <div className="bg-yellow-900/80 px-4 py-2 rounded-lg border border-yellow-400">
+                <div className="text-yellow-200 text-sm font-mono">RADIATION EXPOSURE</div>
+                <div className="text-yellow-100 text-xs">{radiation} Gy</div>
+              </div>
             </div>
           )}
           

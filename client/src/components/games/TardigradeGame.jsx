@@ -9,6 +9,7 @@ import ApplicationsScene from './TardigradeGame/scenes/ApplicationsScene';
 import GameHeader from './TardigradeGame/components/GameHeader';
 import ProgressTracker from './TardigradeGame/components/ProgressTracker';
 import ScienceFactModal from './TardigradeGame/components/ScienceFactModal';
+import ProfessionalBackground from './ProfessionalBackground';
 
 const TardigradeGame = () => {
   const [gameState, setGameState] = useState({
@@ -108,67 +109,23 @@ const TardigradeGame = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 to-purple-900">
-      <GameHeader gameState={gameState} />
+    <div className="min-h-screen relative">
+      <ProfessionalBackground />
       
-      {renderCurrentScene()}
-      
-      <ProgressTracker gameState={gameState} />
-      
-      {gameState.showScienceFact && (
-        <ScienceFactModal 
-          fact={gameState.currentFact} 
-          onClose={closeScienceFact} 
-        />
-      )}
-      
-      {/* Background stars animation */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="stars"></div>
-        <div className="stars2"></div>
-        <div className="stars3"></div>
+      <div className="relative z-10">
+        <GameHeader gameState={gameState} />
+        
+        {renderCurrentScene()}
+        
+        <ProgressTracker gameState={gameState} />
+        
+        {gameState.showScienceFact && (
+          <ScienceFactModal 
+            fact={gameState.currentFact} 
+            onClose={closeScienceFact} 
+          />
+        )}
       </div>
-
-      <style jsx>{`
-        .stars {
-          width: 1px;
-          height: 1px;
-          background: transparent;
-          box-shadow: 
-            1780px 1216px #fff, 1467px 594px #fff, 1490px 1949px #fff,
-            742px 1229px #fff, 1414px 1980px #fff, 382px 1849px #fff,
-            1806px 1482px #fff, 1847px 558px #fff, 484px 447px #fff;
-          animation: animStar 50s linear infinite;
-        }
-
-        .stars2 {
-          width: 2px;
-          height: 2px;
-          background: transparent;
-          box-shadow: 
-            1780px 1216px #fff, 1467px 594px #fff, 1490px 1949px #fff,
-            742px 1229px #fff, 1414px 1980px #fff, 382px 1849px #fff;
-          animation: animStar 100s linear infinite;
-        }
-
-        .stars3 {
-          width: 3px;
-          height: 3px;
-          background: transparent;
-          box-shadow: 
-            1780px 1216px #fff, 1467px 594px #fff, 1490px 1949px #fff;
-          animation: animStar 150s linear infinite;
-        }
-
-        @keyframes animStar {
-          from {
-            transform: translateY(0px);
-          }
-          to {
-            transform: translateY(-2000px);
-          }
-        }
-      `}</style>
     </div>
   );
 };

@@ -88,7 +88,7 @@ const SpaceMissionScene = ({ onChoice, gameState, updateGameState }) => {
           className="text-center mb-8"
         >
           <h1 className="text-5xl font-bold text-white mb-4 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-            🛰️ International Space Station Mission
+            International Space Station Mission
           </h1>
           <p className="text-xl text-gray-300">
             Chapter 4: Testing tardigrade survival in actual space conditions
@@ -105,8 +105,14 @@ const SpaceMissionScene = ({ onChoice, gameState, updateGameState }) => {
             {/* Mission Overview */}
             <div className="bg-gradient-to-br from-gray-900 to-blue-900 rounded-xl p-8 border border-blue-400/30">
               <h3 className="text-2xl text-blue-400 mb-6 flex items-center">
-                <span className="mr-3">📋</span>
-                Mission Planning - {missionPath.charAt(0).toUpperCase() + missionPath.slice(1)} Focus
+                <svg className="mr-3 w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                  <polyline points="14,2 14,8 20,8"/>
+                  <line x1="16" y1="13" x2="8" y2="13"/>
+                  <line x1="16" y1="17" x2="8" y2="17"/>
+                  <polyline points="10,9 9,9 8,9"/>
+                </svg>
+                Mission Protocol - {missionPath.charAt(0).toUpperCase() + missionPath.slice(1)} Division
               </h3>
               
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -172,8 +178,10 @@ const SpaceMissionScene = ({ onChoice, gameState, updateGameState }) => {
                 className="bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white text-xl font-bold py-6 px-12 rounded-xl transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-orange-500/25"
               >
                 <div className="flex items-center">
-                  <span className="mr-4 text-2xl">🚀</span>
-                  Launch Space Mission
+                  <svg className="mr-4 w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                  </svg>
+                  Initialize Launch Sequence
                 </div>
               </button>
             </div>
@@ -188,15 +196,38 @@ const SpaceMissionScene = ({ onChoice, gameState, updateGameState }) => {
             className="text-center space-y-8"
           >
             {/* Rocket Animation */}
-            <div className="relative h-64 overflow-hidden">
+            <div className="relative h-64 overflow-hidden bg-gradient-to-t from-blue-900 to-black rounded-lg">
               <motion.div
                 animate={{ y: [-50, -200], opacity: [1, 0] }}
                 transition={{ duration: 3, repeat: Infinity }}
-                className="absolute left-1/2 transform -translate-x-1/2 text-8xl"
+                className="absolute left-1/2 transform -translate-x-1/2"
               >
-                🚀
+                <svg width="60" height="100" viewBox="0 0 60 100" className="text-orange-400">
+                  {/* Spacecraft body */}
+                  <rect x="20" y="30" width="20" height="50" fill="#e5e7eb" rx="5"/>
+                  {/* Nose cone */}
+                  <polygon points="30,10 40,30 20,30" fill="#9ca3af"/>
+                  {/* Engines */}
+                  <rect x="15" y="75" width="10" height="15" fill="#6b7280"/>
+                  <rect x="35" y="75" width="10" height="15" fill="#6b7280"/>
+                  {/* Exhaust */}
+                  <path d="M20 90 L25 100 L30 90 L35 100 L40 90" stroke="#f97316" strokeWidth="2" fill="none"/>
+                  <path d="M22 85 L28 95 L38 95 L32 85" fill="#fbbf24" opacity="0.8"/>
+                </svg>
               </motion.div>
               <div className="absolute inset-0 bg-gradient-to-t from-orange-600/20 to-transparent pointer-events-none"></div>
+              {/* Stars */}
+              {Array.from({length: 20}).map((_, i) => (
+                <div
+                  key={i}
+                  className="absolute w-1 h-1 bg-white rounded-full animate-pulse"
+                  style={{
+                    left: `${Math.random() * 100}%`,
+                    top: `${Math.random() * 100}%`,
+                    animationDelay: `${Math.random() * 2}s`
+                  }}
+                />
+              ))}
             </div>
 
             <div className="bg-black/80 rounded-xl p-8 border border-orange-400/30">
