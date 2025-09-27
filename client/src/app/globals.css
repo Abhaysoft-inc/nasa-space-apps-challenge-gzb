@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 @import "tailwindcss";
 
 /* Custom Space Theme Variables */
@@ -80,3 +81,6 @@ input:focus {
 * {
   transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
 }
+=======
+@import "tailwindcss";
+>>>>>>> 2df18613882c988531f6aac24410146e754f3e30
