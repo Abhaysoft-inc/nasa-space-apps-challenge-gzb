@@ -1,167 +1,185 @@
 # ======================================================
 # 📌 1. Install dependencies
 # ======================================================
-!pip install nlpcloud faiss-cpu google-generativeai PyMuPDF langchain-text-splitters
+!pip install PyMuPDF langchain-text-splitters sentence-transformers pinecone google-generativeai tqdm
 
 # ======================================================
 # 📌 2. Imports
 # ======================================================
 import os
 import fitz  # PyMuPDF
-import pickle
-import numpy as np
-import nlpcloud
-import faiss
-import time # Import time for adding delays
 from pathlib import Path
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 import google.generativeai as genai
-from tqdm.auto import tqdm # Import tqdm for progress bar
-
+from tqdm.auto import tqdm
+from sentence_transformers import SentenceTransformer
+from pinecone import Pinecone, ServerlessSpec
+import time
 
 # ======================================================
 # 📌 3. User Config - API keys and folders
 # ======================================================
-NLP_API_KEY = "7723821d5cb457a79ca7652db97f9c9c01c052ea"   # NLPCloud key
-EMBED_MODEL = "paraphrase-multilingual-mpnet-base-v2"  # embedding model
 PDF_FOLDER = "/content/pdfs"            # upload PDFs here
 
 GOOGLE_API_KEY = "AIzaSyBQBigt-xLwws1iNp_i-6gb3XXq8RRVUGA"  # Gemini API key
+PINECONE_API_KEY = "pcsk_73fzGC_EkqGu38kPmvQGKPDv3pcZ4WQ4oDTAorq5uyEYsxsgWB9GaX34MMMCmGvFQiBWJp" # Replace with your Pinecone API key
+PINECONE_INDEX_NAME = "my-rag-index" # Replace with your desired index name
 
 # ======================================================
 # 📌 4. Extract text from PDFs
 # ======================================================
 texts = []
-for pdf_path in Path(PDF_FOLDER).glob("*.pdf"):
-    doc = fitz.open(pdf_path)
-    for page_num, page in enumerate(doc):
-        text = page.get_text("text")
-        texts.append({
-            "paper_id": pdf_path.stem,
-            "page": page_num + 1,
-            "text": text
-        })
+pdf_files = list(Path(PDF_FOLDER).glob("*.pdf"))
 
-print(f"Extracted {len(texts)} pages from PDFs")
+if not pdf_files:
+    print(f"No PDF files found in {PDF_FOLDER}. Please upload your PDFs to this folder.")
+else:
+    processed_files_count = 0
+    for pdf_path in pdf_files:
+        try:
+            doc = fitz.open(pdf_path)
+            processed_files_count += 1
+            for page_num, page in enumerate(doc):
+                text = page.get_text("text")
+                texts.append({
+                    "paper_id": pdf_path.stem,
+                    "page": page_num + 1,
+                    "text": text
+                })
+            print(f"Successfully extracted text from {pdf_path.name}")
+        except Exception as e:
+            print(f"Error extracting text from {pdf_path.name}: {e}")
 
-# ======================================================
-# 📌 5. Chunk text
-# ======================================================
-splitter = RecursiveCharacterTextSplitter(chunk_size=600, chunk_overlap=100)
-chunks = []
-for record in texts:
-    for i, chunk in enumerate(splitter.split_text(record["text"])):
-        chunks.append({
-            "id": f"{record['paper_id']}_{record['page']}_{i}",
-            "text": chunk,
-            "metadata": {
-                "paper_id": record["paper_id"],
-                "page": record["page"]
-            }
-        })
+    print(f"Processed {processed_files_count} out of {len(pdf_files)} files.")
+    print(f"Extracted {len(texts)} pages in total.")
 
-print(f"Total chunks created: {len(chunks)}")
+    # ======================================================
+    # 📌 5. Chunk text
+    # ======================================================
+    splitter = RecursiveCharacterTextSplitter(chunk_size=600, chunk_overlap=100)
+    chunks = []
+    for record in texts:
+        for i, chunk in enumerate(splitter.split_text(record["text"])):
+            chunks.append({
+                "id": f"{record['paper_id']}_{record['page']}_{i}",
+                "text": chunk,
+                "metadata": {
+                    "paper_id": record["paper_id"],
+                    "page": record["page"],
+                    "text": chunk # Store text in metadata for retrieval
+                }
+            })
 
-
-
-# Install the sentence-transformers library
-!pip install sentence-transformers
-
-# Import the library
-from sentence_transformers import SentenceTransformer
-import numpy as np
-from tqdm.auto import tqdm
-
-# Load a pre-trained model (you can choose a different one based on your needs)
-# 'all-MiniLM-L6-v2' is a good general-purpose model
-embedding_model = SentenceTransformer('all-MiniLM-L6-v2')
-
-# ======================================================
-# 📌 6. Generate embeddings via Sentence-Transformers
-# ======================================================
-# Assuming 'chunks' is already defined from the previous steps
-
-embeddings = []
-for chunk in tqdm(chunks):
-    # The encode method can handle a list of strings for batch processing
-    # but we will process one by one for simplicity and to match the previous structure
-    embedding = embedding_model.encode(chunk["text"])
-    chunk["embedding"] = embedding
-
-print("✅ Finished generating embeddings using Sentence-Transformers")
-
-# Now you can continue with storing in FAISS and querying as before
-# The rest of the code (Steps 7-12) can remain the same,
-# just make sure to use the 'chunks' list with the new embeddings.
-
-# ======================================================
-# 📌 7. Store in FAISS
-# ======================================================
-dimension = len(chunks[0]["embedding"])
-index = faiss.IndexFlatL2(dimension)
-vectors = np.array([c["embedding"] for c in chunks]).astype("float32")
-index.add(vectors)
-
-faiss.write_index(index, "papers.index")
-with open("metadata.pkl", "wb") as f:
-    pickle.dump(chunks, f)
-
-print("✅ Stored FAISS index + metadata")
-
-# ======================================================
-# 📌 8. Load FAISS and metadata (for querying)
-# ======================================================
-index = faiss.read_index("papers.index")
-with open("metadata.pkl", "rb") as f:
-    chunks = pickle.load(f)
-
-# ======================================================
-# 📌 9. Initialize Google Gemini client
-# ======================================================
-# Assuming GOOGLE_API_KEY is already defined
-import google.generativeai as genai
-genai.configure(api_key=GOOGLE_API_KEY)
-
-# List available models to find one that supports generateContent
-# for m in genai.list_models():
-#   if 'generateContent' in m.supported_generation_methods:
-#     print(m.name)
-
-gemini_model = genai.GenerativeModel('gemini-pro-latest') # Using gemini-pro-latest
+    print(f"Total chunks created: {len(chunks)}")
 
 
-# ======================================================
-# 10. Retrieval function
-# ======================================================
-def retrieve_chunks(query, k=5):
-    # Generate embedding for the query using the same model
-    q_emb = embedding_model.encode(query)
-    D, I = index.search(np.array([q_emb]).astype("float32"), k)
-    return [chunks[i] for i in I[0]]
+    # Load a pre-trained model for embeddings
+    embedding_model = SentenceTransformer('all-MiniLM-L6-v2')
 
-# ======================================================
-# 📌 11. Generate answer with Gemini
-# ======================================================
-def generate_answer(query, k=5):
-    top_chunks = retrieve_chunks(query, k)
-    context = "\n\n".join([c["text"] for c in top_chunks])
+    # Get embedding dimension
+    if chunks:
+        dimension = len(embedding_model.encode(chunks[0]["text"]))
+    else:
+        dimension = 384 # Default dimension for 'all-MiniLM-L6-v2'
 
-    prompt = f"""
-    You are an expert research assistant. Use only the context below to answer the question.
 
-    Context:
-    {context}
+    # ======================================================
+    # 📌 6. Initialize Pinecone and Create Index
+    # ======================================================
+    pc = Pinecone(api_key=PINECONE_API_KEY)
 
-    Question: {query}
-    """
+    # Check if index exists, if not create it
+    if PINECONE_INDEX_NAME not in pc.list_indexes():
+        print(f"Creating index '{PINECONE_INDEX_NAME}'...")
+        pc.create_index(
+            name=PINECONE_INDEX_NAME,
+            dimension=dimension,
+            metric="cosine", # or "euclidean", "dotproduct"
+            spec=ServerlessSpec(cloud='aws', region='us-east-1') # Choose appropriate cloud and region
+        )
+        # wait for index to be initialized
+        while not pc.describe_index(PINECONE_INDEX_NAME).status['ready']:
+            time.sleep(1)
+        print("✅ Index created.")
+    else:
+        print(f"Index '{PINECONE_INDEX_NAME}' already exists.")
 
-    response = gemini_model.generate_content(prompt)
-    return response.text
+    index = pc.Index(PINECONE_INDEX_NAME)
+    print(f"Index stats: {index.describe_index_stats()}")
 
-# ======================================================
-# 📌 12. Test it!
-# ======================================================
-query = "tell me about the Stem Cell Health and Tissue Regeneration in Microgravity	"
-answer = generate_answer(query)
-print("\n💡 Answer from Gemini:\n")
-print(answer)
+
+    # ======================================================
+    # 📌 7. Generate Embeddings and Upload to Pinecone
+    # ======================================================
+    batch_size = 100 # Adjust batch size as needed
+    # Ensure there are chunks to process before generating embeddings
+    if chunks:
+        for i in tqdm(range(0, len(chunks), batch_size)):
+            batch = chunks[i:i + batch_size]
+            # Prepare data for upserting
+            vectors_to_upsert = []
+            for chunk in batch:
+                embedding = embedding_model.encode(chunk["text"]).tolist() # Convert to list for Pinecone
+                vectors_to_upsert.append({
+                    "id": chunk["id"],
+                    "values": embedding,
+                    "metadata": chunk["metadata"]
+                })
+            # Upsert to Pinecone
+            index.upsert(vectors=vectors_to_upsert)
+
+        print("✅ Finished generating embeddings and uploading to Pinecone")
+    else:
+        print("No chunks to generate embeddings for.")
+
+
+    # ======================================================
+    # 📌 8. Initialize Google Gemini client
+    # ======================================================
+    genai.configure(api_key=GOOGLE_API_KEY)
+    gemini_model = genai.GenerativeModel('gemini-pro-latest') # Using gemini-pro-latest
+
+
+    # ======================================================
+    # 📌 9. Retrieval function (using Pinecone)
+    # ======================================================
+    def retrieve_chunks(query, k=5):
+        # Generate embedding for the query
+        q_emb = embedding_model.encode(query).tolist()
+        # Query Pinecone index
+        results = index.query(vector=q_emb, top_k=k, include_metadata=True)
+        # Extract the text from the results
+        retrieved_texts = [match['metadata']['text'] for match in results['matches']]
+        return retrieved_texts
+
+
+    # ======================================================
+    # 📌 10. Generate answer with Gemini
+    # ======================================================
+    def generate_answer(query, k=5):
+        top_chunks_text = retrieve_chunks(query, k)
+        context = "\n\n".join(top_chunks_text)
+
+        prompt = f"""
+        You are an expert research assistant. Use only the context below to answer the question.
+
+        Context:
+        {context}
+
+        Question: {query}
+        """
+
+        response = gemini_model.generate_content(prompt)
+        return response.text
+
+    # ======================================================
+    # 📌 11. Test it!
+    # ======================================================
+    query = "tell me about the Stem Cell Health and Tissue Regeneration in Microgravity"
+    # Ensure there are chunks before attempting to generate an answer
+    if chunks:
+        answer = generate_answer(query)
+        print("\n💡 Answer from Gemini:\n")
+        print(answer)
+    else:
+        print("\nNo text extracted from PDFs to generate an answer.")

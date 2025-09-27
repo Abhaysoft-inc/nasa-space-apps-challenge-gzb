@@ -7,6 +7,15 @@ import { Html } from '@react-three/drei';
 import { motion } from 'framer-motion';
 import * as THREE from 'three';
 
+// Unified color palette for the whole page
+const PALETTE = {
+  light: '#f0e7e7', // text/accents on dark
+  dark: '#451804',  // deep background brown
+  accent1: '#c1440e', // brick orange
+  accent2: '#e77d11', // warm orange
+  accent3: '#fda600', // amber
+};
+
 // Research data generator - realistic NASA papers
 const generateResearchGalaxy = () => {
   // Fallback patterns as data URIs for when external images fail
@@ -22,7 +31,7 @@ const generateResearchGalaxy = () => {
   const categories = [
     { 
       name: 'Human Biology', 
-      color: '#EF4444', 
+      color: PALETTE.accent3, 
       position: [0, 20, 0],
       imageUrl: 'https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=512&q=60',
       fallbackUrl: fallbackPatterns['Human Biology'],
@@ -31,7 +40,7 @@ const generateResearchGalaxy = () => {
     },
     { 
       name: 'Plant Biology', 
-      color: '#10B981', 
+      color: PALETTE.accent3, 
       position: [30, 10, -20],
       imageUrl: 'https://images.unsplash.com/photo-1461354464878-ad92f492a5a0?auto=format&fit=crop&w=512&q=60',
       fallbackUrl: fallbackPatterns['Plant Biology'],
@@ -40,7 +49,7 @@ const generateResearchGalaxy = () => {
     },
     { 
       name: 'Microbiology', 
-      color: '#3B82F6', 
+      color: PALETTE.accent3, 
       position: [-25, 0, 15],
       imageUrl: 'https://images.unsplash.com/photo-1559757175-0eb30cd92a79?auto=format&fit=crop&w=512&q=60',
       fallbackUrl: fallbackPatterns['Microbiology'],
@@ -49,7 +58,7 @@ const generateResearchGalaxy = () => {
     },
     { 
       name: 'Cell Biology', 
-      color: '#8B5CF6', 
+      color: PALETTE.accent3, 
       position: [15, -15, 25],
       imageUrl: 'https://images.unsplash.com/photo-1581091870622-7c77c9c1cf3f?auto=format&fit=crop&w=512&q=60',
       fallbackUrl: fallbackPatterns['Cell Biology'],
@@ -58,7 +67,7 @@ const generateResearchGalaxy = () => {
     },
     { 
       name: 'Radiation Effects', 
-      color: '#F59E0B', 
+      color: PALETTE.accent3, 
       position: [-30, -10, -10],
       imageUrl: 'https://images.unsplash.com/photo-1529257414771-1960e7e0d8a5?auto=format&fit=crop&w=512&q=60',
       fallbackUrl: fallbackPatterns['Radiation Effects'],
@@ -67,7 +76,7 @@ const generateResearchGalaxy = () => {
     },
     { 
       name: 'Gravity Studies', 
-      color: '#EC4899', 
+      color: PALETTE.accent3, 
       position: [5, 25, -30],
       imageUrl: 'https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&w=512&q=60',
       fallbackUrl: fallbackPatterns['Gravity Studies'],
@@ -214,13 +223,13 @@ const generateAbstract = (category) => {
   return `This groundbreaking study examines ${category.toLowerCase()} in space environments, providing critical insights for future Mars missions and long-duration spaceflight. Our research reveals significant implications for astronaut health and mission success.`;
 };
 
-export default function GalaxyScene({ onPaperClick, currentEra, selectedCategory, searchTerm, selectedPaper }) {
+export default function GalaxyScene({ onPaperClick, currentEra, selectedCategory, searchTerm, selectedPaper, isPlaying = true }) {
   const groupRef = useRef();
   const [hoveredPaper, setHoveredPaper] = useState(null);
   const { camera } = useThree();
   
   // Generate research papers
-  const allPapers = useMemo(() => relaxPositions(generateResearchGalaxy()), []);
+  const allPapers = useMemo(() => generateResearchGalaxy(), []);
   
   // Filter papers based on era and category
   const visiblePapers = useMemo(() => {
@@ -252,10 +261,10 @@ export default function GalaxyScene({ onPaperClick, currentEra, selectedCategory
     return conns;
   }, [visiblePapers]);
 
-  // Auto-rotate galaxy
+  // Auto-rotate galaxy (pause when not playing)
   useFrame((state, delta) => {
-    if (groupRef.current && !selectedPaper) {
-      groupRef.current.rotation.y += delta * 0.1;
+    if (groupRef.current && !selectedPaper && isPlaying) {
+      groupRef.current.rotation.y += delta * 0.06;
       groupRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.2) * 0.05;
     }
   });
@@ -275,6 +284,7 @@ export default function GalaxyScene({ onPaperClick, currentEra, selectedCategory
           )}
           onClick={() => onPaperClick(paper)}
           onHover={setHoveredPaper}
+          isPlaying={isPlaying}
         />
       ))}
 
@@ -287,21 +297,20 @@ export default function GalaxyScene({ onPaperClick, currentEra, selectedCategory
             conn.fromId === selectedPaper?.id || 
             conn.toId === selectedPaper?.id
           }
+          isPlaying={isPlaying}
         />
       ))}
 
-      {/* Category Centers - subtle indicators */}
+      {/* Category Centers - subtle indicators (recolor to palette and dim) */}
       {['Human Biology', 'Plant Biology', 'Microbiology', 'Cell Biology', 'Radiation Effects', 'Gravity Studies'].map((category, index) => {
-        const colors = ['#EF4444', '#10B981', '#3B82F6', '#8B5CF6', '#F59E0B', '#EC4899'];
         const positions = [[0, 20, 0], [30, 10, -20], [-25, 0, 15], [15, -15, 25], [-30, -10, -10], [5, 25, -30]];
-        
         return (
           <mesh key={category} position={positions[index]} raycast={null}>
-            <sphereGeometry args={[0.5, 16, 16]} />
+            <sphereGeometry args={[0.4, 16, 16]} />
             <meshBasicMaterial 
-              color={colors[index]} 
+              color={PALETTE.light}
               transparent 
-              opacity={selectedCategory === category ? 0.3 : 0.1}
+              opacity={selectedCategory === category ? 0.18 : 0.08}
             />
           </mesh>
         );
@@ -311,7 +320,7 @@ export default function GalaxyScene({ onPaperClick, currentEra, selectedCategory
 }
 
 // Scientific Research Visual Component with Real Imagery
-function ResearchStar({ paper, isSelected, isHovered, isHighlighted, onClick, onHover }) {
+function ResearchStar({ paper, isSelected, isHovered, isHighlighted, onClick, onHover, isPlaying }) {
   const meshRef = useRef();
   const glowRef = useRef();
   const [texture, setTexture] = useState(null);
@@ -368,26 +377,36 @@ function ResearchStar({ paper, isSelected, isHovered, isHighlighted, onClick, on
     };
   }, [paper.imageUrl, paper.fallbackUrl, textureLoader]);
 
-  // Animation loop
+  // Animation loop (paused when not playing)
   useFrame((state) => {
     if (meshRef.current) {
-      // Gentle rotation for scientific feel
-      meshRef.current.rotation.y += 0.008;
-      meshRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.3 + paper.id * 0.1) * 0.05;
-      
-      // Subtle floating
-      meshRef.current.position.y = paper.position[1] + Math.sin(state.clock.elapsedTime * 0.5 + paper.id * 0.2) * 0.1;
+      if (isPlaying) {
+        // Very gentle rotation
+        meshRef.current.rotation.y += 0.002;
+        meshRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.2 + paper.id * 0.1) * 0.02;
+        // Very subtle floating
+        meshRef.current.position.y = paper.position[1] + Math.sin(state.clock.elapsedTime * 0.4 + paper.id * 0.2) * 0.03;
+      } else {
+        meshRef.current.position.y = paper.position[1];
+      }
     }
 
     if (glowRef.current) {
-      // Scientific glow effect
-      const glowIntensity = 0.25 + Math.sin(state.clock.elapsedTime * 0.8 + paper.id * 0.05) * 0.15;
-      glowRef.current.material.opacity = glowIntensity * (isHovered ? 1.5 : 1.0);
+      if (isPlaying) {
+        // Tiny subtle glow
+        const glowIntensity = 0.08 + Math.sin(state.clock.elapsedTime * 0.6 + paper.id * 0.05) * 0.05;
+        glowRef.current.material.opacity = glowIntensity;
+      } else {
+        glowRef.current.material.opacity = 0.12; // steady glow
+      }
     }
   });
 
-  const scale = paper.size * (isSelected ? 2.2 : isHighlighted ? 1.8 : isHovered ? 1.4 : 1.0);
-  const opacity = isSelected ? 1 : isHighlighted ? 0.98 : 0.9;
+  // Make all bubbles tiny; enlarge a bit on hover
+  const STAR_SIZE = 0.14;
+  const scaleFactor = isHovered ? 1.6 : 1.0;
+  const scale = STAR_SIZE * scaleFactor;
+  const opacity = 0.95;
 
   return (
     <group position={paper.position}>
@@ -410,93 +429,49 @@ function ResearchStar({ paper, isSelected, isHovered, isHighlighted, onClick, on
         }}
         scale={[scale, scale, scale]}
       >
-        <sphereGeometry args={[1.3, 32, 32]} />
-        {texture ? (
-          <meshStandardMaterial
-            map={texture}
-            transparent
-            opacity={opacity}
-            emissive={paper.color}
-            emissiveIntensity={0.6}
-            roughness={0.3}
-            metalness={0.1}
-          />
-        ) : (
-          <meshStandardMaterial
-            color={paper.color}
-            transparent
-            opacity={opacity}
-            emissive={paper.color}
-            emissiveIntensity={0.8}
-            roughness={0.5}
-            metalness={0.2}
-          />
-        )}
+        <sphereGeometry args={[1.0, 16, 16]} />
+        {/* Core dot: black fill */}
+        <meshBasicMaterial color="#000000" transparent opacity={opacity} />
       </mesh>
 
-      {/* Scientific Data Ring */}
-      <mesh rotation={[Math.PI / 2, 0, 0]} scale={[scale * 1.6, scale * 1.6, 1]} raycast={null}>
-        <ringGeometry args={[1.4, 1.7, 32]} />
-        <meshBasicMaterial
-          color={paper.color}
-          transparent
-          opacity={isHovered ? 0.6 : 0.35}
-          side={THREE.DoubleSide}
-        />
+      {/* Star border: thin white ring slightly larger than core */}
+      <mesh rotation={[Math.PI / 2, 0, 0]} scale={[scale, scale, 1]} raycast={null}>
+        <ringGeometry args={[1.1, 1.35, 64]} />
+        <meshBasicMaterial color="#ffffff" transparent opacity={0.7} side={THREE.DoubleSide} />
       </mesh>
 
-      {/* Research Field Glow */}
-      <mesh ref={glowRef} scale={[scale * 3, scale * 3, scale * 3]} raycast={null}>
-        <sphereGeometry args={[1, 16, 16]} />
-        <meshBasicMaterial
-          color={paper.color}
-          transparent
-          opacity={0.25}
-        />
+      {/* Shine glow: soft additive white spheres for a star-like blur */}
+      <mesh ref={glowRef} scale={[scale * 1.7, scale * 1.7, scale * 1.7]} raycast={null}>
+        <sphereGeometry args={[0.9, 16, 16]} />
+        <meshBasicMaterial color="#ffffff" transparent opacity={0.16} blending={THREE.AdditiveBlending} depthWrite={false} />
+      </mesh>
+      <mesh scale={[scale * 2.2, scale * 2.2, scale * 2.2]} raycast={null}>
+        <sphereGeometry args={[0.9, 12, 12]} />
+        <meshBasicMaterial color="#ffffff" transparent opacity={0.08} blending={THREE.AdditiveBlending} depthWrite={false} />
       </mesh>
 
-      {/* High Citation Indicators */}
-      {paper.citations > 50 && (
-        <mesh position={[0, 2 * scale, 0]} raycast={null}>
-          <octahedronGeometry args={[0.2]} />
-          <meshBasicMaterial color="#FFD700" transparent opacity={0.8} />
-        </mesh>
-      )}
-
-      {/* Breakthrough Research Marker */}
-      {paper.citations > 100 && (
-        <mesh position={[0, 2.5 * scale, 0]} raycast={null}>
-          <tetrahedronGeometry args={[0.15]} />
-          {/* Use a material that supports emissive to avoid three.js uniform errors */}
-          <meshStandardMaterial 
-            color="#FF4444" 
-            emissive="#FF4444" 
-            emissiveIntensity={0.3}
-            roughness={0.6}
-            metalness={0.2}
-          />
-        </mesh>
-      )}
+      {/* Removed yellow/orange indicator meshes for a cleaner star-only look */}
 
       {/* Research Info Display */}
       {(isSelected || isHovered) && (
-        <Html distanceFactor={12} position={[0, scale + 2.5, 0]}>
+        // Fixed-size, stable pop-up (no distance-based scaling)
+        <Html position={[0, scale + 2.5, 0]}>
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-black/95 backdrop-blur-lg rounded-lg p-4 text-white text-sm max-w-sm border border-white/20 pointer-events-none shadow-2xl"
+            className="bg-[#451804]/95 backdrop-blur-lg rounded-lg p-4 text-[#f0e7e7] text-sm w-80 h-48 overflow-hidden border border-[#f0e7e7]/20 pointer-events-none shadow-2xl"
             style={{ transform: 'translate(-50%, -100%)' }}
           >
-            <h3 className="font-bold text-blue-300 mb-2 leading-tight">{paper.title}</h3>
-            <p className="text-gray-300 text-xs mb-2">{paper.authors.slice(0, 2).join(', ')}</p>
+            <h3 className="font-bold mb-2 leading-tight" style={{color: PALETTE.accent2}}>{paper.title}</h3>
+            <p className="text-xs mb-2" style={{color: '#f0e7e7'}}>{paper.authors.slice(0, 2).join(', ')}</p>
             
             <div className="flex items-center justify-between text-xs mb-2">
-              <span className="text-gray-400">{paper.year} • {paper.era}</span>
-              <span className="text-yellow-400 font-semibold">{paper.citations} citations</span>
+              <span className="opacity-80">{paper.year} • {paper.era}</span>
+              <span className="font-semibold" style={{color: PALETTE.accent3}}>{paper.citations} citations</span>
             </div>
             
             {paper.description && (
-              <p className="text-gray-300 text-xs mb-3 border-t border-white/10 pt-2 leading-relaxed">
+              <p className="text-xs mb-3 border-t pt-2 leading-relaxed" style={{borderColor: '#f0e7e733'}}>
                 {paper.description}
               </p>
             )}
@@ -504,16 +479,12 @@ function ResearchStar({ paper, isSelected, isHovered, isHighlighted, onClick, on
             <div className="flex items-center justify-between">
               <span 
                 className="inline-block px-3 py-1 rounded-full text-xs font-medium"
-                style={{ 
-                  backgroundColor: paper.color + '25',
-                  color: paper.color,
-                  border: `1px solid ${paper.color}60`
-                }}
+                style={{ backgroundColor: '#f0e7e71f', color: PALETTE.accent2, border: `1px solid ${PALETTE.accent2}66` }}
               >
                 {paper.category}
               </span>
               
-              <div className="text-xs text-gray-400">
+              <div className="text-xs opacity-80">
                 {paper.texture}
               </div>
             </div>
@@ -525,7 +496,7 @@ function ResearchStar({ paper, isSelected, isHovered, isHighlighted, onClick, on
 }
 
 // Citation Connection Lines
-function CitationLink({ connection, isVisible }) {
+function CitationLink({ connection, isVisible, isPlaying = true }) {
   const meshRef = useRef();
 
   // Compute cylinder transform to connect two points
@@ -544,10 +515,15 @@ function CitationLink({ connection, isVisible }) {
 
   useFrame((state) => {
     if (!isVisible || !meshRef.current) return;
-    const t = state.clock.elapsedTime;
-    const a = 0.15 + Math.sin(t * 0.8 + connection.fromId * 0.1) * 0.1;
     const mat = meshRef.current.material;
-    if (mat) mat.opacity = Math.max(0.08, a);
+    if (!mat) return;
+    if (isPlaying) {
+      const t = state.clock.elapsedTime;
+      const a = 0.15 + Math.sin(t * 0.8 + connection.fromId * 0.1) * 0.1;
+      mat.opacity = Math.max(0.08, a);
+    } else {
+      mat.opacity = 0.2;
+    }
   });
 
   if (!isVisible) return null;
@@ -562,12 +538,15 @@ function CitationLink({ connection, isVisible }) {
       raycast={null}
     >
       {/* Unit-height slim cylinder aligned on Y, scaled to length */}
-      <cylinderGeometry args={[0.03, 0.03, 1, 8]} />
-      <meshBasicMaterial
-        color={connection.color}
+      <cylinderGeometry args={[0.03, 0.03, 1, 16]} />
+      <meshStandardMaterial 
+        color="#ffffff"
+        emissive="#ffffff"
+        emissiveIntensity={0.25}
+        metalness={0.8}
+        roughness={0.2}
         transparent
-        opacity={0.25}
-        depthWrite={false}
+        opacity={0.6}
       />
     </mesh>
   );

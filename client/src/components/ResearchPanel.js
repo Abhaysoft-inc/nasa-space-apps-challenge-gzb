@@ -6,6 +6,33 @@ import { X, BookOpen, Users2, Calendar, Link2, Star, Quote } from 'lucide-react'
 export default function ResearchPanel({ selectedPaper, onClose }) {
   if (!selectedPaper) return null;
 
+  const buildDoiUrl = (doi) => {
+    if (!doi) return null;
+    return doi.startsWith('http') ? doi : `https://doi.org/${doi}`;
+  };
+
+  const openOriginalPaper = () => {
+    const doiUrl = buildDoiUrl(selectedPaper.doi);
+    const fallback = selectedPaper.title
+      ? `https://www.google.com/search?q=${encodeURIComponent(selectedPaper.title + ' site:ncbi.nlm.nih.gov|doi.org')}`
+      : 'https://scholar.google.com';
+    const url = doiUrl || fallback;
+    try {
+      window.open(url, '_blank', 'noopener,noreferrer');
+    } catch {}
+  };
+
+  const exploreCitations = () => {
+    // Prefer DOI-based scholar query; fallback to title search
+    const query = selectedPaper.doi
+      ? `doi:${selectedPaper.doi}`
+      : (selectedPaper.title || 'space biology research');
+    const url = `https://scholar.google.com/scholar?hl=en&q=${encodeURIComponent(query)}`;
+    try {
+      window.open(url, '_blank', 'noopener,noreferrer');
+    } catch {}
+  };
+
   return (
     <AnimatePresence>
       <motion.div
@@ -150,6 +177,7 @@ export default function ResearchPanel({ selectedPaper, onClose }) {
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
+              onClick={openOriginalPaper}
               className="w-full py-3 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg text-white font-medium hover:from-blue-500 hover:to-purple-500 transition-all"
             >
               View Full Paper
@@ -157,6 +185,7 @@ export default function ResearchPanel({ selectedPaper, onClose }) {
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
+              onClick={exploreCitations}
               className="w-full py-3 border border-gray-600 rounded-lg text-gray-300 hover:bg-gray-800 transition-all"
             >
               Explore Citations

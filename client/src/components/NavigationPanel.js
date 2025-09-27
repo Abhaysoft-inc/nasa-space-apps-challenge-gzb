@@ -39,29 +39,29 @@ export default function NavigationPanel({
     >
       <div className="p-6">
         {/* Mission Status */}
-        <div className="bg-gradient-to-r from-blue-600/20 to-purple-600/20 rounded-xl p-4 border border-blue-400/30 mb-6">
+  <div className="rounded-xl p-4 mb-6" style={{ backgroundColor: 'rgba(4,4,4,0.1)', border: '1px solid #f0e7e733' }}>
           <div className="flex items-center gap-3 mb-3">
             <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
               <Target className="w-4 h-4 text-white" />
             </div>
             <div>
-              <h3 className="text-white font-semibold">Mission Progress</h3>
-              <p className="text-gray-400 text-sm">Space Explorer Status</p>
+              <h3 className="font-semibold" style={{color:'#f0e7e7'}}>Mission Progress</h3>
+              <p className="text-sm" style={{color:'#f0e7e7aa'}}>Space Explorer Status</p>
             </div>
           </div>
           
           <div className="grid grid-cols-3 gap-3">
             <div className="text-center">
-              <div className="text-lg font-bold text-blue-400">{stats.papersDiscovered}</div>
-              <div className="text-xs text-gray-400">Discovered</div>
+              <div className="text-lg font-bold" style={{color:'#fda600'}}>{stats.papersDiscovered}</div>
+              <div className="text-xs" style={{color:'#f0e7e7aa'}}>Discovered</div>
             </div>
             <div className="text-center">
-              <div className="text-lg font-bold text-purple-400">{stats.connectionsFound}</div>
-              <div className="text-xs text-gray-400">Connected</div>
+              <div className="text-lg font-bold" style={{color:'#e77d11'}}>{stats.connectionsFound}</div>
+              <div className="text-xs" style={{color:'#f0e7e7aa'}}>Connected</div>
             </div>
             <div className="text-center">
-              <div className="text-lg font-bold text-pink-400">{stats.erasExplored.size}</div>
-              <div className="text-xs text-gray-400">Eras</div>
+              <div className="text-lg font-bold" style={{color:'#c1440e'}}>{stats.erasExplored.size}</div>
+              <div className="text-xs" style={{color:'#f0e7e7aa'}}>Eras</div>
             </div>
           </div>
         </div>
@@ -70,7 +70,7 @@ export default function NavigationPanel({
         <div className="mb-6">
           <div className="flex items-center gap-2 mb-3">
             <Search className="w-4 h-4 text-gray-400" />
-            <h3 className="text-white font-semibold">Research Scanner</h3>
+            <h3 className="font-semibold" style={{color:'#f0e7e7'}}>Research Scanner</h3>
           </div>
           
           <div className="relative">
@@ -80,7 +80,8 @@ export default function NavigationPanel({
               placeholder="Search papers, authors, keywords..."
               value={searchTerm}
               onChange={(e) => onSearchChange(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 bg-gray-800/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-blue-400 focus:outline-none"
+              className="w-full pl-10 pr-4 py-3 rounded-lg focus:outline-none"
+              style={{ backgroundColor:'#00000055', border:'1px solid #f0e7e733', color:'#f0e7e7' }}
             />
           </div>
 
@@ -90,7 +91,7 @@ export default function NavigationPanel({
               animate={{ opacity: 1, y: 0 }}
               className="mt-2 text-sm text-gray-400"
             >
-              Scanning galaxy for: <span className="text-blue-400 font-semibold">"{searchTerm}"</span>
+              <span style={{color:'#f0e7e7aa'}}>Scanning galaxy for: </span><span className="font-semibold" style={{color:'#fda600'}}>"{searchTerm}"</span>
             </motion.div>
           )}
         </div>
@@ -99,7 +100,7 @@ export default function NavigationPanel({
         <div className="mb-6">
           <div className="flex items-center gap-2 mb-3">
             <Filter className="w-4 h-4 text-gray-400" />
-            <h3 className="text-white font-semibold">Research Categories</h3>
+            <h3 className="font-semibold" style={{color:'#f0e7e7'}}>Research Categories</h3>
           </div>
           
           <div className="space-y-2">
@@ -109,29 +110,22 @@ export default function NavigationPanel({
                 whileHover={{ scale: 1.02, x: 4 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => onCategoryChange(category.id)}
-                className={`w-full p-3 rounded-lg text-left transition-all ${
-                  selectedCategory === category.id
-                    ? 'bg-gradient-to-r from-blue-600/30 to-purple-600/30 border border-blue-400/50'
-                    : 'bg-gray-800/30 hover:bg-gray-700/50 border border-transparent'
-                }`}
+                className={`w-full p-3 rounded-lg text-left transition-all ${selectedCategory === category.id ? '' : ''}`}
+                style={ selectedCategory === category.id ? { backgroundColor:'rgba(4,4,4,0.1)', border:'1px solid #f0e7e744' } : { backgroundColor:'#00000055', border:'1px solid transparent' } }
                 suppressHydrationWarning
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className={`w-3 h-3 rounded-full ${
-                      category.id === 'all' 
-                        ? 'bg-gradient-to-r from-blue-400 to-purple-400'
-                        : getCategoryColor(category.id)
-                    }`} />
+                    <div className="w-3 h-3 rounded-full" style={{backgroundColor:'#fda600'}} />
                     <span className={`font-medium ${
-                      selectedCategory === category.id ? 'text-white' : category.color
-                    }`}>
+                      selectedCategory === category.id ? 'text-white' : ''
+                    }`} style={{color:'#f0e7e7'}}>
                       {category.name}
                     </span>
                   </div>
                   <div className="flex items-center gap-1">
-                    <Zap className="w-3 h-3 text-yellow-400" />
-                    <span className="text-sm text-gray-400">{category.count}</span>
+                    <Zap className="w-3 h-3" style={{color:'#fda600'}} />
+                    <span className="text-sm" style={{color:'#f0e7e7aa'}}>{category.count}</span>
                   </div>
                 </div>
               </motion.button>
@@ -141,14 +135,15 @@ export default function NavigationPanel({
 
         {/* Quick Actions */}
         <div className="mb-6">
-          <h3 className="text-white font-semibold mb-3">Quick Navigation</h3>
+          <h3 className="font-semibold mb-3" style={{color:'#f0e7e7'}}>Quick Navigation</h3>
           
           <div className="space-y-2">
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={onResetView}
-              className="w-full p-3 bg-gradient-to-r from-green-600/20 to-emerald-600/20 border border-green-400/30 rounded-lg text-green-400 font-medium hover:from-green-600/30 hover:to-emerald-600/30 transition-all"
+              className="w-full p-3 rounded-lg font-medium transition-all"
+              style={{ backgroundColor:'rgba(4,4,4,0.1)', border:'1px solid #f0e7e744', color:'#f0e7e7' }}
             >
               <div className="flex items-center gap-2 justify-center">
                 <RotateCcw className="w-4 h-4" />
@@ -159,7 +154,8 @@ export default function NavigationPanel({
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="w-full p-3 bg-gray-800/50 border border-gray-600 rounded-lg text-gray-300 font-medium hover:bg-gray-700/50 transition-all"
+              className="w-full p-3 rounded-lg font-medium transition-all"
+              style={{ backgroundColor:'#00000055', border:'1px solid #f0e7e733', color:'#f0e7e7' }}
             >
               <div className="flex items-center gap-2 justify-center">
                 <SortAsc className="w-4 h-4" />
@@ -170,12 +166,12 @@ export default function NavigationPanel({
         </div>
 
         {/* Explorer Tips */}
-        <div className="bg-gradient-to-r from-yellow-600/20 to-orange-600/20 rounded-xl p-4 border border-yellow-400/30">
-          <h4 className="text-yellow-400 font-semibold mb-2 flex items-center gap-2">
-            <Zap className="w-4 h-4" />
+  <div className="rounded-xl p-4" style={{ backgroundColor:'#fda60022', border:'1px solid #f0e7e733' }}>
+          <h4 className="font-semibold mb-2 flex items-center gap-2" style={{color:'#fda600'}}>
+            <Zap className="w-4 h-4" style={{color:'#fda600'}} />
             Explorer Tips
           </h4>
-          <div className="space-y-2 text-sm text-gray-300">
+          <div className="space-y-2 text-sm" style={{color:'#f0e7e7'}}>
             <p>• Click stars to explore research papers</p>
             <p>• Follow glowing connections between citations</p>
             <p>• Use timeline to travel through research eras</p>
