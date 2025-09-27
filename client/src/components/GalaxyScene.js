@@ -255,7 +255,8 @@ export default function GalaxyScene({ onPaperClick, currentEra, selectedCategory
   // Auto-rotate galaxy
   useFrame((state, delta) => {
     if (groupRef.current && !selectedPaper) {
-      groupRef.current.rotation.y += delta * 0.1;
+      // Slow down overall galaxy rotation for a calmer feel
+      groupRef.current.rotation.y += delta * 0.02;
       groupRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.2) * 0.05;
     }
   });
@@ -372,7 +373,8 @@ function ResearchStar({ paper, isSelected, isHovered, isHighlighted, onClick, on
   useFrame((state) => {
     if (meshRef.current) {
       // Gentle rotation for scientific feel
-      meshRef.current.rotation.y += 0.008;
+      // Slow down individual star rotation
+      meshRef.current.rotation.y += 0.002;
       meshRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.3 + paper.id * 0.1) * 0.05;
       
       // Subtle floating
@@ -381,8 +383,10 @@ function ResearchStar({ paper, isSelected, isHovered, isHighlighted, onClick, on
 
     if (glowRef.current) {
       // Scientific glow effect
-      const glowIntensity = 0.25 + Math.sin(state.clock.elapsedTime * 0.8 + paper.id * 0.05) * 0.15;
-      glowRef.current.material.opacity = glowIntensity * (isHovered ? 1.5 : 1.0);
+      // Make the glow subtler and smaller
+      const glowIntensity = 0.15 + Math.sin(state.clock.elapsedTime * 0.8 + paper.id * 0.05) * 0.1;
+      const targetOpacity = Math.min(0.25, glowIntensity * (isHovered ? 1.2 : 1.0));
+      glowRef.current.material.opacity = targetOpacity;
     }
   });
 
@@ -435,23 +439,25 @@ function ResearchStar({ paper, isSelected, isHovered, isHighlighted, onClick, on
       </mesh>
 
       {/* Scientific Data Ring */}
-      <mesh rotation={[Math.PI / 2, 0, 0]} scale={[scale * 1.6, scale * 1.6, 1]} raycast={null}>
-        <ringGeometry args={[1.4, 1.7, 32]} />
+      {/* Make the ring thinner and smaller so the highlight looks compact */}
+      <mesh rotation={[Math.PI / 2, 0, 0]} scale={[scale * 1.15, scale * 1.15, 1]} raycast={null}>
+        <ringGeometry args={[1.45, 1.52, 48]} />
         <meshBasicMaterial
           color={paper.color}
           transparent
-          opacity={isHovered ? 0.6 : 0.35}
+          opacity={isHovered ? 0.4 : 0.25}
           side={THREE.DoubleSide}
         />
       </mesh>
 
       {/* Research Field Glow */}
-      <mesh ref={glowRef} scale={[scale * 3, scale * 3, scale * 3]} raycast={null}>
-        <sphereGeometry args={[1, 16, 16]} />
+      {/* Reduce glow “bubble” size for a subtle highlight */}
+      <mesh ref={glowRef} scale={[scale * 1.3, scale * 1.3, scale * 1.3]} raycast={null}>
+        <sphereGeometry args={[0.8, 16, 16]} />
         <meshBasicMaterial
           color={paper.color}
           transparent
-          opacity={0.25}
+          opacity={0.15}
         />
       </mesh>
 
@@ -480,14 +486,15 @@ function ResearchStar({ paper, isSelected, isHovered, isHighlighted, onClick, on
 
       {/* Research Info Display */}
       {(isSelected || isHovered) && (
-        <Html distanceFactor={12} position={[0, scale + 2.5, 0]}>
+        // Fixed-size hover card regardless of star size or distance
+        <Html position={[0, scale + 2.5, 0]}>
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-black/95 backdrop-blur-lg rounded-lg p-4 text-white text-sm max-w-sm border border-white/20 pointer-events-none shadow-2xl"
+            className="bg-black/95 backdrop-blur-lg rounded-lg p-4 text-white text-sm w-80 h-48 overflow-hidden border border-white/20 pointer-events-none shadow-2xl"
             style={{ transform: 'translate(-50%, -100%)' }}
           >
-            <h3 className="font-bold text-blue-300 mb-2 leading-tight">{paper.title}</h3>
+            <h3 className="font-bold text-blue-300 mb-2 leading-tight truncate">{paper.title}</h3>
             <p className="text-gray-300 text-xs mb-2">{paper.authors.slice(0, 2).join(', ')}</p>
             
             <div className="flex items-center justify-between text-xs mb-2">

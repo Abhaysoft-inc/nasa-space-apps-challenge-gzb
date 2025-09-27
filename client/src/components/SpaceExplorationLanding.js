@@ -54,7 +54,19 @@ export default function SpaceExplorationLanding() {
   }, []);
 
   return (
-    <div className="relative w-full h-screen bg-gradient-to-b from-slate-900 via-purple-900/20 to-black overflow-hidden">
+    <div className="relative w-full h-screen overflow-hidden">
+      {/* Background video */}
+      <video
+        className="absolute inset-0 w-full h-full object-cover -z-10"
+        src="/Landing_bg.mp4"
+        autoPlay
+        muted
+        loop
+        playsInline
+        aria-hidden
+      />
+      {/* Soft dark overlay for contrast over video */}
+      <div className="absolute inset-0 bg-black/40 -z-10" />
       {/* Space Header */}
       <SpaceHeader explorerStats={explorerStats} />
       
@@ -64,11 +76,9 @@ export default function SpaceExplorationLanding() {
           eventSource={mainCanvasContainerRef}
           eventPrefix="client"
           camera={{ position: [0, 0, 60], fov: 70 }}
-          gl={{ antialias: true, alpha: false, powerPreference: "high-performance" }}
+          gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
         >
-          <color attach="background" args={['#000014']} />
-          {/* Depth fog for better spatial perception */}
-          <fog attach="fog" args={["#000014", 50, 300]} />
+          {/* Transparent canvas to show video background */}
           
           {/* Galaxy Scene */}
           <Suspense fallback={<GalaxyLoader />}>
@@ -80,16 +90,16 @@ export default function SpaceExplorationLanding() {
               selectedPaper={selectedPaper}
             />
             
-            {/* Cosmic Environment */}
+            {/* Subtle starfield to blend with video background */}
             <Stars 
               raycast={null}
-              radius={350} 
-              depth={120} 
-              count={12000} 
-              factor={8} 
-              saturation={1.0} 
-              fade={true} 
-              speed={0.6}
+              radius={400}
+              depth={120}
+              count={3000}
+              factor={1.1}
+              saturation={0.0}
+              fade
+              speed={0.05}
             />
             
             {/* Dynamic Lighting (brighter to ensure visibility) */}
@@ -107,7 +117,7 @@ export default function SpaceExplorationLanding() {
               minDistance={20}
               maxDistance={300}
               autoRotate={!selectedPaper}
-              autoRotateSpeed={1.0}
+              autoRotateSpeed={0.3}
               dampingFactor={0.08}
               enableDamping={true}
               rotateSpeed={0.8}
@@ -116,16 +126,6 @@ export default function SpaceExplorationLanding() {
             />
           </Suspense>
         </Canvas>
-        {/* Always-on starfield behind – must NOT capture pointer events */}
-        <div className="pointer-events-none absolute inset-0 z-0">
-          <Canvas
-            className="pointer-events-none"  
-            camera={{ position: [0, 0, 60], fov: 70 }}
-            gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
-          >
-            <Stars raycast={null} radius={400} depth={80} count={4000} factor={2.5} fade speed={0.2} />
-          </Canvas>
-        </div>
 
         {/* Compact Welcome Message */}
         <AnimatePresence>

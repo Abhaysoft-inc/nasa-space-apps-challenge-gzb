@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { useRef } from 'react';
 import { Play, Pause, Calendar } from 'lucide-react';
 
 export default function TimelineExplorer({ 
@@ -10,6 +11,7 @@ export default function TimelineExplorer({
   onTogglePlay = () => {},
   explorerStats
 }) {
+  const trackRef = useRef(null);
   // Ensure explorerStats has proper defaults
   const stats = explorerStats || {
     erasExplored: new Set(),
@@ -63,7 +65,9 @@ export default function TimelineExplorer({
   };
 
   const onTrackClick = (e) => {
-    const rect = e.currentTarget.getBoundingClientRect();
+    const el = trackRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
     const p = ((e.clientX - rect.left) / rect.width) * 100;
     handleFromPercent(p);
   };
@@ -74,7 +78,9 @@ export default function TimelineExplorer({
     onTrackClick(e);
     const move = (ev) => {
       if (!isDown) return;
-      const rect = e.currentTarget.getBoundingClientRect();
+      const el = trackRef.current;
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
       const p = ((ev.clientX - rect.left) / rect.width) * 100;
       handleFromPercent(p);
     };
@@ -110,6 +116,7 @@ export default function TimelineExplorer({
             {/* Clickable track */}
             <div 
               className="absolute top-1/2 -translate-y-1/2 left-0 right-0 h-2 bg-gray-800/80 rounded-full cursor-pointer"
+              ref={trackRef}
               onClick={onTrackClick}
               onMouseDown={onMouseDown}
             >
