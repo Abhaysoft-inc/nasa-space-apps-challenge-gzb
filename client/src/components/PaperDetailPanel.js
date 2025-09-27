@@ -6,6 +6,22 @@ import { X, ExternalLink, Users, Calendar, Quote, TrendingUp, Link2, BookOpen } 
 export default function PaperDetailPanel({ paper, onClose }) {
   if (!paper) return null;
 
+  const buildDoiUrl = (doi) => {
+    if (!doi) return null;
+    return doi.startsWith('http') ? doi : `https://doi.org/${doi}`;
+  };
+
+  const openOriginalPaper = () => {
+    const doiUrl = buildDoiUrl(paper.doi);
+    const fallback = paper.title
+      ? `https://www.google.com/search?q=${encodeURIComponent(paper.title + ' site:ncbi.nlm.nih.gov|doi.org')}`
+      : 'https://scholar.google.com';
+    const url = doiUrl || fallback;
+    try {
+      window.open(url, '_blank', 'noopener,noreferrer');
+    } catch {}
+  };
+
   return (
     <motion.div
       initial={{ x: '100%' }}
@@ -154,6 +170,7 @@ export default function PaperDetailPanel({ paper, onClose }) {
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
+            onClick={openOriginalPaper}
             className="w-full py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-medium hover:shadow-lg transition-shadow"
           >
             View Full Paper

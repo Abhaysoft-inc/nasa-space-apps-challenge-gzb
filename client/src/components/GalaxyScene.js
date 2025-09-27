@@ -229,7 +229,7 @@ export default function GalaxyScene({ onPaperClick, currentEra, selectedCategory
   const { camera } = useThree();
   
   // Generate research papers
-  const allPapers = useMemo(() => relaxPositions(generateResearchGalaxy()), []);
+  const allPapers = useMemo(() => generateResearchGalaxy(), []);
   
   // Filter papers based on era and category
   const visiblePapers = useMemo(() => {
@@ -403,7 +403,7 @@ function ResearchStar({ paper, isSelected, isHovered, isHighlighted, onClick, on
   });
 
   // Make all bubbles tiny; enlarge a bit on hover
-  const STAR_SIZE = 0.06;
+  const STAR_SIZE = 0.14;
   const scaleFactor = isHovered ? 1.6 : 1.0;
   const scale = STAR_SIZE * scaleFactor;
   const opacity = 0.95;
@@ -450,28 +450,7 @@ function ResearchStar({ paper, isSelected, isHovered, isHighlighted, onClick, on
         <meshBasicMaterial color="#ffffff" transparent opacity={0.08} blending={THREE.AdditiveBlending} depthWrite={false} />
       </mesh>
 
-      {/* High Citation Indicators */}
-      {paper.citations > 50 && (
-        <mesh position={[0, 2 * scale, 0]} raycast={null}>
-          <octahedronGeometry args={[0.2]} />
-          <meshBasicMaterial color={PALETTE.accent3} transparent opacity={0.6} />
-        </mesh>
-      )}
-
-      {/* Breakthrough Research Marker */}
-      {paper.citations > 100 && (
-        <mesh position={[0, 2.5 * scale, 0]} raycast={null}>
-          <tetrahedronGeometry args={[0.15]} />
-          {/* Use a material that supports emissive to avoid three.js uniform errors */}
-          <meshStandardMaterial 
-            color={PALETTE.accent1}
-            emissive={PALETTE.accent1}
-            emissiveIntensity={0.2}
-            roughness={0.6}
-            metalness={0.2}
-          />
-        </mesh>
-      )}
+      {/* Removed yellow/orange indicator meshes for a cleaner star-only look */}
 
       {/* Research Info Display */}
       {(isSelected || isHovered) && (
@@ -559,8 +538,16 @@ function CitationLink({ connection, isVisible, isPlaying = true }) {
       raycast={null}
     >
       {/* Unit-height slim cylinder aligned on Y, scaled to length */}
-      <cylinderGeometry args={[0.03, 0.03, 1, 8]} />
-      <meshBasicMaterial color="#000000" transparent opacity={0.25} depthWrite={false} />
+      <cylinderGeometry args={[0.03, 0.03, 1, 16]} />
+      <meshStandardMaterial 
+        color="#ffffff"
+        emissive="#ffffff"
+        emissiveIntensity={0.25}
+        metalness={0.8}
+        roughness={0.2}
+        transparent
+        opacity={0.6}
+      />
     </mesh>
   );
 }
