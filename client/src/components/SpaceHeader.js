@@ -15,7 +15,7 @@ export default function SpaceHeader({ explorerStats, isSidebarOpen = true, onTog
     <motion.header
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      className="absolute top-0 left-0 right-0 z-40 bg-black/30 backdrop-blur-md border-b border-white/10"
+      className="fixed top-14 left-0 right-0 z-40 bg-black/30 backdrop-blur-md border-b border-white/10"
     >
       <div className="flex items-center justify-between px-6 py-4">
         {/* Logo & Title */}

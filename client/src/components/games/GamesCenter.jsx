@@ -64,6 +64,33 @@ export default function GamesCenter(){
         {tab === 'overview' && (
           <div className="space-y-6">
             <KnowledgeGamesSection seed={3} />
+            {/* Featured Narrative Game */}
+            <section className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-lg font-semibold text-gray-900">Featured Interactive Story</h2>
+                <a href="/games/bion-m1" className="text-sm text-indigo-600 hover:text-indigo-700">Open →</a>
+              </div>
+              <div className="grid md:grid-cols-[1fr,2fr] gap-4 items-center">
+                <div className="rounded-xl overflow-hidden border border-gray-200">
+                  <div className="aspect-[16/9] bg-gradient-to-br from-indigo-600 to-fuchsia-600 relative">
+                    <img src="/biology.jpeg" alt="Bion‑M1" className="absolute inset-0 w-full h-full object-cover opacity-60 mix-blend-luminosity"/>
+                    <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(255,255,255,0.15),transparent_60%)]" />
+                  </div>
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold text-gray-900">Mission Bion‑M1: The Complete Story</h3>
+                  <p className="text-sm text-gray-600 mt-1">A story‑driven web experience that follows 30 days of space biology aboard the Bion‑M1 biosatellite. Make decisions, analyze telemetry, and unlock the bone‑health breakthrough.</p>
+                  <div className="mt-3 flex flex-wrap gap-2 text-xs">
+                    <span className="px-2 py-1 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200">Educational</span>
+                    <span className="px-2 py-1 rounded-md bg-indigo-50 text-indigo-700 border border-indigo-200">Narrative</span>
+                    <span className="px-2 py-1 rounded-md bg-amber-50 text-amber-700 border border-amber-200">Beginner‑friendly</span>
+                  </div>
+                  <div className="mt-4">
+                    <a href="/games/bion-m1" className="inline-flex items-center px-4 py-2 rounded-md bg-indigo-600 text-white hover:bg-indigo-500">Play Now</a>
+                  </div>
+                </div>
+              </div>
+            </section>
           </div>
         )}
 
