@@ -1,0 +1,9 @@
+GENERATE: effects/smoke-particle.png
+DIMENSIONS: 32x32
+FORMAT: PNG
+TYPE: effect
+
+PROMPT:
+Wispy smoke particle effect, light gray to white gradient, soft translucent edges, for rocket launch smoke trails, 32x32 pixels, PNG with transparency, realistic game particle style
+
+After generation, replace this file with the actual image!

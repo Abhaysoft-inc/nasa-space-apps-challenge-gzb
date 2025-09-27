@@ -1,0 +1,141 @@
+# 🎮 BION-M1 VISUAL NOVEL - MASTER PROMPTS
+# Generated using Google Gemini API: AIzaSyDrqsFxk2IvCaJq...
+# Total Assets: 13
+
+## 🔥 SINGLE BATCH PROMPT (Copy entire block below)
+===============================================================
+
+Generate 13 separate professional anime-style visual novel images for NASA Bion-M1 space mission game with consistent art direction:
+
+IMAGE 1 (backgrounds/nasa-ames-lab.jpg): Professional NASA Ames Research Center laboratory interior, modern scientific facility with clean white walls, fluorescent lighting, advanced microscopes, centrifuges, computers, biological samples in glass containers, sterile environment, bright clinical atmosphere, anime visual novel background style, 16:9 aspect ratio, high detail - 1920x1080 JPG
+
+IMAGE 2 (backgrounds/baikonur-launch.jpg): Baikonur Cosmodrome launch pad at golden hour, Soyuz rocket standing on launch pad, industrial space facility infrastructure, dramatic orange sunset sky, launch tower and support structures, wide Kazakhstan landscape, epic inspiring atmosphere, anime visual novel background style, cinematic lighting, 16:9 aspect ratio - 1920x1080 JPG
+
+IMAGE 3 (backgrounds/mission-control-room.jpg): NASA Mission Control Houston interior, multiple tiers of control stations, large wall screens displaying orbital data, professional flight controllers at computer consoles, blue and green ambient lighting, high-tech atmosphere, serious focused environment, anime visual novel background style, 16:9 aspect ratio - 1920x1080 JPG
+
+IMAGE 4 (backgrounds/space-station-interior.jpg): International Space Station interior module, cylindrical corridor with curved walls, scientific equipment floating in zero gravity, control panels and monitors, cables and apparatus, clean technical environment, natural Earth lighting from viewport, anime visual novel background style, 16:9 aspect ratio - 1920x1080 JPG
+
+IMAGE 5 (backgrounds/recovery-landing.jpg): Soyuz capsule recovery site in Kazakhstan steppe, wide open grassland, clear blue sky, recovery vehicles and helicopters in distance, parachute visible, peaceful mission completion mood, anime visual novel background style, bright daylight, 16:9 aspect ratio - 1920x1080 JPG
+
+IMAGE 6 (characters/dr-sarah-chen.png): Dr. Sarah Chen, professional Asian-American female scientist age 35-40, anime visual novel character art style, white lab coat over dark professional blouse, confident intelligent expression, shoulder-length black hair, standing pose facing forward, full body head to feet, transparent background, 1:2 portrait ratio - 512x1024 PNG
+
+IMAGE 7 (characters/mission-director.png): NASA Mission Director, authoritative Caucasian male age 50-55, anime visual novel character style, dark blue NASA polo shirt with logo, military bearing, confident leadership expression, short professional gray hair, commanding presence, standing pose facing forward, full body, transparent background, 1:2 portrait - 512x1024 PNG
+
+IMAGE 8 (characters/control-officer.png): Mission Control Officer, technical specialist diverse ethnicity age 30-35, anime visual novel character style, NASA uniform with communication headset, holding tablet device, focused analytical expression, professional approachable appearance, standing pose facing forward, full body, transparent background, 1:2 portrait - 512x1024 PNG
+
+IMAGE 9 (characters/scientist-team.png): Young research scientist, diverse background age 25-35, anime visual novel character style, white lab coat over casual professional attire, friendly collaborative expression, modern professional appearance, team player presence, standing pose facing forward, full body, transparent background, 1:2 portrait - 512x1024 PNG
+
+IMAGE 10 (ui/dialogue-panel.png): Visual novel dialogue text panel UI element, rounded rectangle with subtle shadows, dark navy blue background with bright cyan glowing borders, semi-transparent for text overlay, professional game interface style, clean modern design, 1100x200 dimensions, PNG transparency - custom PNG
+
+IMAGE 11 (ui/choice-button.png): Visual novel choice button UI element, rounded rectangular button, dark blue gradient background with cyan accent borders, professional clickable appearance with subtle glow effect, clean game interface style, 1000x60 dimensions, PNG transparency - custom PNG
+
+IMAGE 12 (effects/spark-particle.png): Small bright particle effect, white to cyan gradient sparkle, glowing center with radiating light rays, for launch and success animations, 32x32 pixels, PNG with full transparency, game particle effect style - custom PNG
+
+IMAGE 13 (effects/smoke-particle.png): Wispy smoke particle effect, light gray to white gradient, soft translucent edges, for rocket launch smoke trails, 32x32 pixels, PNG with transparency, realistic game particle style - custom PNG
+
+Style Requirements: Consistent anime/visual novel aesthetic, professional scientific theme, cool color palette (blues, cyans, whites), high detail, clean lines, cell shading.
+
+Generate all as separate individual files.
+
+===============================================================
+
+## 📋 INDIVIDUAL PROMPTS
+
+
+### 1. backgrounds/nasa-ames-lab.jpg
+**Format:** JPG | **Size:** 1920x1080
+**Prompt:** Professional NASA Ames Research Center laboratory interior, modern scientific facility with clean white walls, fluorescent lighting, advanced microscopes, centrifuges, computers, biological samples in glass containers, sterile environment, bright clinical atmosphere, anime visual novel background style, 16:9 aspect ratio, high detail
+**Save as:** backgrounds/nasa-ames-lab.jpg
+
+---
+### 2. backgrounds/baikonur-launch.jpg
+**Format:** JPG | **Size:** 1920x1080
+**Prompt:** Baikonur Cosmodrome launch pad at golden hour, Soyuz rocket standing on launch pad, industrial space facility infrastructure, dramatic orange sunset sky, launch tower and support structures, wide Kazakhstan landscape, epic inspiring atmosphere, anime visual novel background style, cinematic lighting, 16:9 aspect ratio
+**Save as:** backgrounds/baikonur-launch.jpg
+
+---
+### 3. backgrounds/mission-control-room.jpg
+**Format:** JPG | **Size:** 1920x1080
+**Prompt:** NASA Mission Control Houston interior, multiple tiers of control stations, large wall screens displaying orbital data, professional flight controllers at computer consoles, blue and green ambient lighting, high-tech atmosphere, serious focused environment, anime visual novel background style, 16:9 aspect ratio
+**Save as:** backgrounds/mission-control-room.jpg
+
+---
+### 4. backgrounds/space-station-interior.jpg
+**Format:** JPG | **Size:** 1920x1080
+**Prompt:** International Space Station interior module, cylindrical corridor with curved walls, scientific equipment floating in zero gravity, control panels and monitors, cables and apparatus, clean technical environment, natural Earth lighting from viewport, anime visual novel background style, 16:9 aspect ratio
+**Save as:** backgrounds/space-station-interior.jpg
+
+---
+### 5. backgrounds/recovery-landing.jpg
+**Format:** JPG | **Size:** 1920x1080
+**Prompt:** Soyuz capsule recovery site in Kazakhstan steppe, wide open grassland, clear blue sky, recovery vehicles and helicopters in distance, parachute visible, peaceful mission completion mood, anime visual novel background style, bright daylight, 16:9 aspect ratio
+**Save as:** backgrounds/recovery-landing.jpg
+
+---
+### 6. characters/dr-sarah-chen.png
+**Format:** PNG | **Size:** 512x1024
+**Prompt:** Dr. Sarah Chen, professional Asian-American female scientist age 35-40, anime visual novel character art style, white lab coat over dark professional blouse, confident intelligent expression, shoulder-length black hair, standing pose facing forward, full body head to feet, transparent background, 1:2 portrait ratio
+**Save as:** characters/dr-sarah-chen.png
+
+---
+### 7. characters/mission-director.png
+**Format:** PNG | **Size:** 512x1024
+**Prompt:** NASA Mission Director, authoritative Caucasian male age 50-55, anime visual novel character style, dark blue NASA polo shirt with logo, military bearing, confident leadership expression, short professional gray hair, commanding presence, standing pose facing forward, full body, transparent background, 1:2 portrait
+**Save as:** characters/mission-director.png
+
+---
+### 8. characters/control-officer.png
+**Format:** PNG | **Size:** 512x1024
+**Prompt:** Mission Control Officer, technical specialist diverse ethnicity age 30-35, anime visual novel character style, NASA uniform with communication headset, holding tablet device, focused analytical expression, professional approachable appearance, standing pose facing forward, full body, transparent background, 1:2 portrait
+**Save as:** characters/control-officer.png
+
+---
+### 9. characters/scientist-team.png
+**Format:** PNG | **Size:** 512x1024
+**Prompt:** Young research scientist, diverse background age 25-35, anime visual novel character style, white lab coat over casual professional attire, friendly collaborative expression, modern professional appearance, team player presence, standing pose facing forward, full body, transparent background, 1:2 portrait
+**Save as:** characters/scientist-team.png
+
+---
+### 10. ui/dialogue-panel.png
+**Format:** PNG | **Size:** custom
+**Prompt:** Visual novel dialogue text panel UI element, rounded rectangle with subtle shadows, dark navy blue background with bright cyan glowing borders, semi-transparent for text overlay, professional game interface style, clean modern design, 1100x200 dimensions, PNG transparency
+**Save as:** ui/dialogue-panel.png
+
+---
+### 11. ui/choice-button.png
+**Format:** PNG | **Size:** custom
+**Prompt:** Visual novel choice button UI element, rounded rectangular button, dark blue gradient background with cyan accent borders, professional clickable appearance with subtle glow effect, clean game interface style, 1000x60 dimensions, PNG transparency
+**Save as:** ui/choice-button.png
+
+---
+### 12. effects/spark-particle.png
+**Format:** PNG | **Size:** custom
+**Prompt:** Small bright particle effect, white to cyan gradient sparkle, glowing center with radiating light rays, for launch and success animations, 32x32 pixels, PNG with full transparency, game particle effect style
+**Save as:** effects/spark-particle.png
+
+---
+### 13. effects/smoke-particle.png
+**Format:** PNG | **Size:** custom
+**Prompt:** Wispy smoke particle effect, light gray to white gradient, soft translucent edges, for rocket launch smoke trails, 32x32 pixels, PNG with transparency, realistic game particle style
+**Save as:** effects/smoke-particle.png
+
+---
+
+## 🚀 USAGE INSTRUCTIONS
+
+1. **Batch Method:** Copy the single batch prompt above into Leonardo AI or Ideogram
+2. **Individual Method:** Copy each individual prompt into your AI generator
+3. **Download & Organize:** Save with exact filenames in correct folders
+4. **Verify:** Check all 13 files are created with proper formats
+5. **Launch:** Run `npm run dev` to see your visual novel!
+
+## 📁 FOLDER STRUCTURE
+```
+client/public/
+├── backgrounds/     (5 JPG files, 1920x1080)
+├── characters/      (4 PNG files, 512x1024, transparent)
+├── ui/              (2 PNG files, custom sizes, transparent)  
+└── effects/         (2 PNG files, 32x32, transparent)
+```
+
+✨ After generation, your Bion-M1 visual novel will have professional anime-style graphics!

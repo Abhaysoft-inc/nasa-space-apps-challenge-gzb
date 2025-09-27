@@ -1,0 +1,9 @@
+FILE: backgrounds/space-station-interior.jpg
+PROMPT: International Space Station interior module, cylindrical corridor with curved walls, scientific equipment floating in zero gravity, control panels and monitors, cables and apparatus, clean technical environment, natural Earth lighting from viewport, anime visual novel background style, 16:9 aspect ratio
+
+INSTRUCTIONS:
+1. Copy the prompt above
+2. Use Leonardo AI, Midjourney, or DALL-E
+3. Generate the image
+4. Save as specified filename
+5. Replace this text file with the image

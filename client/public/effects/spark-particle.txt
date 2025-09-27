@@ -1,0 +1,9 @@
+GENERATE: effects/spark-particle.png
+DIMENSIONS: 32x32
+FORMAT: PNG
+TYPE: effect
+
+PROMPT:
+Small bright particle effect, white to cyan gradient sparkle, glowing center with radiating light rays, for launch and success animations, 32x32 pixels, PNG with full transparency, game particle effect style
+
+After generation, replace this file with the actual image!

@@ -1,0 +1,9 @@
+FILE: backgrounds/nasa-ames-lab.jpg
+PROMPT: Professional NASA Ames Research Center laboratory interior, modern scientific facility with clean white walls, fluorescent lighting, advanced microscopes, centrifuges, computers, biological samples in glass containers, sterile environment, bright clinical atmosphere, anime visual novel background style, 16:9 aspect ratio, high detail
+
+INSTRUCTIONS:
+1. Copy the prompt above
+2. Use Leonardo AI, Midjourney, or DALL-E
+3. Generate the image
+4. Save as specified filename
+5. Replace this text file with the image

@@ -1,0 +1,9 @@
+FILE: characters/dr-sarah-chen.png
+PROMPT: Dr. Sarah Chen, professional Asian-American female scientist age 35-40, anime visual novel character art style, white lab coat over dark professional blouse, confident intelligent expression, shoulder-length black hair, standing pose facing forward, full body head to feet, transparent background, 1:2 portrait ratio
+
+INSTRUCTIONS:
+1. Copy the prompt above
+2. Use Leonardo AI, Midjourney, or DALL-E
+3. Generate the image
+4. Save as specified filename
+5. Replace this text file with the image

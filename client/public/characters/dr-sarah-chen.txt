@@ -1,0 +1,9 @@
+GENERATE: characters/dr-sarah-chen.png
+DIMENSIONS: 512x1024
+FORMAT: PNG
+TYPE: character
+
+PROMPT:
+Dr. Sarah Chen, professional Asian-American female scientist, age 35-40, clean anime visual novel character art style, white lab coat over professional dark blouse, confident intelligent facial expression, shoulder-length professional black hair, standing pose facing forward, full body visible from head to feet, transparent background, 1:2 aspect ratio portrait
+
+After generation, replace this file with the actual image!

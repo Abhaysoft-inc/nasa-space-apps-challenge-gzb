@@ -7,7 +7,7 @@ import Link from "next/link"
 export default function BionM1Game(){
   const [chapter, setChapter] = useState(1)
   const [popup, setPopup] = useState(null)
-  const [timer, setTimer] = useState(600)
+  const [timer, setTimer] = useState(150)
   const [counting, setCounting] = useState(false)
 
   const initialState = useMemo(()=> ({
@@ -53,7 +53,7 @@ export default function BionM1Game(){
     setTimeout(()=> setChapter(2), 600)
   }
 
-  function startCountdown(){ setTimer(600); setCounting(true) }
+  function startCountdown(){ setTimer(150); setCounting(true) }
   function abortLaunch(){
     setCounting(false)
     showPopup({ title:'Launch Aborted', content:'You prioritized animal welfare and system safety. Launch will be rescheduled. (Demo continues)', action:{ label:'Continue Mission', onClick:()=> { closePopup(); setChapter(3) } } })
@@ -79,8 +79,8 @@ export default function BionM1Game(){
   function runExperiment(){ setGame(g=> ({...g, missionStatus:'experiment'})); setTimeout(()=> setChapter(6), 600) }
 
   return (
-    <div className="fixed inset-0 bg-black overflow-hidden">
-      {/* Full-screen game container */}
+    <div className="fixed inset-0 bg-black overflow-hidden game-container">
+      {/* Full-screen game container with proper black background */}
       <div className="absolute top-4 left-4 right-4 z-50 flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Link href="/games" className="text-white/80 hover:text-white text-sm backdrop-blur bg-black/40 px-3 py-2 rounded-lg border border-white/20">← Exit Game</Link>
@@ -105,17 +105,21 @@ export default function BionM1Game(){
       <main className="absolute inset-0 pt-24">
         {chapter === 1 && (
           <FullScreenScene bgImage={assets?.ch1?.bg || "/biology.jpeg"}>
-            {/* Lab environment layers */}
-            {assets?.ch1?.layers?.[0] && (
-              <img src={assets.ch1.layers[0]} alt="lab racks" className="absolute inset-0 w-full h-full object-cover opacity-60" />
-            )}
-            {assets?.ch1?.layers?.[1] && (
-              <img src={assets.ch1.layers[1]} alt="lab table" className="absolute bottom-0 left-0 w-full h-1/3 object-cover opacity-70" />
-            )}
+            {/* Lab environment - cleaner layout */}
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/30" />
             
-            {/* Character - Dr. Sarah Chen */}
+            {/* Character - Dr. Sarah Chen - positioned to not overlap with dialogue */}
             {assets?.ch1?.characters?.sarahIdle && (
-              <img src={assets.ch1.characters.sarahIdle} alt="Dr. Sarah Chen" className="absolute bottom-0 left-8 h-96 object-contain z-20" />
+              <div className="absolute bottom-0 right-8 h-80 w-64 flex items-end justify-center z-10">
+                <img 
+                  src={assets.ch1.characters.sarahIdle} 
+                  alt="Dr. Sarah Chen" 
+                  className="h-full w-auto object-contain filter drop-shadow-lg"
+                  style={{
+                    filter: 'drop-shadow(0 10px 20px rgba(0,0,0,0.3)) brightness(1.1)'
+                  }}
+                />
+              </div>
             )}
             
             {/* Story dialogue */}
@@ -168,34 +172,49 @@ export default function BionM1Game(){
 
         {chapter === 2 && (
           <FullScreenScene bgImage={assets?.ch2?.bg}>
-            {/* Launch pad smoke and effects */}
-            {assets?.ch2?.smoke && (
-              <img src={assets.ch2.smoke} alt="launch smoke" className="absolute bottom-0 left-0 w-full h-2/3 object-cover opacity-50" />
-            )}
-            
-            {/* Rocket */}
-            <div className="absolute right-1/4 bottom-0 top-0 flex items-end justify-center">
-              {assets?.ch2?.rocket ? (
-                <img 
-                  src={assets.ch2.rocket} 
-                  alt="Bion-M1 rocket" 
-                  className={`h-5/6 object-contain transition-all duration-3000 ${
-                    counting && timer <= 0 ? 'transform -translate-y-full opacity-0' : 
-                    counting ? 'animate-pulse' : ''
-                  }`} 
-                />
-              ) : (
-                <div className="w-16 h-80 bg-gradient-to-t from-gray-300 to-white rounded-t-full" />
-              )}
+            {/* Rocket - custom CSS design to avoid transparency issues */}
+            <div className="absolute left-1/2 bottom-0 top-0 flex items-end justify-center transform -translate-x-1/2">
+              <div className={`relative transition-all duration-2000 ${
+                counting && timer <= 0 ? 'transform -translate-y-full scale-75 opacity-0' : 
+                counting ? 'animate-pulse' : ''
+              }`}>
+                {/* Custom rocket design */}
+                <div className="relative w-16 h-80 mx-auto">
+                  {/* Rocket body */}
+                  <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-12 h-64 bg-gradient-to-t from-gray-300 via-gray-200 to-white rounded-t-full shadow-2xl border-2 border-gray-400"></div>
+                  
+                  {/* Rocket nose */}
+                  <div className="absolute bottom-64 left-1/2 transform -translate-x-1/2 w-6 h-16 bg-gradient-to-t from-white to-gray-100 clip-path-triangle shadow-lg"></div>
+                  
+                  {/* Side boosters */}
+                  <div className="absolute bottom-8 left-0 w-4 h-32 bg-gradient-to-t from-gray-400 to-gray-300 rounded-t-lg shadow-lg"></div>
+                  <div className="absolute bottom-8 right-0 w-4 h-32 bg-gradient-to-t from-gray-400 to-gray-300 rounded-t-lg shadow-lg"></div>
+                  
+                  {/* Launch effects */}
+                  {counting && (
+                    <>
+                      <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 w-8 h-16 bg-gradient-to-t from-orange-500 via-yellow-400 to-transparent animate-pulse opacity-90"></div>
+                      <div className="absolute -bottom-4 left-0 w-3 h-8 bg-gradient-to-t from-red-500 via-orange-400 to-transparent animate-pulse opacity-80"></div>
+                      <div className="absolute -bottom-4 right-0 w-3 h-8 bg-gradient-to-t from-red-500 via-orange-400 to-transparent animate-pulse opacity-80"></div>
+                      <div className="absolute -bottom-12 left-1/2 transform -translate-x-1/2 w-20 h-20 bg-gradient-radial from-orange-400/60 via-red-500/40 to-transparent rounded-full animate-ping"></div>
+                    </>
+                  )}
+                </div>
+              </div>
             </div>
+            
+            {/* Launch pad smoke effects - subtle */}
+            {counting && (
+              <div className="absolute bottom-0 left-0 w-full h-1/3 bg-gradient-to-t from-gray-300/20 to-transparent animate-pulse" />
+            )}
             
             {/* Mission Control Interface */}
             <div className="absolute top-8 left-8 right-8">
               <div className="backdrop-blur bg-black/80 border border-cyan-500/30 rounded-2xl p-6">
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="text-white font-bold text-2xl tracking-wide">LAUNCH CONTROL</h2>
-                  <div className="text-3xl font-mono text-cyan-400">
-                    T-{String(Math.floor(timer / 60)).padStart(2, '0')}:{String(timer % 60).padStart(2, '0')}
+                  <div className="text-4xl font-mono text-cyan-400 font-bold">
+                    {String(Math.floor(timer / 60)).padStart(2, '0')}:{String(timer % 60).padStart(2, '0')}
                   </div>
                 </div>
                 
@@ -253,6 +272,35 @@ export default function BionM1Game(){
                 0% { transform: translateY(0) scale(1); } 
                 100% { transform: translateY(-150vh) scale(0.5); opacity: 0; } 
               }
+              @keyframes float {
+                0%, 100% { transform: translateY(0px) rotate(0deg); }
+                50% { transform: translateY(-10px) rotate(5deg); }
+              }
+              /* Fix all image rendering issues */
+              img {
+                background-color: transparent !important;
+                image-rendering: -webkit-optimize-contrast;
+                image-rendering: crisp-edges;
+              }
+              .no-checkerboard {
+                background-image: none !important;
+                background-color: transparent !important;
+              }
+              /* Custom gradient utilities */
+              .bg-gradient-radial {
+                background: radial-gradient(circle, var(--tw-gradient-stops));
+              }
+              /* Triangle clip path for rocket nose */
+              .clip-path-triangle {
+                clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+              }
+              /* Ensure all containers have proper backgrounds */
+              .game-container {
+                background: #000 !important;
+              }
+              .game-container * {
+                background-clip: padding-box;
+              }
             `}</style>
           </FullScreenScene>
         )}
@@ -264,26 +312,34 @@ export default function BionM1Game(){
               <div className="absolute inset-0 bg-gradient-to-b from-transparent via-blue-900/20 to-black/60" />
               
               {/* Floating microgravity habitat view */}
-              <div className="absolute top-1/4 right-8 w-80 h-60 border border-cyan-500/50 rounded-xl overflow-hidden backdrop-blur bg-black/40">
-                {assets?.ch3?.habitatBg && (
-                  <img src={assets.ch3.habitatBg} alt="habitat interior" className="w-full h-full object-cover opacity-70" />
-                )}
+              <div className="absolute top-1/4 right-8 w-80 h-60 border-2 border-cyan-500/60 rounded-xl overflow-hidden backdrop-blur-sm bg-slate-900/80">
+                <div className="absolute inset-0 bg-gradient-to-br from-slate-800 to-slate-900">
+                  {/* Habitat interior simulation */}
+                  <div className="absolute inset-2 bg-gradient-to-br from-slate-700 to-slate-800 rounded-lg">
+                    {/* Floating mice simulation with CSS */}
+                    <div className="absolute top-4 left-8 w-8 h-6 bg-gradient-to-br from-amber-200 to-amber-400 rounded-full animate-[float_4s_ease-in-out_infinite] shadow-lg">
+                      <div className="absolute top-1 left-1 w-2 h-2 bg-black rounded-full"></div>
+                      <div className="absolute top-1 right-1 w-2 h-2 bg-black rounded-full"></div>
+                      <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-1 h-3 bg-amber-300 rounded-full"></div>
+                    </div>
+                    
+                    <div className="absolute top-16 right-12 w-8 h-6 bg-gradient-to-br from-amber-200 to-amber-400 rounded-full animate-[float_5s_ease-in-out_infinite_0.5s] shadow-lg">
+                      <div className="absolute top-1 left-1 w-2 h-2 bg-black rounded-full"></div>
+                      <div className="absolute top-1 right-1 w-2 h-2 bg-black rounded-full"></div>
+                    </div>
+                    
+                    <div className="absolute top-32 left-1/2 transform -translate-x-1/2 rotate-45 w-8 h-6 bg-gradient-to-br from-amber-200 to-amber-400 rounded-full animate-[float_6s_ease-in-out_infinite_1s] shadow-lg">
+                      <div className="absolute top-1 left-1 w-2 h-2 bg-black rounded-full"></div>
+                      <div className="absolute top-1 right-1 w-2 h-2 bg-black rounded-full"></div>
+                    </div>
+                    
+                    {/* Habitat equipment */}
+                    <div className="absolute bottom-4 left-4 w-16 h-8 bg-gray-600 rounded border border-gray-500"></div>
+                    <div className="absolute bottom-4 right-4 w-12 h-12 bg-blue-600 rounded-full border-2 border-blue-500"></div>
+                  </div>
+                </div>
                 
-                {/* Floating mice animation */}
-                {assets?.ch3?.mice?.map((mouseImg, i) => (
-                  <img 
-                    key={mouseImg} 
-                    src={mouseImg} 
-                    alt={`mouse ${i+1}`} 
-                    className={`absolute w-12 h-12 object-contain ${
-                      i === 0 ? 'top-4 left-8 animate-[float_4s_ease-in-out_infinite]' :
-                      i === 1 ? 'top-16 right-12 animate-[float_5s_ease-in-out_infinite_0.5s]' :
-                      'top-32 left-1/2 animate-[float_6s_ease-in-out_infinite_1s] transform rotate-45'
-                    }`}
-                  />
-                ))}
-                
-                <div className="absolute bottom-2 left-2 text-cyan-400 text-xs font-mono">HABITAT CAM - DAY 5</div>
+                <div className="absolute bottom-2 left-2 text-cyan-400 text-xs font-mono bg-black/60 px-2 py-1 rounded">HABITAT CAM - DAY 5</div>
               </div>
             </div>
             
@@ -364,110 +420,318 @@ export default function BionM1Game(){
                 </div>
               </div>
             </div>
-            
-            <style jsx>{`
-              @keyframes float {
-                0%, 100% { transform: translateY(0px) rotate(0deg); }
-                50% { transform: translateY(-10px) rotate(5deg); }
-              }
-            `}</style>
           </FullScreenScene>
         )}
 
         {chapter === 4 && (
-          <SceneFrame bgClass="from-fuchsia-900 via-violet-900 to-slate-900" imageSrc={assets?.ch4?.vignette} imageClass="opacity-40">
-            <ChapterHeader title="Chapter 4 · The Bone Discovery" subtitle="Day 14 — X‑ray analysis"/>
-            <div className="grid md:grid-cols-2 gap-4">
-              <div className="bg-white rounded-xl border border-gray-200 p-4">
-                <h3 className="font-semibold">Bone Density Analysis</h3>
-                <div className="mt-3 grid grid-cols-2 gap-3 text-center">
-                  <div>
-                    {assets?.ch4?.pre ? (
-                      <img src={assets.ch4.pre} alt="Pre-flight bone scan" className="h-40 w-full object-contain rounded-lg bg-white" />
-                    ) : (
-                      <div className="h-40 rounded-lg bg-gradient-to-br from-gray-200 to-gray-300" />
-                    )}
-                    <p className="mt-1 text-sm">Pre‑flight — 100% baseline</p>
-                  </div>
-                  <div>
-                    {assets?.ch4?.day14 ? (
-                      <div className="relative h-40 w-full rounded-lg overflow-hidden bg-white">
-                        <img src={assets.ch4.day14} alt="Day 14 bone scan" className="h-full w-full object-contain" />
-                        {assets?.ch4?.highlight && <img src={assets.ch4.highlight} alt="highlight" className="absolute inset-0 object-contain mix-blend-screen opacity-80" />}
-                      </div>
-                    ) : (
-                      <div className="h-40 rounded-lg bg-gradient-to-br from-red-200 to-rose-300" />
-                    )}
-                    <p className="mt-1 text-sm text-rose-600 font-medium">Day 14 — 79% baseline</p>
-                  </div>
-                </div>
+          <FullScreenScene bgImage={assets?.ch4?.vignette}>
+            <div className="absolute inset-0 bg-gradient-to-b from-purple-900/20 to-black/60" />
+            
+            {/* Discovery moment */}
+            <div className="absolute top-1/4 left-1/2 transform -translate-x-1/2">
+              <div className="text-center mb-8">
+                <h2 className="text-4xl font-bold text-white mb-4">CRITICAL DISCOVERY</h2>
+                <p className="text-cyan-400 text-lg">Day 14 - Bone Density Analysis</p>
               </div>
-              <div className="bg-black/60 border border-fuchsia-400/30 rounded-xl p-4 text-fuchsia-100">
-                <p className="text-sm">You notice bone loss is not uniform. Weight‑bearing bones show 21% loss vs 8% for non‑weight‑bearing.</p>
-                <p className="text-sm mt-3">This pattern suggests:</p>
-                <div className="mt-3 grid gap-2">
-                  <ChoiceButton onClick={()=> breakthrough('mechanical')} className="ring-2 ring-fuchsia-400">⚡ Mechanical loading is crucial</ChoiceButton>
-                  <ChoiceButton onClick={()=> breakthrough('blood')}>🩸 Blood flow changes</ChoiceButton>
-                  <ChoiceButton onClick={()=> breakthrough('hormonal')}>🧪 Hormonal changes</ChoiceButton>
+            </div>
+            
+            {/* Bone scan comparison */}
+            <div className="absolute bottom-8 left-8 right-8">
+              <div className="grid md:grid-cols-3 gap-6">
+                {/* Pre-flight scan */}
+                <div className="backdrop-blur bg-black/80 border border-emerald-500/40 rounded-2xl p-6">
+                  <h3 className="text-emerald-400 font-bold text-lg mb-4">PRE-FLIGHT BASELINE</h3>
+                  <div className="bg-gradient-to-br from-emerald-900 to-emerald-800 rounded-lg p-4 mb-4 border border-emerald-600">
+                    {/* Custom bone scan visualization */}
+                    <div className="w-full h-48 relative bg-gradient-to-br from-gray-900 to-black rounded border border-emerald-500/30">
+                      <div className="absolute inset-4 flex items-center justify-center">
+                        {/* Bone structure visualization */}
+                        <div className="relative">
+                          <div className="w-16 h-32 bg-gradient-to-b from-white via-gray-200 to-white rounded-full opacity-90 shadow-lg">
+                            <div className="absolute top-4 left-1/2 transform -translate-x-1/2 w-8 h-8 bg-white rounded-full"></div>
+                            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 w-8 h-8 bg-white rounded-full"></div>
+                          </div>
+                          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-emerald-400 text-xs font-bold">HEALTHY</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="text-center text-emerald-400 font-bold text-2xl">100%</div>
+                  <p className="text-gray-300 text-sm text-center">Bone Density</p>
+                </div>
+                
+                {/* Day 14 scan */}
+                <div className="backdrop-blur bg-black/80 border border-red-500/40 rounded-2xl p-6">
+                  <h3 className="text-red-400 font-bold text-lg mb-4">DAY 14 - ORBIT</h3>
+                  <div className="bg-gradient-to-br from-red-900 to-red-800 rounded-lg p-4 mb-4 border border-red-600">
+                    {/* Degraded bone scan visualization */}
+                    <div className="w-full h-48 relative bg-gradient-to-br from-gray-900 to-black rounded border border-red-500/30">
+                      <div className="absolute inset-4 flex items-center justify-center">
+                        {/* Degraded bone structure */}
+                        <div className="relative">
+                          <div className="w-16 h-32 bg-gradient-to-b from-red-200 via-red-300 to-red-200 rounded-full opacity-70 shadow-lg">
+                            {/* Visible damage areas */}
+                            <div className="absolute top-6 left-2 w-3 h-3 bg-red-600 rounded opacity-80"></div>
+                            <div className="absolute top-12 right-1 w-2 h-4 bg-red-700 rounded opacity-90"></div>
+                            <div className="absolute bottom-8 left-1 w-4 h-2 bg-red-800 rounded opacity-85"></div>
+                            
+                            <div className="absolute top-4 left-1/2 transform -translate-x-1/2 w-6 h-6 bg-red-300 rounded-full opacity-60"></div>
+                            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 w-6 h-6 bg-red-300 rounded-full opacity-60"></div>
+                          </div>
+                          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-red-400 text-xs font-bold">DEGRADED</div>
+                          {/* Highlight critical areas */}
+                          <div className="absolute inset-0 border-2 border-red-500 rounded-full animate-pulse opacity-50"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="text-center text-red-400 font-bold text-2xl">79%</div>
+                  <p className="text-gray-300 text-sm text-center">21% Loss in 14 days!</p>
+                </div>
+                
+                {/* Analysis panel */}
+                <div className="backdrop-blur bg-black/80 border border-cyan-500/40 rounded-2xl p-6">
+                  <h3 className="text-cyan-400 font-bold text-lg mb-4">DR. CHEN'S ANALYSIS</h3>
+                  <p className="text-white text-sm mb-4">
+                    "The pattern is unprecedented. Weight-bearing bones show 21% loss, while non-weight-bearing bones show only 8%."
+                  </p>
+                  <p className="text-cyan-400 font-semibold mb-4">What does this pattern suggest?</p>
+                  
+                  <div className="space-y-3">
+                    <StoryChoice onClick={()=> breakthrough('mechanical')} icon="⚡" highlight>
+                      <div>
+                        <h4 className="font-bold text-white">Mechanical Loading Critical</h4>
+                        <p className="text-gray-300 text-sm">Gravity provides essential bone stress</p>
+                      </div>
+                    </StoryChoice>
+                    
+                    <StoryChoice onClick={()=> breakthrough('blood')} icon="🩸">
+                      <div>
+                        <h4 className="font-bold text-white">Blood Flow Changes</h4>
+                        <p className="text-gray-300 text-sm">Circulation affects bone formation</p>
+                      </div>
+                    </StoryChoice>
+                  </div>
                 </div>
               </div>
             </div>
-          </SceneFrame>
+          </FullScreenScene>
         )}
 
         {chapter === 5 && (
-          <SceneFrame bgClass="from-indigo-900 via-slate-900 to-black">
-            <ChapterHeader title="Chapter 5 · The Final Week" subtitle="Emergency experiment protocol"/>
-            <div className="bg-white rounded-xl border border-gray-200 p-4 max-w-2xl">
-              <p className="text-sm text-gray-700">You have 8 days and 15 mice remaining. Select parameters to test mechanical loading.</p>
-              <div className="mt-4 grid sm:grid-cols-2 gap-3">
-                <LabeledSelect label="Exercise Group Size" options={[{v:5,l:'5 mice'},{v:8,l:'8 mice'},{v:12,l:'12 mice'}]} />
-                <LabeledSelect label="Exercise Duration" options={[{v:30,l:'30 min/day'},{v:60,l:'60 min/day'},{v:120,l:'120 min/day'}]} />
+          <FullScreenScene bgImage={assets?.ch5?.blueprint}>
+            <div className="absolute inset-0 bg-gradient-to-b from-indigo-900/30 to-black/70" />
+            
+            {/* Emergency protocol header */}
+            <div className="absolute top-8 left-8 right-8">
+              <div className="backdrop-blur bg-black/80 border border-amber-500/50 rounded-2xl p-6">
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="w-4 h-4 bg-amber-400 rounded-full animate-pulse" />
+                  <h2 className="text-amber-400 font-bold text-2xl">EMERGENCY EXPERIMENT PROTOCOL</h2>
+                </div>
+                <p className="text-white text-lg">
+                  Your breakthrough discovery has changed everything. Mission Control approves an emergency experiment to test mechanical loading theory.
+                </p>
               </div>
-              <button onClick={runExperiment} className="mt-4 px-4 py-2 rounded-md bg-indigo-600 text-white">Run the Experiment</button>
             </div>
-          </SceneFrame>
+            
+            {/* Exercise device design - custom CSS to avoid image issues */}
+            <div className="absolute left-8 top-1/3 w-1/2">
+              <div className="backdrop-blur bg-black/60 border border-cyan-500/40 rounded-2xl p-6">
+                <h3 className="text-cyan-400 font-bold text-lg mb-4">PROTOTYPE EXERCISE DEVICE</h3>
+                <div className="w-full h-64 bg-gradient-to-br from-slate-800 to-slate-900 rounded-lg border border-cyan-500/30 p-4 mb-4">
+                  {/* Custom exercise device visualization */}
+                  <div className="relative w-full h-full flex items-center justify-center">
+                    {/* Central hub */}
+                    <div className="absolute w-16 h-16 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-full border-4 border-cyan-300 shadow-lg">
+                      <div className="absolute inset-2 bg-gradient-to-br from-blue-600 to-cyan-600 rounded-full"></div>
+                    </div>
+                    
+                    {/* Exercise arms */}
+                    <div className="absolute w-32 h-4 bg-gradient-to-r from-gray-600 via-gray-500 to-gray-600 rounded-full transform rotate-0"></div>
+                    <div className="absolute w-4 h-32 bg-gradient-to-b from-gray-600 via-gray-500 to-gray-600 rounded-full"></div>
+                    <div className="absolute w-32 h-4 bg-gradient-to-r from-gray-600 via-gray-500 to-gray-600 rounded-full transform rotate-45"></div>
+                    <div className="absolute w-32 h-4 bg-gradient-to-r from-gray-600 via-gray-500 to-gray-600 rounded-full transform -rotate-45"></div>
+                    
+                    {/* End caps */}
+                    <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 w-6 h-6 bg-gradient-to-br from-red-500 to-red-600 rounded-full border-2 border-red-400"></div>
+                    <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-6 h-6 bg-gradient-to-br from-red-500 to-red-600 rounded-full border-2 border-red-400"></div>
+                    <div className="absolute top-1/2 -left-2 transform -translate-y-1/2 w-6 h-6 bg-gradient-to-br from-red-500 to-red-600 rounded-full border-2 border-red-400"></div>
+                    <div className="absolute top-1/2 -right-2 transform -translate-y-1/2 w-6 h-6 bg-gradient-to-br from-red-500 to-red-600 rounded-full border-2 border-red-400"></div>
+                  </div>
+                </div>
+                <p className="text-gray-300 text-sm">Microgravity resistance loading system</p>
+              </div>
+            </div>
+            
+            {/* Experiment parameters */}
+            <div className="absolute bottom-8 right-8 w-96">
+              <div className="backdrop-blur bg-black/80 border border-indigo-500/40 rounded-2xl p-6">
+                <h3 className="text-indigo-400 font-bold text-lg mb-4">EXPERIMENT PARAMETERS</h3>
+                <p className="text-white mb-4">8 days remaining, 15 mice available</p>
+                
+                <div className="space-y-4 mb-6">
+                  <div>
+                    <label className="text-gray-300 text-sm block mb-2">Exercise Group Size</label>
+                    <select className="w-full bg-black/60 border border-gray-600 rounded p-2 text-white">
+                      <option>5 mice (small sample)</option>
+                      <option>8 mice (optimal)</option>
+                      <option>12 mice (large sample)</option>
+                    </select>
+                  </div>
+                  
+                  <div>
+                    <label className="text-gray-300 text-sm block mb-2">Exercise Duration</label>
+                    <select className="w-full bg-black/60 border border-gray-600 rounded p-2 text-white">
+                      <option>30 min/day (safe)</option>
+                      <option>60 min/day (moderate)</option>
+                      <option>120 min/day (intensive)</option>
+                    </select>
+                  </div>
+                </div>
+                
+                <button 
+                  onClick={runExperiment} 
+                  className="w-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-bold py-3 px-6 rounded-lg transition-all"
+                >
+                  🧪 INITIATE EXPERIMENT
+                </button>
+              </div>
+            </div>
+          </FullScreenScene>
         )}
 
         {chapter === 6 && (
-          <SceneFrame bgClass="from-emerald-900 via-teal-900 to-slate-900">
-            <ChapterHeader title="Chapter 6 · Return to Earth" subtitle="Mission complete"/>
-            <div className="grid md:grid-cols-2 gap-4">
-              <div className="bg-white rounded-xl border border-gray-200 p-4">
-                <h3 className="font-semibold">Key Discoveries</h3>
-                <ul className="mt-3 space-y-2 text-sm">
-                  <li className="flex gap-3"><span>🦴</span> <span><strong>Mechanical loading</strong> is critical for bone health — 21% vs 8% loss.</span></li>
-                  <li className="flex gap-3"><span>💪</span> <span>Exercise countermeasures reduced loss by ~50% in protocol group (simulated).</span></li>
-                </ul>
+          <FullScreenScene bgImage={assets?.ch6?.bg}>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+            
+            {/* Mission complete header */}
+            <div className="absolute top-8 left-8 right-8 text-center">
+              <div className="backdrop-blur bg-emerald-900/80 border border-emerald-500/50 rounded-2xl p-8">
+                <h1 className="text-4xl font-bold text-white mb-4">🎉 MISSION COMPLETE</h1>
+                <p className="text-emerald-300 text-xl">Bion‑M1 has successfully returned to Earth</p>
               </div>
-              <div className="bg-white rounded-xl border border-gray-200 p-4">
-                <h3 className="font-semibold">Your Research Legacy</h3>
-                <ol className="mt-3 text-sm space-y-2">
-                  <li>2015 — ISS upgrades exercise equipment.</li>
-                  <li>2020 — Artemis incorporates bone protocols.</li>
-                  <li>2028 — Mars crews use derived systems.</li>
-                </ol>
-                <div className="mt-4 flex gap-2">
-                  <Link href="/papers" className="px-3 py-2 rounded-md bg-gray-800 text-white text-sm">Explore related papers</Link>
-                  <Link href="/games" className="px-3 py-2 rounded-md bg-indigo-600 text-white text-sm">Play more games</Link>
+            </div>
+            
+            {/* Recovery scene elements - custom CSS designs */}
+            <div className="absolute bottom-1/4 left-1/3 transform -translate-x-1/2">
+              {/* Custom capsule design */}
+              <div className="relative">
+                <div className="w-20 h-20 bg-gradient-to-br from-gray-300 via-gray-400 to-gray-500 rounded-full shadow-2xl border-2 border-gray-600">
+                  <div className="absolute inset-2 bg-gradient-to-br from-white to-gray-200 rounded-full"></div>
+                  <div className="absolute top-3 left-3 w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
+                  <div className="absolute bottom-3 right-3 w-2 h-2 bg-blue-500 rounded-full"></div>
+                </div>
+                <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-8 h-4 bg-gradient-to-b from-orange-500 to-red-600 rounded-b-lg"></div>
+              </div>
+            </div>
+            
+            {/* Recovery team representation */}
+            <div className="absolute bottom-20 right-1/3 flex gap-2">
+              <div className="w-4 h-8 bg-gradient-to-b from-blue-600 to-blue-800 rounded-t-full"></div>
+              <div className="w-4 h-8 bg-gradient-to-b from-green-600 to-green-800 rounded-t-full"></div>
+              <div className="w-4 h-8 bg-gradient-to-b from-red-600 to-red-800 rounded-t-full"></div>
+            </div>
+            
+            {/* Helicopter representation */}
+            <div className="absolute top-1/4 right-12">
+              <div className="relative">
+                <div className="w-12 h-4 bg-gradient-to-r from-gray-700 to-gray-600 rounded-full"></div>
+                <div className="absolute -top-1 left-1/2 transform -translate-x-1/2 w-16 h-1 bg-gray-800 rounded-full animate-spin"></div>
+                <div className="absolute top-1 right-0 w-4 h-2 bg-gradient-to-r from-gray-600 to-gray-700 rounded"></div>
+              </div>
+            </div>
+            
+            {/* Results summary */}
+            <div className="absolute bottom-8 left-8 right-8">
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="backdrop-blur bg-black/80 border border-emerald-500/40 rounded-2xl p-6">
+                  <h3 className="text-emerald-400 font-bold text-lg mb-4">🏆 YOUR DISCOVERIES</h3>
+                  <ul className="space-y-3 text-white">
+                    <li className="flex items-start gap-3">
+                      <span className="text-2xl">🦴</span>
+                      <div>
+                        <p className="font-bold">Mechanical Loading Critical</p>
+                        <p className="text-gray-300 text-sm">21% vs 8% bone loss pattern identified</p>
+                      </div>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="text-2xl">💪</span>
+                      <div>
+                        <p className="font-bold">Exercise Countermeasures Work</p>
+                        <p className="text-gray-300 text-sm">50% reduction in bone loss achieved</p>
+                      </div>
+                    </li>
+                  </ul>
+                  <div className="mt-6 p-4 bg-emerald-500/20 border border-emerald-500/50 rounded-lg">
+                    <p className="text-emerald-300 font-bold">Final Score</p>
+                    <div className="flex gap-4 mt-2">
+                      <span className="text-white">Accuracy: {game.scientificAccuracy}</span>
+                      <span className="text-white">Discovery: {game.breakthroughPoints}</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="backdrop-blur bg-black/80 border border-cyan-500/40 rounded-2xl p-6">
+                  <h3 className="text-cyan-400 font-bold text-lg mb-4">🚀 RESEARCH LEGACY</h3>
+                  <div className="space-y-3 text-gray-300 text-sm">
+                    <div className="flex gap-3">
+                      <span className="text-cyan-400 font-bold">2015</span>
+                      <span>ISS exercise equipment upgraded based on your findings</span>
+                    </div>
+                    <div className="flex gap-3">
+                      <span className="text-cyan-400 font-bold">2020</span>
+                      <span>Artemis program incorporates bone health protocols</span>
+                    </div>
+                    <div className="flex gap-3">
+                      <span className="text-cyan-400 font-bold">2028</span>
+                      <span>Mars mission crews use exercise systems derived from your research</span>
+                    </div>
+                  </div>
+                  
+                  <div className="mt-6 flex gap-3">
+                    <Link 
+                      href="/papers" 
+                      className="flex-1 bg-gray-800 hover:bg-gray-700 text-white font-bold py-3 px-4 rounded-lg text-center transition-all"
+                    >
+                      📚 Explore Research Papers
+                    </Link>
+                    <Link 
+                      href="/games" 
+                      className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-lg text-center transition-all"
+                    >
+                      🎮 Play More Games
+                    </Link>
+                  </div>
                 </div>
               </div>
             </div>
-          </SceneFrame>
+          </FullScreenScene>
         )}
       </main>
 
+      {/* Story popup modal */}
       {popup && (
-        <div className="fixed inset-0 z-50 bg-black/60 grid place-items-center p-4" role="dialog" aria-modal="true">
-          <div className="max-w-md w-full rounded-xl bg-white p-5 shadow-lg">
-            <h3 className="text-lg font-semibold">{popup.title}</h3>
-            <p className="mt-2 text-sm text-gray-700">{popup.content}</p>
-            {popup.footer && <p className="mt-2 text-xs text-gray-500">{popup.footer}</p>}
-            <div className="mt-4 flex justify-end gap-2">
+        <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4" role="dialog" aria-modal="true">
+          <div className="max-w-lg w-full backdrop-blur bg-black/90 border border-white/20 rounded-2xl p-8 shadow-2xl">
+            <h3 className="text-2xl font-bold text-white mb-4">{popup.title}</h3>
+            <p className="text-gray-300 text-base leading-relaxed mb-4">{popup.content}</p>
+            {popup.footer && <p className="text-sm text-gray-500 mb-6">{popup.footer}</p>}
+            <div className="flex justify-end gap-3">
               {popup.action ? (
-                <button onClick={popup.action.onClick} className="px-3 py-1.5 rounded-md bg-indigo-600 text-white text-sm">{popup.action.label}</button>
+                <button 
+                  onClick={popup.action.onClick} 
+                  className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-6 py-3 rounded-lg transition-all"
+                >
+                  {popup.action.label}
+                </button>
               ) : null}
-              <button onClick={closePopup} className="px-3 py-1.5 rounded-md bg-gray-200 text-gray-800 text-sm">Close</button>
+              <button 
+                onClick={closePopup} 
+                className="bg-gray-700 hover:bg-gray-600 text-white font-bold px-6 py-3 rounded-lg transition-all"
+              >
+                Continue
+              </button>
             </div>
           </div>
         </div>
@@ -476,4 +740,53 @@ export default function BionM1Game(){
   )
 }
 
+function FullScreenScene({ children, bgImage }) {
+  return (
+    <div className="absolute inset-0 overflow-hidden bg-black">
+      {bgImage && (
+        <div className="absolute inset-0">
+          <img 
+            src={bgImage} 
+            alt="scene background" 
+            className="w-full h-full object-cover" 
+            style={{ 
+              backgroundColor: '#000000',
+              objectFit: 'cover',
+              minWidth: '100%',
+              minHeight: '100%'
+            }}
+            onError={(e) => {
+              e.target.style.display = 'none';
+              e.target.parentElement.style.background = 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)';
+            }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/30" />
+        </div>
+      )}
+      {!bgImage && (
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-800 to-black" />
+      )}
+      <div className="relative z-10 h-full">
+        {children}
+      </div>
+    </div>
+  )
+}
 
+function StoryChoice({ children, onClick, icon, highlight = false }) {
+  return (
+    <button
+      onClick={onClick}
+      className={`w-full text-left p-4 rounded-xl border transition-all hover:scale-[1.02] hover:shadow-lg ${
+        highlight 
+          ? 'bg-gradient-to-r from-cyan-500/20 to-indigo-500/20 border-cyan-500/50 hover:from-cyan-500/30 hover:to-indigo-500/30 shadow-cyan-500/20'
+          : 'bg-white/5 border-white/20 hover:bg-white/10 hover:border-white/40'
+      }`}
+    >
+      <div className="flex items-center gap-4">
+        <div className="text-2xl">{icon}</div>
+        <div className="flex-1">{children}</div>
+      </div>
+    </button>
+  )
+}

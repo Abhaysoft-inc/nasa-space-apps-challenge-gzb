@@ -1,0 +1,9 @@
+FILE: characters/mission-director.png
+PROMPT: NASA Mission Director, authoritative Caucasian male age 50-55, anime visual novel character style, dark blue NASA polo shirt with logo, military bearing, confident leadership expression, short professional gray hair, commanding presence, standing pose facing forward, full body, transparent background, 1:2 portrait
+
+INSTRUCTIONS:
+1. Copy the prompt above
+2. Use Leonardo AI, Midjourney, or DALL-E
+3. Generate the image
+4. Save as specified filename
+5. Replace this text file with the image

@@ -1,0 +1,9 @@
+GENERATE: backgrounds/mission-control-room.jpg
+DIMENSIONS: 1920x1080
+FORMAT: JPG
+TYPE: background
+
+PROMPT:
+NASA Mission Control Houston, multiple tiers of control stations, large wall screens displaying orbital trajectory data and ISS feeds, professional flight controllers at computer consoles, blue and green ambient lighting, high-tech atmosphere, serious focused environment, anime visual novel background style, wide view, 16:9 aspect ratio
+
+After generation, replace this file with the actual image!

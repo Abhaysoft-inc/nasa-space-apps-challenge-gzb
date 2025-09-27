@@ -1,0 +1,9 @@
+FILE: backgrounds/baikonur-launch.jpg
+PROMPT: Baikonur Cosmodrome launch pad at golden hour, Soyuz rocket standing on launch pad, industrial space facility infrastructure, dramatic orange sunset sky, launch tower and support structures, wide Kazakhstan landscape, epic inspiring atmosphere, anime visual novel background style, cinematic lighting, 16:9 aspect ratio
+
+INSTRUCTIONS:
+1. Copy the prompt above
+2. Use Leonardo AI, Midjourney, or DALL-E
+3. Generate the image
+4. Save as specified filename
+5. Replace this text file with the image

@@ -1,0 +1,9 @@
+GENERATE: backgrounds/baikonur-launch.jpg
+DIMENSIONS: 1920x1080
+FORMAT: JPG
+TYPE: background
+
+PROMPT:
+Baikonur Cosmodrome launch pad at golden hour, Soyuz rocket standing tall on launch pad, industrial space facility infrastructure, dramatic orange-pink sunset sky, launch tower and support structures, wide open Kazakhstan landscape, epic inspiring atmosphere, anime visual novel background style, cinematic lighting, 16:9 aspect ratio
+
+After generation, replace this file with the actual image!

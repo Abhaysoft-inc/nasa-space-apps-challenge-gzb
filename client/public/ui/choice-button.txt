@@ -1,0 +1,9 @@
+GENERATE: ui/choice-button.png
+DIMENSIONS: 1000x60
+FORMAT: PNG
+TYPE: ui
+
+PROMPT:
+Visual novel choice button UI element, rounded rectangular button design, dark blue gradient background with cyan accent borders, professional clickable appearance with subtle hover glow effect, clean game interface style, 1000x60 pixel dimensions, PNG with transparency
+
+After generation, replace this file with the actual image!

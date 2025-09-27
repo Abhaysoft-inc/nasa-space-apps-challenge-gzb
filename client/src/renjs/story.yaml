@@ -1,0 +1,526 @@
+// Bion-M1 Space Biology Mission Story
+// A RenJS Interactive Visual Novel
+
+Setup: {
+  // Set initial variables
+  $: {
+    scientificAccuracy: 0,
+    breakthroughPoints: 0,
+    missionStatus: 'pre-launch',
+    playerName: 'Dr. Sarah Chen',
+    boneDataQuality: 0,
+    geneticDiversity: 0
+  }
+}
+
+// ============= CHAPTER 1: MISSION PREPARATION =============
+scene_lab_preparation: {
+  background: 'lab_background',
+  
+  text: {
+    who: 'narrator',
+    text: 'NASA Ames Research Center - 6 months before launch'
+  },
+  
+  show: 'sarah_confident',
+  
+  text: {
+    who: 'Dr. Sarah Chen',
+    text: 'We\'re 6 months out from launch. The Bion-M1 mission will be humanity\'s most comprehensive study of biological adaptation to spaceflight.'
+  },
+  
+  text: {
+    who: 'Dr. Sarah Chen', 
+    text: 'Forty-five mice will spend 30 days in orbit. Every decision we make now will determine whether we unlock the secrets to long-duration space travel... or watch years of research fail.'
+  },
+  
+  choice: {
+    text: 'Which mouse strain should we prioritize for the bone density study?',
+    option1: {
+      text: '🧬 C57BL/6 Strain - Gold standard for research',
+      action: {
+        $: { 
+          boneDataQuality: 10,
+          scientificAccuracy: 10
+        },
+        goto: 'choice_c57bl6'
+      }
+    },
+    option2: {
+      text: '🛡️ BALB/c Strain - Immune system specialists',
+      action: {
+        goto: 'choice_balbc'
+      }
+    },
+    option3: {
+      text: '🌍 Mixed Population - Genetic diversity',
+      action: {
+        $: { 
+          geneticDiversity: 10,
+          scientificAccuracy: 5
+        },
+        goto: 'choice_mixed'
+      }
+    }
+  }
+}
+
+choice_c57bl6: {
+  show: 'sarah_pleased',
+  text: {
+    who: 'Dr. Sarah Chen',
+    text: 'Excellent choice! C57BL/6 mice will provide reliable, consistent bone density data. This strain has been the gold standard for decades.'
+  },
+  
+  text: {
+    who: 'narrator',
+    text: 'Your scientific accuracy increases! This decision will impact the quality of your bone density measurements.'
+  },
+  
+  goto: 'chapter_2_launch'
+}
+
+choice_balbc: {
+  show: 'sarah_thoughtful',
+  text: {
+    who: 'Dr. Sarah Chen',
+    text: 'BALB/c mice are excellent for immune studies, but they might not give us the most consistent bone data. Still, stress response data will be valuable.'
+  },
+  
+  goto: 'chapter_2_launch'
+}
+
+choice_mixed: {
+  show: 'sarah_excited',
+  text: {
+    who: 'Dr. Sarah Chen',
+    text: 'Smart thinking! Genetic diversity will help us understand individual variations in bone loss. This mirrors human diversity much better.'
+  },
+  
+  text: {
+    who: 'narrator', 
+    text: 'Genetic diversity points gained! This will help with broader applicability of your results.'
+  },
+  
+  goto: 'chapter_2_launch'
+}
+
+// ============= CHAPTER 2: LAUNCH DAY =============
+chapter_2_launch: {
+  background: 'launch_pad',
+  music: 'tension_theme',
+  
+  text: {
+    who: 'narrator',
+    text: 'Baikonur Cosmodrome, Kazakhstan - Launch Day'
+  },
+  
+  show: 'mission_control_screen',
+  
+  text: {
+    who: 'Mission Control',
+    text: 'Dr. Chen, all biological payload systems are nominal. 45 mice secured in habitat modules.'
+  },
+  
+  show: 'sarah_focused',
+  
+  text: {
+    who: 'Dr. Sarah Chen',
+    text: 'Roger that. Life support systems?'
+  },
+  
+  text: {
+    who: 'Mission Control',
+    text: 'All green. Initiating launch sequence... T-minus 3 minutes and counting.'
+  },
+  
+  // Animated countdown sequence
+  animation: {
+    type: 'countdown',
+    duration: 3000,
+    text: 'LAUNCH COUNTDOWN'
+  },
+  
+  text: {
+    who: 'Mission Control',
+    text: 'T-minus 10... 9... 8... 7... 6... 5... 4... 3... 2... 1... LIFTOFF!'
+  },
+  
+  animation: {
+    type: 'rocket_launch',
+    duration: 5000
+  },
+  
+  text: {
+    who: 'narrator',
+    text: 'The Foton-M4 capsule carrying your precious cargo disappears into the sky, beginning humanity\'s most ambitious space biology mission.'
+  },
+  
+  goto: 'chapter_3_orbit'
+}
+
+// ============= CHAPTER 3: ORBIT OPERATIONS =============
+chapter_3_orbit: {
+  background: 'mission_control',
+  music: 'space_ambient',
+  
+  text: {
+    who: 'narrator',
+    text: 'Mission Control - Day 5 in Orbit'
+  },
+  
+  show: 'telemetry_screen',
+  
+  text: {
+    who: 'Dr. Sarah Chen',
+    text: 'Telemetry shows the mice are adapting to microgravity. Heart rates are elevated but stabilizing.'
+  },
+  
+  animation: {
+    type: 'floating_mice',
+    duration: 3000
+  },
+  
+  text: {
+    who: 'Mission Control',
+    text: 'Dr. Chen, we\'re seeing unusual behavior from Subject #23. Spinning motions, reduced feeding activity.'
+  },
+  
+  show: 'sarah_concerned',
+  
+  choice: {
+    text: 'What\'s your diagnosis for the unusual behavior?',
+    option1: {
+      text: '🧠 Vestibular System Disruption - Microgravity affecting inner ear',
+      action: {
+        $: { 
+          scientificAccuracy: 20
+        },
+        goto: 'correct_diagnosis'
+      }
+    },
+    option2: {
+      text: '😰 Psychological Stress - Confined environment anxiety',
+      action: {
+        goto: 'incorrect_diagnosis'
+      }
+    },
+    option3: {
+      text: '🔧 Equipment Malfunction - Habitat system irregularity',
+      action: {
+        goto: 'incorrect_diagnosis'
+      }
+    }
+  }
+}
+
+correct_diagnosis: {
+  show: 'sarah_brilliant',
+  
+  text: {
+    who: 'Dr. Sarah Chen',
+    text: 'Exactly! The vestibular system disruption is causing spatial disorientation. This is identical to what astronauts experience during space adaptation syndrome.'
+  },
+  
+  text: {
+    who: 'narrator',
+    text: 'Breakthrough insight! Your scientific accuracy has significantly increased.'
+  },
+  
+  goto: 'chapter_4_discovery'
+}
+
+incorrect_diagnosis: {
+  show: 'sarah_uncertain',
+  
+  text: {
+    who: 'Dr. Sarah Chen',
+    text: 'Hmm, further observation reveals it\'s actually vestibular disruption from microgravity. The inner ear is struggling with the lack of gravitational reference.'
+  },
+  
+  goto: 'chapter_4_discovery'
+}
+
+// ============= CHAPTER 4: CRITICAL DISCOVERY =============
+chapter_4_discovery: {
+  background: 'analysis_lab',
+  music: 'discovery_theme',
+  
+  text: {
+    who: 'narrator',
+    text: 'Mission Control - Day 14: Bone Density Analysis Results'
+  },
+  
+  animation: {
+    type: 'bone_scan_comparison',
+    duration: 4000
+  },
+  
+  show: 'sarah_shocked',
+  
+  text: {
+    who: 'Dr. Sarah Chen',
+    text: 'This is... unprecedented. Look at these bone density scans!'
+  },
+  
+  text: {
+    who: 'Dr. Sarah Chen',
+    text: 'Weight-bearing bones show 21% density loss in just 14 days, while non-weight-bearing bones only show 8% loss.'
+  },
+  
+  choice: {
+    text: 'What does this pattern suggest about bone loss in space?',
+    option1: {
+      text: '⚡ Mechanical Loading Critical - Gravity provides essential bone stress',
+      action: {
+        $: { 
+          breakthroughPoints: 50,
+          missionStatus: 'discovery'
+        },
+        goto: 'breakthrough_discovery'
+      }
+    },
+    option2: {
+      text: '🩸 Blood Flow Changes - Circulation affects bone formation',
+      action: {
+        goto: 'alternative_theory'
+      }
+    }
+  }
+}
+
+breakthrough_discovery: {
+  animation: {
+    type: 'eureka_moment',
+    duration: 3000
+  },
+  
+  show: 'sarah_eureka',
+  
+  text: {
+    who: 'Dr. Sarah Chen',
+    text: 'That\'s it! Mechanical loading is absolutely critical for bone health. Without gravity providing constant stress, bones literally waste away!'
+  },
+  
+  text: {
+    who: 'narrator',
+    text: 'BREAKTHROUGH DISCOVERY! Your insight will revolutionize our understanding of bone loss in space and lead to new countermeasures.'
+  },
+  
+  goto: 'chapter_5_experiment'
+}
+
+alternative_theory: {
+  show: 'sarah_studying',
+  
+  text: {
+    who: 'Dr. Sarah Chen',
+    text: 'Blood flow is important, but the pattern clearly points to mechanical loading being the primary factor. Weight-bearing vs. non-weight-bearing is the key distinction.'
+  },
+  
+  text: {
+    who: 'narrator',
+    text: 'You eventually reach the correct conclusion about mechanical loading.'
+  },
+  
+  $: { breakthroughPoints: 25 },
+  
+  goto: 'chapter_5_experiment'
+}
+
+// ============= CHAPTER 5: EMERGENCY EXPERIMENT =============
+chapter_5_experiment: {
+  background: 'space_station_interior',
+  music: 'urgent_theme',
+  
+  text: {
+    who: 'narrator',
+    text: 'Mission Control - Emergency Protocol Authorization'
+  },
+  
+  text: {
+    who: 'Mission Control',
+    text: 'Dr. Chen, your breakthrough discovery has changed everything. We\'re authorizing an emergency experiment to test mechanical loading theory.'
+  },
+  
+  animation: {
+    type: 'exercise_device_blueprint',
+    duration: 3000
+  },
+  
+  show: 'sarah_determined',
+  
+  text: {
+    who: 'Dr. Sarah Chen',
+    text: 'We have 8 days remaining and 15 mice available. This prototype exercise device could be the key to preventing bone loss.'
+  },
+  
+  choice: {
+    text: 'How should we design the experiment?',
+    option1: {
+      text: '🐭 5 mice, 30 min/day (Safe approach)',
+      action: {
+        goto: 'safe_experiment'
+      }
+    },
+    option2: {
+      text: '🔬 8 mice, 60 min/day (Optimal approach)',
+      action: {
+        $: { 
+          breakthroughPoints: 75
+        },
+        goto: 'optimal_experiment'
+      }
+    },
+    option3: {
+      text: '⚡ 12 mice, 120 min/day (Aggressive approach)',
+      action: {
+        goto: 'aggressive_experiment'
+      }
+    }
+  }
+}
+
+optimal_experiment: {
+  animation: {
+    type: 'experiment_montage',
+    duration: 5000
+  },
+  
+  show: 'sarah_focused_work',
+  
+  text: {
+    who: 'Dr. Sarah Chen',
+    text: 'Perfect balance. 8 mice with 60 minutes of daily mechanical loading exercise. This should give us statistically significant results without overexertion.'
+  },
+  
+  text: {
+    who: 'narrator',
+    text: 'Your experimental design is methodical and scientific. The results will be groundbreaking.'
+  },
+  
+  goto: 'chapter_6_results'
+}
+
+safe_experiment: {
+  text: {
+    who: 'Dr. Sarah Chen', 
+    text: 'A cautious approach. The results will be less dramatic but still valuable.'
+  },
+  
+  goto: 'chapter_6_results'
+}
+
+aggressive_experiment: {
+  text: {
+    who: 'Dr. Sarah Chen',
+    text: 'Ambitious, but we risk overexertion. Science requires balance between boldness and caution.'
+  },
+  
+  goto: 'chapter_6_results'
+}
+
+// ============= CHAPTER 6: MISSION COMPLETE =============
+chapter_6_results: {
+  background: 'recovery_site',
+  music: 'triumph_theme',
+  
+  text: {
+    who: 'narrator',
+    text: 'Kazakhstani Steppe - Capsule Recovery Site'
+  },
+  
+  animation: {
+    type: 'capsule_landing',
+    duration: 4000
+  },
+  
+  show: 'sarah_triumphant',
+  
+  text: {
+    who: 'Dr. Sarah Chen',
+    text: 'Mission complete! 30 days in space, and we\'ve revolutionized our understanding of space biology.'
+  },
+  
+  // Results summary based on player choices
+  if: '$.breakthroughPoints >= 50',
+  then: {
+    animation: {
+      type: 'success_celebration',
+      duration: 3000
+    },
+    
+    text: {
+      who: 'narrator',
+      text: 'MISSION SUCCESS! Your discoveries lead to:'
+    },
+    
+    text: {
+      who: 'narrator', 
+      text: '• 2015: ISS exercise equipment upgraded based on your findings'
+    },
+    
+    text: {
+      who: 'narrator',
+      text: '• 2020: Artemis program incorporates bone health protocols'
+    },
+    
+    text: {
+      who: 'narrator',
+      text: '• 2028: Mars mission crews use exercise systems derived from your research'
+    }
+  },
+  
+  text: {
+    who: 'Dr. Sarah Chen',
+    text: 'Thanks to this mission, future astronauts will maintain their bone health during long-duration flights to Mars and beyond.'
+  },
+  
+  // Final score display
+  text: {
+    who: 'narrator',
+    text: 'FINAL RESULTS:\\nScientific Accuracy: $.scientificAccuracy\\nBreakthrough Points: $.breakthroughPoints\\nMission Status: $.missionStatus'
+  },
+  
+  choice: {
+    text: 'What would you like to do next?',
+    option1: {
+      text: '📚 Explore Research Papers',
+      action: {
+        goto: 'end_papers'
+      }
+    },
+    option2: {
+      text: '🎮 Play Again', 
+      action: {
+        goto: 'scene_lab_preparation'
+      }
+    },
+    option3: {
+      text: '🚀 More Space Games',
+      action: {
+        goto: 'end_games'
+      }
+    }
+  }
+}
+
+end_papers: {
+  text: {
+    who: 'narrator',
+    text: 'Explore the real scientific papers that inspired this mission!'
+  },
+  // This would link back to the papers section
+  
+  end: true
+}
+
+end_games: {
+  text: {
+    who: 'narrator',
+    text: 'Discover more interactive space science experiences!'
+  },
+  // This would link back to the games section
+  
+  end: true
+}

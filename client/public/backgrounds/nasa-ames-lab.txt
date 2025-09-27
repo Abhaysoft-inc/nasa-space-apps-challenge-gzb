@@ -1,0 +1,9 @@
+GENERATE: backgrounds/nasa-ames-lab.jpg
+DIMENSIONS: 1920x1080
+FORMAT: JPG
+TYPE: background
+
+PROMPT:
+Professional NASA Ames Research Center laboratory interior, modern scientific facility, clean white walls with fluorescent lighting, advanced equipment including microscopes, centrifuges, computers, glass containers with biological samples, sterile environment, bright clinical atmosphere, wide angle view, anime visual novel background style, high detail, 16:9 aspect ratio
+
+After generation, replace this file with the actual image!

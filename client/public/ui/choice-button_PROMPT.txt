@@ -1,0 +1,9 @@
+FILE: ui/choice-button.png
+PROMPT: Visual novel choice button UI element, rounded rectangular button, dark blue gradient background with cyan accent borders, professional clickable appearance with subtle glow effect, clean game interface style, 1000x60 dimensions, PNG transparency
+
+INSTRUCTIONS:
+1. Copy the prompt above
+2. Use Leonardo AI, Midjourney, or DALL-E
+3. Generate the image
+4. Save as specified filename
+5. Replace this text file with the image
