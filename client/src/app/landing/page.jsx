@@ -65,9 +65,9 @@ export default function SpaceHeroPage() {
     const headerOpacity = useTransform(scrollYProgress, [0, 0.6, 0.8], [1, 0.4, 0]);
     const moonLabelOpacity = useTransform(scrollYProgress, [0.6, 0.9], [0, 1]);
     const moonX = useTransform(scrollYProgress, [0, 1], ["-50%", "0%"]);
-    const moonScale = useTransform(scrollYProgress, [0, 1], [0.9, 1.05]);
     // Keep the moon fully opaque once it starts entering
     // (we remove opacity animation to avoid any transparent look)
+    const leftWidth = '55%';
 
     const planets = {
         moon: {
@@ -346,8 +346,8 @@ export default function SpaceHeroPage() {
 
                         {/* Moon image slides in from left, half width, full height, below header */}
                         <motion.div
-                            className="absolute top-0 left-0 h-full w-1/2 z-10 flex items-center justify-start"
-                            style={{ x: moonX, scale: moonScale }}
+                            className="absolute top-0 left-0 h-full z-10 flex items-center justify-start"
+                            style={{ x: moonX, width: leftWidth }}
                         >
                             <div className="relative h-full w-full">
                                 <Image src="/moon-unscreen.gif" alt="Moon animation" fill priority unoptimized className="object-contain object-left" />
@@ -355,7 +355,7 @@ export default function SpaceHeroPage() {
                         </motion.div>
 
                         {/* Right-side hardcoded moon research text */}
-                        <div className="relative z-20 h-full ml-[50%]">
+                        <div className="relative z-20 h-full" style={{ marginLeft: leftWidth }}>
                             <div className="h-full flex items-center">
                                 <div className="max-w-3xl px-6 md:px-12">
                                     <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">Research on and for the Moon</h2>
