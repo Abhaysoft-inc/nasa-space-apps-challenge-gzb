@@ -4,7 +4,8 @@ import { usePathname } from "next/navigation";
 
 export default function Navbar() {
     const pathname = usePathname();
-    if (pathname === "/") return null;
+    const hide = pathname === "/" || pathname === "/landing" || pathname?.startsWith("/landing/");
+    if (hide) return null;
 
     return (
         <div className="sticky top-0 z-50">
