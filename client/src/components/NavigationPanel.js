@@ -33,6 +33,8 @@ export default function NavigationPanel({
     <motion.div
       initial={{ x: -400, opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
+      exit={{ x: -400, opacity: 0 }}
+      transition={{ type: 'tween', duration: 0.25 }}
       className="fixed left-0 top-20 h-[calc(100vh-5rem)] w-72 bg-black/30 backdrop-blur-lg border-r border-white/10 z-30 overflow-y-auto pointer-events-auto"
     >
       <div className="p-6">

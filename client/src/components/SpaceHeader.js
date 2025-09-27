@@ -2,9 +2,9 @@
 
 import { motion } from 'framer-motion';
 import Image from 'next/image';
-import { Rocket, Award, Target, Users } from 'lucide-react';
+import { Rocket, Award, Target, Users, PanelLeftOpen, PanelLeftClose } from 'lucide-react';
 
-export default function SpaceHeader({ explorerStats }) {
+export default function SpaceHeader({ explorerStats, isSidebarOpen = true, onToggleSidebar = () => {} }) {
   // Ensure explorerStats has proper defaults
   const stats = explorerStats || {
     papersDiscovered: 0,
@@ -20,6 +20,19 @@ export default function SpaceHeader({ explorerStats }) {
       <div className="flex items-center justify-between px-6 py-4">
         {/* Logo & Title */}
         <div className="flex items-center gap-4">
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={onToggleSidebar}
+            className="p-2 border border-white/20 rounded-lg text-white/90 hover:bg-white/10"
+            aria-label="Toggle sidebar"
+          >
+            {isSidebarOpen ? (
+              <PanelLeftClose className="w-5 h-5" />
+            ) : (
+              <PanelLeftOpen className="w-5 h-5" />
+            )}
+          </motion.button>
           <motion.div
             whileHover={{ rotate: 360 }}
             transition={{ duration: 0.8 }}

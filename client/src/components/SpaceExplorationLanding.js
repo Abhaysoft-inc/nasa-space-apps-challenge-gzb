@@ -25,6 +25,7 @@ export default function SpaceExplorationLanding() {
     erasExplored: new Set(),
     achievements: []
   });
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   // Auto-dismiss welcome message after 8 seconds
   useEffect(() => {
@@ -56,7 +57,11 @@ export default function SpaceExplorationLanding() {
   return (
     <div className="relative w-full h-screen bg-gradient-to-b from-slate-900 via-purple-900/20 to-black overflow-hidden">
       {/* Space Header */}
-      <SpaceHeader explorerStats={explorerStats} />
+      <SpaceHeader 
+        explorerStats={explorerStats}
+        isSidebarOpen={isSidebarOpen}
+        onToggleSidebar={() => setIsSidebarOpen((v) => !v)}
+      />
       
       {/* Main 3D Galaxy */}
       <div ref={mainCanvasContainerRef} className="absolute inset-0 z-10">
@@ -165,19 +170,23 @@ export default function SpaceExplorationLanding() {
       </div>
 
       {/* Navigation Panel - Fixed Sidebar */}
-      <NavigationPanel 
-        searchTerm={searchTerm}
-        onSearchChange={setSearchTerm}
-        selectedCategory={selectedCategory}
-        onCategoryChange={setSelectedCategory}
-        explorerStats={explorerStats}
-        onResetView={() => {
-          setSelectedPaper(null);
-          setCurrentEra('2020s');
-          setSelectedCategory('all');
-          setSearchTerm('');
-        }}
-      />
+      <AnimatePresence>
+        {isSidebarOpen && (
+          <NavigationPanel 
+            searchTerm={searchTerm}
+            onSearchChange={setSearchTerm}
+            selectedCategory={selectedCategory}
+            onCategoryChange={setSelectedCategory}
+            explorerStats={explorerStats}
+            onResetView={() => {
+              setSelectedPaper(null);
+              setCurrentEra('2020s');
+              setSelectedCategory('all');
+              setSearchTerm('');
+            }}
+          />
+        )}
+      </AnimatePresence>
 
       {/* Timeline Explorer - Fixed Bottom */}
       <TimelineExplorer 
