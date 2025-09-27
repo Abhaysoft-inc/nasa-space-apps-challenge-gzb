@@ -1,0 +1,26 @@
+<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- NASA Meatball Outer Circle -->
+  <circle cx="24" cy="24" r="23" fill="#0B1426" stroke="#4F46E5" stroke-width="2"/>
+  
+  <!-- NASA Stars -->
+  <path d="M8 12L9.5 14.5L12 12L9.5 9.5L8 12Z" fill="#FFFFFF"/>
+  <path d="M36 16L37.5 18.5L40 16L37.5 13.5L36 16Z" fill="#FFFFFF"/>
+  <path d="M32 32L33.5 34.5L36 32L33.5 29.5L32 32Z" fill="#FFFFFF"/>
+  
+  <!-- Orbital Ring -->
+  <ellipse cx="24" cy="24" rx="18" ry="6" fill="none" stroke="#EC4899" stroke-width="2" opacity="0.8"/>
+  
+  <!-- Central Planet/Sphere -->
+  <circle cx="24" cy="24" r="8" fill="url(#planetGradient)"/>
+  
+  <!-- NASA Vector Arrow -->
+  <path d="M12 24C16 20, 32 20, 36 24" fill="none" stroke="#10B981" stroke-width="3" stroke-linecap="round"/>
+  
+  <!-- Gradient Definitions -->
+  <defs>
+    <radialGradient id="planetGradient" cx="0.3" cy="0.3">
+      <stop offset="0%" stop-color="#6366F1"/>
+      <stop offset="100%" stop-color="#3730A3"/>
+    </radialGradient>
+  </defs>
+</svg>

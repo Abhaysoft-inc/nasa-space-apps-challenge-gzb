@@ -1,0 +1,18 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Rocket Body -->
+  <path d="M32 4C28 4 24 8 24 12V52C24 56 28 60 32 60C36 60 40 56 40 52V12C40 8 36 4 32 4Z" fill="#4F46E5"/>
+  
+  <!-- Rocket Nose -->
+  <path d="M32 4L24 12H40L32 4Z" fill="#6366F1"/>
+  
+  <!-- Rocket Wings -->
+  <path d="M20 44L24 40V52L20 56V44Z" fill="#EC4899"/>
+  <path d="M44 44L40 40V52L44 56V44Z" fill="#EC4899"/>
+  
+  <!-- Window -->
+  <circle cx="32" cy="24" r="4" fill="#FFFFFF" opacity="0.8"/>
+  
+  <!-- Flames -->
+  <path d="M28 60L32 56L36 60L32 64L28 60Z" fill="#F59E0B"/>
+  <path d="M30 60L32 58L34 60L32 62L30 60Z" fill="#FBBF24"/>
+</svg>
