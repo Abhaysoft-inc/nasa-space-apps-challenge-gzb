@@ -1,7 +1,9 @@
 "use client"
-import React, { useState, Suspense } from 'react';
+import React, { useState, Suspense, useRef } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { useGLTF, OrbitControls, Environment } from '@react-three/drei';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import Image from 'next/image';
 
 function MarsModel({ isSelected }) {
     const gltf = useGLTF('/Mars_1_6792.glb');
@@ -56,6 +58,15 @@ function MoonModel({ isSelected }) {
 
 export default function SpaceHeroPage() {
     const [selectedPlanet, setSelectedPlanet] = useState(null);
+    // Moon section scroll animations
+    const moonSectionRef = useRef(null);
+    const { scrollYProgress } = useScroll({ target: moonSectionRef, offset: ["start start", "end start"] });
+    const headerY = useTransform(scrollYProgress, [0, 0.7, 1], [0, -40, -80]);
+    const headerOpacity = useTransform(scrollYProgress, [0, 0.6, 0.8], [1, 0.4, 0]);
+    const moonLabelOpacity = useTransform(scrollYProgress, [0.6, 0.9], [0, 1]);
+    const moonX = useTransform(scrollYProgress, [0, 1], ["-50%", "0%"]);
+    const moonScale = useTransform(scrollYProgress, [0, 1], [0.9, 1.05]);
+    const moonOpacity = useTransform(scrollYProgress, [0, 0.2, 0.5], [0, 0.7, 1]);
 
     const planets = {
         moon: {
@@ -84,22 +95,22 @@ export default function SpaceHeroPage() {
 
     return (
         <div className="w-full relative">
-            {/* Section 1: Hero */}
-            <section className="relative min-h-screen flex">
-                {/* Video Background */}
+            {/* Global fixed background: shared by all sections */}
+            <div className="fixed inset-0 -z-10">
                 <video
                     autoPlay
                     muted
                     loop
                     playsInline
-                    className="absolute inset-0 w-full h-full object-cover z-0"
+                    className="absolute inset-0 w-full h-full object-cover"
                 >
                     <source src="/landing_bg.mp4" type="video/mp4" />
                     <source src="/Landing_bg.mp4" type="video/mp4" />
                 </video>
-
-                {/* Overlay for better text readability */}
-                <div className="absolute inset-0 bg-black/30 z-10"></div>
+                <div className="absolute inset-0 bg-black/30" />
+            </div>
+            {/* Section 1: Hero */}
+            <section className="relative min-h-screen flex">
 
                 {/* Navigation Menu */}
                 <nav className="absolute top-0 left-0 right-0 z-30 p-6">
@@ -306,17 +317,73 @@ export default function SpaceHeroPage() {
                     />
                 ))}
                 </div>
-            </section>
+                    </section>
 
-            {/* Section 2: Simple content to enable scroll */}
-            <section className="min-h-screen flex items-center justify-center bg-gradient-to-b from-black/40 to-black/20">
-                <div className="max-w-3xl px-6 text-center">
-                    <h2 className="text-4xl font-bold text-white mb-4">Keep Exploring</h2>
-                    <p className="text-lg text-gray-200">
-                        Scroll enabled. Add more sections or content here. We can also bring in a Moon-focused section with animations when you’re ready.
-                    </p>
-                </div>
-            </section>
+                    {/* Section 2: Moon research scroll section */}
+                    <section ref={moonSectionRef} className="relative min-h-screen h-screen overflow-hidden">
+                        {/* Sticky header (navbar style) that retracts */}
+                        <div className="sticky top-0 z-30">
+                            <motion.div style={{ y: headerY, opacity: headerOpacity }} className="p-6">
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center space-x-3">
+                                        <span className="text-white font-semibold text-xl">Biolore</span>
+                                    </div>
+                                    <div className="hidden md:flex items-center space-x-8">
+                                        <a href="/" className="text-white/80 hover:text-white transition-colors duration-300 ">Home</a>
+                                        <a href="/papers" className="text-white/80 hover:text-white transition-colors duration-300 ">Research</a>
+                                        <a href="/games" className="text-white/80 hover:text-white transition-colors duration-300 ">Games</a>
+                                        <a href="/mission" className="text-white/80 hover:text-white transition-colors duration-300">Mission</a>
+                                        <button className=" text-white px-6 py-2 rounded-full font-medium transition-all duration-300 transform hover:scale-105 bg-orange-500/90 backdrop-blur-2xl  ">Learn</button>
+                                    </div>
+                                </div>
+                            </motion.div>
+                            {/* Moon label that appears when fully open */}
+                            <motion.div style={{ opacity: moonLabelOpacity }} className="absolute top-6 left-6">
+                                <div className="px-4 py-2 rounded-lg border border-white/20 bg-black/30 backdrop-blur text-white font-semibold">Moon</div>
+                            </motion.div>
+                        </div>
+
+                        {/* Moon image slides in from left, half width, full height, below header */}
+                        <motion.div
+                            className="absolute top-0 left-0 h-full w-1/2 z-10 flex items-center justify-start"
+                            style={{ x: moonX, scale: moonScale, opacity: moonOpacity }}
+                        >
+                            <div className="relative h-full w-full">
+                                <Image src="/moon_nobg.png" alt="Moon" fill priority className="object-contain object-left" />
+                            </div>
+                        </motion.div>
+
+                        {/* Right-side hardcoded moon research text */}
+                        <div className="relative z-20 h-full ml-[50%]">
+                            <div className="h-full flex items-center">
+                                <div className="max-w-3xl px-6 md:px-12">
+                                    <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">Research on and for the Moon</h2>
+                                    <p className="text-lg text-gray-200 mb-4">
+                                        The Moon is our nearest off-world laboratory. Studies here inform planetary science, human health in partial gravity, and technologies for sustainable presence.
+                                    </p>
+                                    <ul className="space-y-3 text-gray-200 text-base list-disc pl-5">
+                                        <li><span className="font-semibold text-white">Lunar Regolith Biology:</span> Plant and microbial responses to regolith simulants and Apollo samples; nutrient cycling and toxicity mitigation.</li>
+                                        <li><span className="font-semibold text-white">Radiation Biology:</span> DNA damage/repair dynamics and shielding approaches under lunar surface radiation and SPEs.</li>
+                                        <li><span className="font-semibold text-white">Dust Toxicology:</span> Ultra-fine dust impacts on lungs, eyes, skin; filtration and adhesion control for suits and habitats.</li>
+                                        <li><span className="font-semibold text-white">Human Physiology (1/6 g):</span> Locomotion, cardiovascular load, bone remodeling, fluid shifts, and circadian adaptation in partial gravity.</li>
+                                        <li><span className="font-semibold text-white">ISRU & Life Support:</span> Regolith-based materials, oxygen extraction, and polar ice utilization for water and propellant.</li>
+                                        <li><span className="font-semibold text-white">Polar Volatiles:</span> Prospecting permanently shadowed regions; cold-trap chemistry relevant to fuel and life support.</li>
+                                        <li><span className="font-semibold text-white">Biocontainment:</span> Preventing forward/back contamination during sample return and in-situ biology experiments.</li>
+                                    </ul>
+                                    <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        <div className="rounded-xl border border-white/10 bg-white/5 p-4 text-gray-200">
+                                            <h3 className="text-white font-semibold mb-2">Artemis Science Objectives</h3>
+                                            <p>Surface ops validating habitat systems, EVA biomedical monitoring, and long-duration partial gravity studies.</p>
+                                        </div>
+                                        <div className="rounded-xl border border-white/10 bg-white/5 p-4 text-gray-200">
+                                            <h3 className="text-white font-semibold mb-2">Lunar Analog Research</h3>
+                                            <p>Antarctic stations and volcanic fields simulate isolation, dust, and cold for testing life support and biology payloads.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
         </div>
     );
 }
