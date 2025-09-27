@@ -60,24 +60,21 @@ const PAPERS = [
 
 export default function PapersIndexPage() {
     const [query, setQuery] = useState('')
-    const [activeTags, setActiveTags] = useState([])
     const [activeDomains, setActiveDomains] = useState([])
-    // Year range for timeline slider [min, max]
-    const [yearRange, setYearRange] = useState(() => {
+    // Sort option
+    const [sortBy, setSortBy] = useState('year-desc') // 'year-desc' | 'year-asc' | 'title-asc' | 'title-desc' | 'domain-asc'
+    // Single year slider: lower bound (from year)
+    const [yearFrom, setYearFrom] = useState(() => {
         const years = PAPERS.map(p => p.year)
-        return [Math.min(...years), Math.max(...years)]
+        return Math.min(...years)
     })
-
-    const allTags = useMemo(() => {
-        const set = new Set()
-        PAPERS.forEach(p => p.tags?.forEach(t => set.add(t)))
-        return Array.from(set).sort()
-    }, [])
 
     const allDomains = useMemo(() => {
         const set = new Set(PAPERS.map(p => p.domain).filter(Boolean))
         return Array.from(set).sort()
     }, [])
+
+    // Categories removed per request
 
     const allYears = useMemo(() => {
         const set = new Set(PAPERS.map(p => p.year).filter(Boolean))
@@ -86,45 +83,52 @@ export default function PapersIndexPage() {
 
     const filtered = useMemo(() => {
         const q = query.trim().toLowerCase()
-        return PAPERS.filter(p => {
+        const result = PAPERS.filter(p => {
             const matchesQuery = !q || p.title.toLowerCase().includes(q)
-            const matchesTags = activeTags.length === 0 || activeTags.every(t => p.tags?.includes(t))
             const matchesDomains = activeDomains.length === 0 || activeDomains.includes(p.domain)
-            const matchesYearRange = p.year >= yearRange[0] && p.year <= yearRange[1]
-            return matchesQuery && matchesTags && matchesDomains && matchesYearRange
+            const matchesYear = p.year >= yearFrom
+            return matchesQuery && matchesDomains && matchesYear
         })
-    }, [query, activeTags, activeDomains, yearRange])
+        // Sorting
+        const sorted = [...result]
+        switch (sortBy) {
+            case 'year-asc':
+                sorted.sort((a, b) => a.year - b.year)
+                break
+            case 'title-asc':
+                sorted.sort((a, b) => a.title.localeCompare(b.title))
+                break
+            case 'title-desc':
+                sorted.sort((a, b) => b.title.localeCompare(a.title))
+                break
+            case 'domain-asc':
+                sorted.sort((a, b) => a.domain.localeCompare(b.domain) || b.year - a.year)
+                break
+            case 'year-desc':
+            default:
+                sorted.sort((a, b) => b.year - a.year)
+        }
+        return sorted
+    }, [query, activeDomains, yearFrom, sortBy])
 
-    const toggleTag = (tag) => {
-        setActiveTags(prev => prev.includes(tag) ? prev.filter(t => t !== tag) : [...prev, tag])
-    }
     const toggleDomain = (domain) => {
         setActiveDomains(prev => prev.includes(domain) ? prev.filter(d => d !== domain) : [...prev, domain])
     }
+    // Category filter removed
 
-    // Dropdown handlers
-    const onDomainsChange = (e) => {
-        const values = Array.from(e.target.selectedOptions, o => o.value)
-        setActiveDomains(values)
-    }
+    // Dropdown handler removed; using checkbox toggles instead
 
-    // Timeline slider handlers
-    const onMinYearChange = (e) => {
+    // Single year slider handler (lower bound)
+    const onYearFromChange = (e) => {
         const v = Number(e.target.value)
-        setYearRange(([lo, hi]) => [Math.min(v, hi), hi])
-    }
-    const onMaxYearChange = (e) => {
-        const v = Number(e.target.value)
-        setYearRange(([lo, hi]) => [lo, Math.max(v, lo)])
+        setYearFrom(v)
     }
 
     const clearFilters = () => {
-        setActiveTags([])
         setActiveDomains([])
-        // Reset to full year range
-        if (allYears.length) {
-            setYearRange([allYears[allYears.length - 1], allYears[0]])
-        }
+        setSortBy('year-desc')
+        // Reset year to minimum
+        if (allYears.length) setYearFrom(allYears[allYears.length - 1])
     }
 
     return (
@@ -135,115 +139,104 @@ export default function PapersIndexPage() {
                     <p className="text-gray-600 mt-1">Browse papers as cards. Click any card to open the paper page.</p>
                 </div>
 
-                        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
                     {/* Sidebar */}
                     <aside className="lg:col-span-3">
                         <div className="sticky top-6 bg-white rounded-xl border border-gray-200 shadow-sm p-4 md:p-5">
-                                    <div className="mb-5 flex items-center justify-between">
-                                        <h2 className="text-base font-semibold text-gray-900">Filters</h2>
-                                        {(activeTags.length > 0 || activeDomains.length > 0 || (allYears.length > 0 && (yearRange[0] !== allYears[allYears.length - 1] || yearRange[1] !== allYears[0]))) && (
-                                            <button
-                                                type="button"
-                                                onClick={clearFilters}
-                                                className="text-xs text-blue-600 hover:underline"
-                                            >
-                                                Clear filters
-                                            </button>
-                                        )}
-                                    </div>
+                            <div className="mb-5 flex items-center justify-between">
+                                <h2 className="text-base font-semibold text-gray-900">Filters</h2>
+                                {(activeDomains.length > 0 || sortBy !== 'year-desc' || (allYears.length > 0 && (yearFrom !== allYears[allYears.length - 1]))) && (
+                                    <button
+                                        type="button"
+                                        onClick={clearFilters}
+                                        className="text-xs text-blue-600 hover:underline"
+                                    >
+                                        Clear filters
+                                    </button>
+                                )}
+                            </div>
 
-                                    {/* Domain filter (dropdown) */}
-                                    <div className="mb-6">
-                                        <h3 className="text-sm font-medium text-gray-900 mb-2">Domain</h3>
-                                        <select
-                                            multiple
-                                            value={activeDomains}
-                                            onChange={onDomainsChange}
-                                            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                            size={Math.min(8, allDomains.length)}
-                                        >
-                                            {allDomains.map(domain => (
-                                                <option key={domain} value={domain}>{domain}</option>
-                                            ))}
-                                        </select>
-                                    </div>
+                            {/* Year filter (single slider) */}
+                            <div className="mb-6">
+                                <h3 className="text-sm font-medium text-gray-900 mb-2">Year</h3>
+                                <div className="mb-2 text-xs text-gray-600 flex items-center justify-between">
+                                    <span>{allYears[allYears.length - 1] ?? ''}</span>
+                                    <span className="font-medium">From {yearFrom} → {allYears[0] ?? ''}</span>
+                                    <span>{allYears[0] ?? ''}</span>
+                                </div>
+                                <input
+                                    type="range"
+                                    min={allYears[allYears.length - 1]}
+                                    max={allYears[0]}
+                                    step={1}
+                                    value={yearFrom}
+                                    onChange={onYearFromChange}
+                                    className="w-full"
+                                />
+                            </div>
 
-                                    {/* Tags filter */}
-                                    <div className="mb-6">
-                                        <h3 className="text-sm font-medium text-gray-900 mb-2">Tags</h3>
-                                        <div className="flex flex-wrap gap-2">
-                                            {allTags.map(tag => (
-                                                <button
-                                                    key={tag}
-                                                    type="button"
-                                                    onClick={() => toggleTag(tag)}
-                                                    className={
-                                                        `px-3 py-1.5 rounded-full text-xs border ${activeTags.includes(tag)
-                                                            ? 'bg-blue-600 text-white border-blue-600'
-                                                            : 'bg-gray-100 text-gray-700 border-gray-200 hover:bg-gray-200'}`
-                                                    }
-                                                >
-                                                    {tag}
-                                                </button>
-                                            ))}
-                                        </div>
-                                    </div>
+                            {/* Sort */}
+                            <div className="mb-6">
+                                <h3 className="text-sm font-medium text-gray-900 mb-2">Sort by</h3>
+                                <select
+                                    value={sortBy}
+                                    onChange={(e) => setSortBy(e.target.value)}
+                                    className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                >
+                                    <option value="year-desc">Newest (Year ↓)</option>
+                                    <option value="year-asc">Oldest (Year ↑)</option>
+                                    <option value="title-asc">Title A → Z</option>
+                                    <option value="title-desc">Title Z → A</option>
+                                    <option value="domain-asc">Domain A → Z</option>
+                                </select>
+                            </div>
 
-                                    {/* Year filter (timeline slider) */}
-                                    <div>
-                                        <h3 className="text-sm font-medium text-gray-900 mb-2">Year</h3>
-                                        <div className="mb-2 text-xs text-gray-600 flex items-center justify-between">
-                                            <span>{yearRange[0]}</span>
-                                            <span className="font-medium">{yearRange[0]} - {yearRange[1]}</span>
-                                            <span>{yearRange[1]}</span>
-                                        </div>
-                                        <div className="space-y-2">
-                                            {/* Min year slider */}
+                            {/* Domain filter (checkbox list) */}
+                            <div className="mb-6">
+                                <h3 className="text-sm font-medium text-gray-900 mb-2">Domain</h3>
+                                <div className="max-h-60 overflow-auto pr-1 space-y-2">
+                                    {allDomains.map(domain => (
+                                        <label key={domain} className="flex items-center gap-2 text-sm text-gray-700">
                                             <input
-                                                type="range"
-                                                min={allYears[allYears.length - 1]}
-                                                max={allYears[0]}
-                                                step={1}
-                                                value={yearRange[0]}
-                                                onChange={onMinYearChange}
-                                                className="w-full"
+                                                type="checkbox"
+                                                className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                                                checked={activeDomains.includes(domain)}
+                                                onChange={() => toggleDomain(domain)}
                                             />
-                                            {/* Max year slider */}
-                                            <input
-                                                type="range"
-                                                min={yearRange[0]}
-                                                max={allYears[0]}
-                                                step={1}
-                                                value={yearRange[1]}
-                                                onChange={onMaxYearChange}
-                                                className="w-full"
-                                            />
-                                        </div>
-                                    </div>
+                                            <span className="flex-1">{domain}</span>
+                                            <span className="text-xs text-gray-500">
+                                                {PAPERS.filter(p => p.domain === domain).length}
+                                            </span>
+                                        </label>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Category, Year, Sort removed from sidebar; moved to top toolbar */}
                         </div>
                     </aside>
 
                     {/* Main content */}
                     <main className="lg:col-span-9">
-                                {/* Full-width search on the right/main side */}
-                                <div className="mb-4">
-                                    <label className="sr-only" htmlFor="paper-search-main">Search papers</label>
-                                    <div className="relative">
-                                        <input
-                                            id="paper-search-main"
-                                            type="text"
-                                            value={query}
-                                            onChange={(e) => setQuery(e.target.value)}
-                                            placeholder="Search by title..."
-                                            className="w-full rounded-lg border border-gray-300 px-4 py-2.5 pl-10 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                        />
-                                        <svg className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1010.5 18.5a7.5 7.5 0 006.15-3.85z" />
-                                        </svg>
-                                    </div>
-                                </div>
+                        {/* Top toolbar: search only */}
+                        <div className="mb-4">
+                            <label className="sr-only" htmlFor="paper-search-main">Search papers</label>
+                            <div className="relative">
+                                <input
+                                    id="paper-search-main"
+                                    type="text"
+                                    value={query}
+                                    onChange={(e) => setQuery(e.target.value)}
+                                    placeholder="Search by title..."
+                                    className="w-full rounded-lg border border-gray-300 px-4 py-2.5 pl-10 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                />
+                                <svg className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1010.5 18.5a7.5 7.5 0 006.15-3.85z" />
+                                </svg>
+                            </div>
+                        </div>
 
-                                <div className="mb-4 text-sm text-gray-600">{filtered.length} result{filtered.length !== 1 ? 's' : ''}</div>
+                        <div className="mb-4 text-sm text-gray-600">{filtered.length} result{filtered.length !== 1 ? 's' : ''}</div>
                         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
                             {filtered.map(paper => (
                                 <Link key={paper.id} href={`/papers/${paper.id}`} className="group">

@@ -27,8 +27,8 @@ export default function RootLayout({ children }) {
               <div className="h-14 flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <Link href="/" className="inline-flex items-center gap-2">
-                    <span className="inline-flex items-center justify-center w-8 h-8 rounded bg-gradient-to-br from-blue-500 to-purple-600 text-white font-semibold">N</span>
-                    <span className="text-sm font-semibold text-gray-900">NASA Research</span>
+                    <span className="inline-flex items-center justify-center w-8 h-8 rounded bg-gradient-to-br from-yellow-500 to-orange-600 text-white font-semibold">B</span>
+                    <span className="text-sm font-semibold text-gray-900">Biolore</span>
                   </Link>
                 </div>
                 <div className="hidden md:flex items-center gap-6">
