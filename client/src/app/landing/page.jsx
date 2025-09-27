@@ -66,7 +66,8 @@ export default function SpaceHeroPage() {
     const moonLabelOpacity = useTransform(scrollYProgress, [0.6, 0.9], [0, 1]);
     const moonX = useTransform(scrollYProgress, [0, 1], ["-50%", "0%"]);
     const moonScale = useTransform(scrollYProgress, [0, 1], [0.9, 1.05]);
-    const moonOpacity = useTransform(scrollYProgress, [0, 0.2, 0.5], [0, 0.7, 1]);
+    // Keep the moon fully opaque once it starts entering
+    // (we remove opacity animation to avoid any transparent look)
 
     const planets = {
         moon: {
@@ -346,10 +347,10 @@ export default function SpaceHeroPage() {
                         {/* Moon image slides in from left, half width, full height, below header */}
                         <motion.div
                             className="absolute top-0 left-0 h-full w-1/2 z-10 flex items-center justify-start"
-                            style={{ x: moonX, scale: moonScale, opacity: moonOpacity }}
+                            style={{ x: moonX, scale: moonScale }}
                         >
                             <div className="relative h-full w-full">
-                                <Image src="/moon_nobg.png" alt="Moon" fill priority className="object-contain object-left" />
+                                <Image src="/moon-unscreen.gif" alt="Moon animation" fill priority unoptimized className="object-contain object-left" />
                             </div>
                         </motion.div>
 
