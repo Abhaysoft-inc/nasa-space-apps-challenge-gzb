@@ -64,10 +64,54 @@ export default function GamesCenter(){
         {tab === 'overview' && (
           <div className="space-y-6">
             <KnowledgeGamesSection seed={3} />
-            {/* Featured Narrative Game */}
+            
+            {/* NEW: Featured Tardigrade Story Game */}
             <section className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-semibold text-gray-900">Featured Interactive Story</h2>
+                <h2 className="text-lg font-semibold text-gray-900">🔬 NEW: Interactive Science Story</h2>
+                <a href="/games/tardigrade-story" className="text-sm text-indigo-600 hover:text-indigo-700">Play Story →</a>
+              </div>
+              <div className="grid md:grid-cols-[1fr,2fr] gap-4 items-center">
+                <div className="rounded-xl overflow-hidden border border-gray-200">
+                  <div className="aspect-[16/9] bg-gradient-to-br from-purple-600 to-blue-600 relative flex items-center justify-center">
+                    <div className="text-6xl animate-pulse">🐻</div>
+                    <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(255,255,255,0.1),transparent_60%)]" />
+                  </div>
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">Tardigrade: The Ultimate Survivors</h3>
+                  <p className="text-gray-600 mb-4">
+                    Discover the amazing water bears that can survive in space! Follow Dr. Elena Rodriguez as she 
+                    uncovers the secrets of Earth's most resilient creatures and partners with NASA to protect astronauts on Mars missions.
+                  </p>
+                  <div className="flex items-center gap-3 text-sm text-gray-500 mb-4">
+                    <span className="flex items-center gap-1">
+                      <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                      15-20 min
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></svg>
+                      Interactive Story
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 11H6m0 0H3m3 0v3m0-3V8"/></svg>
+                      Real Science
+                    </span>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    <span className="px-2 py-1 bg-purple-100 text-purple-700 rounded-md text-xs font-medium">Space Biology</span>
+                    <span className="px-2 py-1 bg-blue-100 text-blue-700 rounded-md text-xs font-medium">Extremophiles</span>
+                    <span className="px-2 py-1 bg-green-100 text-green-700 rounded-md text-xs font-medium">NASA Research</span>
+                    <span className="px-2 py-1 bg-red-100 text-red-700 rounded-md text-xs font-medium">Mars Mission</span>
+                  </div>
+                </div>
+              </div>
+            </section>
+            
+            {/* Original Bion-M1 Game */}
+            <section className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-lg font-semibold text-gray-900">Classic Interactive Story</h2>
                 <a href="/games/bion-m1" className="text-sm text-indigo-600 hover:text-indigo-700">Open →</a>
               </div>
               <div className="grid md:grid-cols-[1fr,2fr] gap-4 items-center">
