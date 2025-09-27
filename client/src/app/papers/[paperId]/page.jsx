@@ -4,15 +4,13 @@ import PaperHeader from '../../../components/papers/PaperHeader'
 import PaperSummary from '../../../components/papers/PaperSummary'
 import PaperContent from '../../../components/papers/PaperContent'
 import RelatedPapers from '../../../components/papers/RelatedPapers'
-import AIAssistantPreview from '../../../components/papers/AIAssistantPreview'
 import PaperActions from '../../../components/papers/PaperActions'
-import ChatModal from '../../../components/papers/ChatModal'
-import FloatingChatButton from '../../../components/papers/FloatingChatButton'
+import ProfileSidebarCard from '../../../components/profile/ProfileSidebarCard'
 
 const PapersPage = () => {
     const [chatInput, setChatInput] = useState('')
     const [chatMessages, setChatMessages] = useState([])
-    const [isChatOpen, setIsChatOpen] = useState(false)
+    // const [isChatOpen, setIsChatOpen] = useState(false)
 
     // Sample paper data
     const paperData = {
@@ -76,6 +74,7 @@ const PapersPage = () => {
 
                     {/* Right Sidebar */}
                     <div className="space-y-6">
+                        <ProfileSidebarCard />
                         <RelatedPapers relatedPapers={relatedPapers} />
                         <PaperActions />
                     </div>
