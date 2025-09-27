@@ -69,6 +69,23 @@ const PapersPage = () => {
                     <div className="lg:col-span-2">
                         <PaperHeader paperData={paperData} />
                         <PaperSummary paperData={paperData} />
+                        {chatMessages.length > 0 && (
+                            <div className="mt-6 bg-white rounded-2xl shadow-sm border border-gray-100 p-4 md:p-6">
+                                <h3 className="text-lg font-semibold text-gray-900 mb-3">AI Q&A</h3>
+                                <div className="space-y-3">
+                                    {chatMessages.map((m, i) => (
+                                        <div key={i} className={`flex ${m.type === 'user' ? 'justify-end' : 'justify-start'}`}>
+                                            <div className={`max-w-[85%] md:max-w-[70%] rounded-2xl px-4 py-2 text-sm border ${m.type === 'user'
+                                                    ? 'bg-blue-50 text-blue-900 border-blue-100'
+                                                    : 'bg-gray-50 text-gray-800 border-gray-100'
+                                                }`}>
+                                                {m.message}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
                         <PaperContent />
                     </div>
 
