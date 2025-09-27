@@ -85,6 +85,14 @@ const PaperHeader = ({ paperData }) => {
         }
     }
 
+    const goToGapFinder = () => {
+        // Navigate to a Gap Finder page with context
+        const params = new URLSearchParams()
+        if (paperData?.title) params.set('title', paperData.title)
+        if (paperData?.doi) params.set('doi', paperData.doi)
+        window.location.href = `/papers/gap-finder?${params.toString()}`
+    }
+
     return (
         <div className="bg-white rounded-lg shadow-md p-6 mb-6">
             <h1 className="text-3xl font-bold text-gray-900 mb-4">
@@ -161,7 +169,19 @@ const PaperHeader = ({ paperData }) => {
                     </svg>
                     Compare
                 </button>
-
+                 <button
+                    type="button"
+                    onClick={goToGapFinder}
+                    title="Gap Finder"
+                    className="inline-flex items-center gap-2 px-3 py-2 text-sm rounded-lg border border-indigo-200 bg-indigo-50 text-indigo-800 hover:bg-indigo-100"
+                >
+                    {/* Lightbulb/target icon to represent gaps/opportunities */}
+                    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M12 3a7 7 0 0 0-4 12.9V18a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v-2.1A7 7 0 0 0 12 3z" />
+                        <path d="M9 22h6" />
+                    </svg>
+                    Gap Finder
+                </button>
                 <button
                     type="button"
                     onClick={toggleFavorite}
@@ -175,18 +195,7 @@ const PaperHeader = ({ paperData }) => {
                     )}
                     {favorite ? 'Saved' : 'Favorite'}
                 </button>
-                <button
-                    type="button"
-                    onClick={handleCopyCitation}
-                    title="Copy citation"
-                    className="inline-flex items-center gap-2 px-3 py-2 text-sm rounded-lg border border-gray-200 bg-white hover:bg-gray-50"
-                >
-                    <svg className="w-4 h-4 text-gray-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <rect x="9" y="9" width="13" height="13" rx="2" />
-                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-                    </svg>
-                    Cite
-                </button>
+               
                 <button
                     type="button"
                     onClick={handleShare}
