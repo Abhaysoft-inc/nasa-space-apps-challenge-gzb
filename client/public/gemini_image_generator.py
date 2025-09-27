@@ -14,7 +14,7 @@ from pathlib import Path
 # -------------------------------
 # CONFIGURATION
 # -------------------------------
-GEMINI_API_KEY = "AIzaSyDrqsFxk2IvCaJqZww3tQULa3do_8RGCso"
+GEMINI_API_KEY = "nothing"
 
 # Google AI Studio endpoints
 TEXT_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent"
