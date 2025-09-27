@@ -27,16 +27,6 @@ export default function SpaceExplorationLanding() {
   });
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
-  // Auto-dismiss welcome message after 8 seconds
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (explorerStats.papersDiscovered === 0) {
-        setExplorerStats(prev => ({...prev, papersDiscovered: 1}));
-      }
-    }, 8000);
-    return () => clearTimeout(timer);
-  }, [explorerStats.papersDiscovered]);
-
   const handlePaperDiscovery = useCallback((paper) => {
     setSelectedPaper(paper);
     setExplorerStats(prev => ({
@@ -142,41 +132,7 @@ export default function SpaceExplorationLanding() {
           </Canvas>
         </div>
 
-        {/* Compact Welcome Message */}
-        <AnimatePresence>
-          {explorerStats.papersDiscovered === 0 && (
-            <motion.div
-              initial={{ opacity: 0, x: -300 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -300 }}
-              transition={{ duration: 0.5 }}
-              className="absolute top-24 left-6 z-20 max-w-sm"
-            >
-              <div className="bg-black/70 backdrop-blur-md rounded-xl p-4 border border-blue-400/40">
-                <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-lg font-bold text-blue-400">🚀 Mission Briefing</h3>
-                  <button
-                    onClick={() => setExplorerStats(prev => ({...prev, papersDiscovered: 1}))}
-                    className="text-gray-400 hover:text-white text-sm"
-                    suppressHydrationWarning
-                  >
-                    ✕
-                  </button>
-                </div>
-                
-                <p className="text-sm text-gray-200 mb-3 leading-relaxed">
-                  Navigate the <span className="text-blue-400 font-medium">3D galaxy</span> where each 
-                  glowing star is NASA research. Click stars to explore!
-                </p>
-                
-                <div className="flex items-center gap-2 text-xs text-gray-400">
-                  <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
-                  <span>Drag to rotate • Scroll to zoom • Click stars to explore</span>
-                </div>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+        {/* Mission briefing removed per request */}
       </div>
 
       {/* Navigation Panel - Fixed Sidebar */}
