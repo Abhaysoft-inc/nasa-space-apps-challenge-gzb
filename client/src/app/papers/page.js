@@ -127,6 +127,19 @@ export default function PapersIndexPage() {
         }
     }
 
+    // Compute a domain-based placeholder image URL for cards
+    const getPaperImage = (paper) => {
+        const domain = paper.domain || 'Paper'
+        // Pick a color based on domain hash
+        const colors = ['0ea5e9', '22c55e', 'a855f7', 'ef4444', 'f59e0b', '14b8a6', '3b82f6', '8b5cf6', '84cc16', '06b6d4']
+        const text = 'ffffff'
+        let hash = 0
+        for (let i = 0; i < domain.length; i++) hash = (hash + domain.charCodeAt(i)) % colors.length
+        const bg = colors[hash]
+        // Use placehold.co to generate a simple, non-copyrighted placeholder with the domain label
+        return `https://placehold.co/800x600/${bg}/${text}?text=${encodeURIComponent(domain)}`
+    }
+
     return (
         <div className="min-h-screen bg-gray-50">
             <div className="max-w-7xl mx-auto px-4 py-10">
@@ -247,8 +260,21 @@ export default function PapersIndexPage() {
                         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
                             {filtered.map(paper => (
                                 <Link key={paper.id} href={`/papers/${paper.id}`} className="group">
-                                    <div className="h-full bg-white border border-gray-200 rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow">
-                                        <h3 className="text-base font-medium text-gray-900 group-hover:text-blue-700">{paper.title}</h3>
+                                    <div className="h-full bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow">
+                                        {/* Image header */}
+                                        <div className="mb-3">
+                                            <img
+                                                src={getPaperImage(paper)}
+                                                alt={paper.title}
+                                                className="w-full h-40 object-cover rounded-md bg-gray-200"
+                                                loading="lazy"
+                                            />
+                                        </div>
+
+                                        {/* Title */}
+                                        <h3 className="text-base font-semibold text-gray-900 group-hover:text-blue-700">{paper.title}</h3>
+
+                                        {/* Tags */}
                                         {paper.tags?.length > 0 && (
                                             <div className="mt-3 flex flex-wrap gap-1.5">
                                                 {paper.tags.slice(0, 3).map(t => (
