@@ -402,9 +402,10 @@ function ResearchStar({ paper, isSelected, isHovered, isHighlighted, onClick, on
     }
   });
 
-  // Make all bubbles tiny and uniform, matching background star size
+  // Make all bubbles tiny; enlarge a bit on hover
   const STAR_SIZE = 0.06;
-  const scale = STAR_SIZE; // no dynamic scaling on hover/selection
+  const scaleFactor = isHovered ? 1.6 : 1.0;
+  const scale = STAR_SIZE * scaleFactor;
   const opacity = 0.95;
 
   return (
@@ -429,34 +430,24 @@ function ResearchStar({ paper, isSelected, isHovered, isHighlighted, onClick, on
         scale={[scale, scale, scale]}
       >
         <sphereGeometry args={[1.0, 16, 16]} />
-        {/* Use unified palette color and ignore textures for consistent theming */}
-        <meshBasicMaterial
-          color={PALETTE.light}
-          transparent
-          opacity={opacity}
-        />
+        {/* Core dot: black fill */}
+        <meshBasicMaterial color="#000000" transparent opacity={opacity} />
       </mesh>
 
-      {/* Scientific Data Ring */}
-      {/* Tiny ring, nearly the same size as the dot */}
+      {/* Star border: thin white ring slightly larger than core */}
       <mesh rotation={[Math.PI / 2, 0, 0]} scale={[scale, scale, 1]} raycast={null}>
-        <ringGeometry args={[1.15, 1.25, 64]} />
-        <meshBasicMaterial
-          color={PALETTE.accent2}
-          transparent
-          opacity={0.2}
-          side={THREE.DoubleSide}
-        />
+        <ringGeometry args={[1.1, 1.35, 64]} />
+        <meshBasicMaterial color="#ffffff" transparent opacity={0.7} side={THREE.DoubleSide} />
       </mesh>
 
-      {/* Research Field Glow */}
-      <mesh ref={glowRef} scale={[scale * 1.4, scale * 1.4, scale * 1.4]} raycast={null}>
+      {/* Shine glow: soft additive white spheres for a star-like blur */}
+      <mesh ref={glowRef} scale={[scale * 1.7, scale * 1.7, scale * 1.7]} raycast={null}>
+        <sphereGeometry args={[0.9, 16, 16]} />
+        <meshBasicMaterial color="#ffffff" transparent opacity={0.16} blending={THREE.AdditiveBlending} depthWrite={false} />
+      </mesh>
+      <mesh scale={[scale * 2.2, scale * 2.2, scale * 2.2]} raycast={null}>
         <sphereGeometry args={[0.9, 12, 12]} />
-        <meshBasicMaterial
-          color={PALETTE.accent3}
-          transparent
-          opacity={0.12}
-        />
+        <meshBasicMaterial color="#ffffff" transparent opacity={0.08} blending={THREE.AdditiveBlending} depthWrite={false} />
       </mesh>
 
       {/* High Citation Indicators */}
@@ -569,12 +560,7 @@ function CitationLink({ connection, isVisible, isPlaying = true }) {
     >
       {/* Unit-height slim cylinder aligned on Y, scaled to length */}
       <cylinderGeometry args={[0.03, 0.03, 1, 8]} />
-      <meshBasicMaterial
-        color={connection.color}
-        transparent
-        opacity={0.25}
-        depthWrite={false}
-      />
+      <meshBasicMaterial color="#000000" transparent opacity={0.25} depthWrite={false} />
     </mesh>
   );
 }
