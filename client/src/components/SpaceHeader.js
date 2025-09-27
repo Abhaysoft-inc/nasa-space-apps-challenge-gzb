@@ -33,8 +33,8 @@ export default function SpaceHeader({ explorerStats, isSidebarOpen = true, onTog
             )}
           </motion.button>
           <motion.div
-            whileHover={{ rotate: 360 }}
-            transition={{ duration: 0.8 }}
+            // whileHover={{ rotate: 360 }}
+            // transition={{ duration: 0.8 }}
             className="relative"
           >
             <div className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center backdrop-blur" style={{backgroundColor:'#c1440e22'}}>
