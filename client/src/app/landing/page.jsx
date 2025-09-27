@@ -4,15 +4,16 @@ import { Canvas } from '@react-three/fiber';
 import { useGLTF, OrbitControls, Environment } from '@react-three/drei';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import Image from 'next/image';
+import Link from 'next/link';
 
-function MarsModel({ isSelected }) {
+function MarsModel({ isSelected, scaleOverride }) {
     const gltf = useGLTF('/Mars_1_6792.glb');
 
     if (gltf && gltf.scene) {
         return (
             <primitive
                 object={gltf.scene.clone()}
-                scale={isSelected ? 0.01 : 0.006}
+                scale={scaleOverride ?? (isSelected ? 0.01 : 0.006)}
                 rotation={[0, 0, 0]}
                 position={[0, 0, 0]}
             />
@@ -74,7 +75,8 @@ export default function SpaceHeroPage() {
     const marsHeaderY = useTransform(marsProgress, [0, 0.7, 1], [0, -40, -80]);
     const marsHeaderOpacity = useTransform(marsProgress, [0, 0.6, 0.8], [1, 0.4, 0]);
     const marsLabelOpacity = useTransform(marsProgress, [0.6, 0.9], [0, 1]);
-    const marsX = useTransform(marsProgress, [0, 1], ["-50%", "0%"]);
+    // For Mars section we will slide the model in from the right
+    const marsX = useTransform(marsProgress, [0, 1], ["50%", "0%"]);
 
     const planets = {
         moon: {
@@ -193,9 +195,9 @@ export default function SpaceHeroPage() {
                                 <button className="px-6 py-3 bg-[#e77d11] rounded-full font-semibold  transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl">
                                     Start Journey
                                 </button>
-                                <button className="px-6 py-3 border border-white/30 rounded-full font-semibold hover:bg-white/10 transition-all duration-300 text-white">
-                                    Learn More
-                                </button>
+                                <Link href="/knowledge-graphs" className="px-6 py-3 border border-white/30 rounded-full font-semibold hover:bg-white/10 transition-all duration-300 text-white">
+                                    Knowledge Graph
+                                </Link>
                             </div>
                         </>
                     )}
@@ -329,25 +331,12 @@ export default function SpaceHeroPage() {
 
                     {/* Section 2: Moon research scroll section */}
                     <section ref={moonSectionRef} className="relative min-h-screen h-screen overflow-hidden">
-                        {/* Sticky header (navbar style) that retracts */}
+                        {/* Sticky header showing only MOON */}
                         <div className="sticky top-0 z-30">
                             <motion.div style={{ y: headerY, opacity: headerOpacity }} className="p-6">
-                                <div className="flex items-center justify-between">
-                                    <div className="flex items-center space-x-3">
-                                        <span className="text-white font-semibold text-xl">Biolore</span>
-                                    </div>
-                                    <div className="hidden md:flex items-center space-x-8">
-                                        <a href="/" className="text-white/80 hover:text-white transition-colors duration-300 ">Home</a>
-                                        <a href="/papers" className="text-white/80 hover:text-white transition-colors duration-300 ">Research</a>
-                                        <a href="/games" className="text-white/80 hover:text-white transition-colors duration-300 ">Games</a>
-                                        <a href="/mission" className="text-white/80 hover:text-white transition-colors duration-300">Mission</a>
-                                        <button className=" text-white px-6 py-2 rounded-full font-medium transition-all duration-300 transform hover:scale-105 bg-orange-500/90 backdrop-blur-2xl  ">Learn</button>
-                                    </div>
+                                <div className="flex items-center justify-center">
+                                    <span className="text-white/90 font-bold text-2xl md:text-3xl tracking-wide">MOON</span>
                                 </div>
-                            </motion.div>
-                            {/* Moon label that appears when fully open */}
-                            <motion.div style={{ opacity: moonLabelOpacity }} className="absolute top-6 left-6">
-                                <div className="px-4 py-2 rounded-lg border border-white/20 bg-black/30 backdrop-blur text-white font-semibold">Moon</div>
                             </motion.div>
                         </div>
 
@@ -394,32 +383,20 @@ export default function SpaceHeroPage() {
                     </section>
 
                     {/* Section 3: Mars research scroll section */}
+                    {/* Text on left, GLB on right */}
                     <section ref={marsSectionRef} className="relative min-h-screen h-screen overflow-hidden">
-                        {/* Sticky header (navbar style) that retracts */}
+                        {/* Sticky header showing only MARS */}
                         <div className="sticky top-0 z-30">
                             <motion.div style={{ y: marsHeaderY, opacity: marsHeaderOpacity }} className="p-6">
-                                <div className="flex items-center justify-between">
-                                    <div className="flex items-center space-x-3">
-                                        <span className="text-white font-semibold text-xl">Biolore</span>
-                                    </div>
-                                    <div className="hidden md:flex items-center space-x-8">
-                                        <a href="/" className="text-white/80 hover:text-white transition-colors duration-300 ">Home</a>
-                                        <a href="/papers" className="text-white/80 hover:text-white transition-colors duration-300 ">Research</a>
-                                        <a href="/games" className="text-white/80 hover:text-white transition-colors duration-300 ">Games</a>
-                                        <a href="/mission" className="text-white/80 hover:text-white transition-colors duration-300">Mission</a>
-                                        <button className=" text-white px-6 py-2 rounded-full font-medium transition-all duration-300 transform hover:scale-105 bg-orange-500/90 backdrop-blur-2xl  ">Learn</button>
-                                    </div>
+                                <div className="flex items-center justify-center">
+                                    <span className="text-white/90 font-bold text-2xl md:text-3xl tracking-wide">MARS</span>
                                 </div>
-                            </motion.div>
-                            {/* Mars label that appears when fully open */}
-                            <motion.div style={{ opacity: marsLabelOpacity }} className="absolute top-6 left-6">
-                                <div className="px-4 py-2 rounded-lg border border-white/20 bg-black/30 backdrop-blur text-white font-semibold">Mars</div>
                             </motion.div>
                         </div>
 
-                        {/* Mars GLB slides in from left, leftWidth, full height */}
+                        {/* Mars GLB slides in from right, fixed width, full height */}
                         <motion.div
-                            className="absolute top-0 left-0 h-full z-10 flex items-center justify-start"
+                            className="absolute top-0 right-0 h-full z-10 flex items-center justify-end"
                             style={{ x: marsX, width: leftWidth }}
                         >
                             <div className="relative h-full w-full">
@@ -433,15 +410,16 @@ export default function SpaceHeroPage() {
                                     <pointLight position={[-10, -10, -5]} intensity={0.4} color="#4169e1" />
                                     <pointLight position={[5, -5, 10]} intensity={0.3} color="#ffa500" />
                                     <Suspense fallback={null}>
-                                        <MarsModel isSelected />
+                                        {/* Reduce GLB scale specifically for this section */}
+                                        <MarsModel isSelected scaleOverride={0.005} />
                                         <OrbitControls enableZoom={false} enablePan={false} autoRotate autoRotateSpeed={0.4} />
                                     </Suspense>
                                 </Canvas>
                             </div>
                         </motion.div>
 
-                        {/* Right-side hardcoded Mars research text */}
-                        <div className="relative z-20 h-full" style={{ marginLeft: leftWidth }}>
+                        {/* Left-side hardcoded Mars research text */}
+                        <div className="relative z-20 h-full" style={{ marginRight: leftWidth }}>
                             <div className="h-full flex items-center">
                                 <div className="max-w-3xl px-6 md:px-12">
                                     <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">Mars Research Highlights</h2>
