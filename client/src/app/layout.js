@@ -1,6 +1,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
-import Link from "next/link";
+import Navbar from "@/components/Navbar";
 import "./globals.css";
+import Link from "next/link";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,7 +35,6 @@ export default function RootLayout({ children }) {
                 <div className="hidden md:flex items-center gap-6">
                   <NavLink href="/papers">Papers</NavLink>
                   <NavLink href="/mission">Mission</NavLink>
-                  <NavLink href="/games">Games</NavLink>
                   <NavLink href="/user/profile">Profile</NavLink>
                 </div>
                 <div className="md:hidden">
@@ -72,7 +72,6 @@ function MobileMenu() {
       <div className="absolute right-0 mt-2 w-48 rounded-lg border border-gray-200 bg-white shadow-lg p-2">
         <Link href="/papers" className="block px-3 py-2 rounded text-sm text-gray-700 hover:bg-gray-50">Papers</Link>
         <Link href="/mission" className="block px-3 py-2 rounded text-sm text-gray-700 hover:bg-gray-50">Mission</Link>
-        <Link href="/games" className="block px-3 py-2 rounded text-sm text-gray-700 hover:bg-gray-50">Games</Link>
         <Link href="/user/profile" className="block px-3 py-2 rounded text-sm text-gray-700 hover:bg-gray-50">Profile</Link>
       </div>
     </details>
