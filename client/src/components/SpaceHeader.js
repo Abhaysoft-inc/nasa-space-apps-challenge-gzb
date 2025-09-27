@@ -1,7 +1,8 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Rocket, Users, PanelLeftOpen, PanelLeftClose } from 'lucide-react';
+import Image from 'next/image';
+import { Users, PanelLeftOpen, PanelLeftClose } from 'lucide-react';
 
 export default function SpaceHeader({ explorerStats, isSidebarOpen = true, onToggleSidebar = () => {} }) {
   // Ensure explorerStats has proper defaults
@@ -32,16 +33,16 @@ export default function SpaceHeader({ explorerStats, isSidebarOpen = true, onTog
               <PanelLeftOpen className="w-5 h-5" />
             )}
           </motion.button>
-          <motion.div
-            // whileHover={{ rotate: 360 }}
-            // transition={{ duration: 0.8 }}
-            className="relative"
-          >
-            <div className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center backdrop-blur" style={{backgroundColor:'#c1440e22'}}>
-              <Rocket className="w-6 h-6" style={{color:'#fda600'}} />
-            </div>
-            <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full animate-pulse" />
-          </motion.div>
+          <div className="relative">
+            <Image
+              src="/logo2.png"
+              alt="Biolores Logo"
+              width={48}
+              height={48}
+              className="w-12 h-12 rounded-full border border-white/20 object-contain"
+              priority
+            />
+          </div>
           
           <div>
             <h1 className="text-xl font-bold" style={{color:'#f0e7e7'}}>
