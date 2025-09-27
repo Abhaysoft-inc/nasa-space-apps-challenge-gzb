@@ -1,6 +1,6 @@
 {
   "ch1": {
-    "bg": "/games/bion-m1/backgrounds/ch1_lab_bg.jpg",
+    "bg": "/games/bion-m1/backgrounds/ch1_lab_bg.png",
     "layers": [
       "/games/bion-m1/layers/ch1_racks_mg.png",
       "/games/bion-m1/layers/ch1_table_fg.png"
@@ -20,10 +20,10 @@
     "exhaust": "/games/bion-m1/effects/ch2_exhaust_spritesheet.png"
   },
   "ch3": {
-    "controlBg": "/games/bion-m1/backgrounds/ch3_control_bg.jpg",
+    "controlBg": "/games/bion-m1/backgrounds/ch3_control_bg.png",
     "hudFrame": "/games/bion-m1/ui/ch3_hud_frame.png",
     "graphCard": "/games/bion-m1/ui/ch3_graph_card.png",
-    "habitatBg": "/games/bion-m1/backgrounds/ch3_habitat_bg.jpg",
+  "habitatBg": "/games/bion-m1/backgrounds/ch3_habitat_bg.png",
     "mice": [
       "/games/bion-m1/props/mouse_float_a.png",
       "/games/bion-m1/props/mouse_float_b.png",

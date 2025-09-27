@@ -79,122 +79,299 @@ export default function BionM1Game(){
   function runExperiment(){ setGame(g=> ({...g, missionStatus:'experiment'})); setTimeout(()=> setChapter(6), 600) }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="sticky top-0 z-40 backdrop-blur bg-white/80 border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
-          <div className="flex items-center gap-3">
-            <Link href="/games" className="text-sm text-gray-600 hover:text-gray-900">← Back to Games</Link>
-            <h1 className="text-lg sm:text-xl font-bold text-gray-900">Mission Bion‑M1: The Complete Story</h1>
+    <div className="fixed inset-0 bg-black overflow-hidden">
+      {/* Full-screen game container */}
+      <div className="absolute top-4 left-4 right-4 z-50 flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <Link href="/games" className="text-white/80 hover:text-white text-sm backdrop-blur bg-black/40 px-3 py-2 rounded-lg border border-white/20">← Exit Game</Link>
+          <h1 className="text-white font-bold text-xl tracking-wide">Mission Bion‑M1: The Complete Story</h1>
+        </div>
+        <div className="flex items-center gap-3">
+          <div className="backdrop-blur bg-black/40 px-3 py-2 rounded-lg border border-emerald-500/30">
+            <span className="text-emerald-400 text-sm">Accuracy: {game.scientificAccuracy}</span>
           </div>
-          <div className="hidden sm:flex items-center gap-3 text-xs text-gray-600">
-            <InfoPill label="Accuracy" value={`${game.scientificAccuracy}`} color="emerald"/>
-            <InfoPill label="Breakthrough" value={`${game.breakthroughPoints}`} color="indigo"/>
-            <InfoPill label="Status" value={game.missionStatus} color="gray"/>
+          <div className="backdrop-blur bg-black/40 px-3 py-2 rounded-lg border border-indigo-500/30">
+            <span className="text-indigo-400 text-sm">Discovery: {game.breakthroughPoints}</span>
           </div>
         </div>
-        <div className="h-1 bg-gray-100"><div className="h-full bg-gradient-to-r from-indigo-500 to-fuchsia-500 transition-all" style={{ width: `${progressPct}%` }} /></div>
+      </div>
+      
+      {/* Progress bar */}
+      <div className="absolute top-20 left-4 right-4 z-40 h-1 bg-white/20 rounded-full overflow-hidden">
+        <div className="h-full bg-gradient-to-r from-cyan-400 via-indigo-500 to-fuchsia-500 transition-all duration-1000" style={{ width: `${progressPct}%` }} />
       </div>
 
-      <main className="max-w-7xl mx-auto px-4 py-6 space-y-6">
+      {/* Main game canvas */}
+      <main className="absolute inset-0 pt-24">
         {chapter === 1 && (
-          <SceneFrame bgClass="from-slate-900 via-indigo-950 to-slate-900" imageSrc={assets?.ch1?.bg || "/biology.jpeg"} imageClass="opacity-20 mix-blend-luminosity">
-            <ChapterHeader title="Chapter 1 · The Selection" subtitle="NASA Ames — 6 months before launch"/>
-            <p className="text-indigo-100/90 max-w-3xl">The Bion‑M1 mission will send 45 mice for 30 days in orbit. Your selection will decide the quality of science and animal welfare outcomes.</p>
-            <div className="mt-6 grid gap-3 sm:grid-cols-3">
-              <ChoiceButton onClick={()=> selectStrain('C57BL6')}>
-                <span className="text-lg">🐭 C57BL/6</span>
-                <small className="block text-xs opacity-80">Reliable data, well‑studied genetics</small>
-              </ChoiceButton>
-              <ChoiceButton onClick={()=> selectStrain('BALB')}>
-                <span className="text-lg">🐭 BALB/c</span>
-                <small className="block text-xs opacity-80">Immune system focus</small>
-              </ChoiceButton>
-              <ChoiceButton onClick={()=> selectStrain('Mixed')}>
-                <span className="text-lg">🐭 Mixed population</span>
-                <small className="block text-xs opacity-80">More representative diversity</small>
-              </ChoiceButton>
+          <FullScreenScene bgImage={assets?.ch1?.bg || "/biology.jpeg"}>
+            {/* Lab environment layers */}
+            {assets?.ch1?.layers?.[0] && (
+              <img src={assets.ch1.layers[0]} alt="lab racks" className="absolute inset-0 w-full h-full object-cover opacity-60" />
+            )}
+            {assets?.ch1?.layers?.[1] && (
+              <img src={assets.ch1.layers[1]} alt="lab table" className="absolute bottom-0 left-0 w-full h-1/3 object-cover opacity-70" />
+            )}
+            
+            {/* Character - Dr. Sarah Chen */}
+            {assets?.ch1?.characters?.sarahIdle && (
+              <img src={assets.ch1.characters.sarahIdle} alt="Dr. Sarah Chen" className="absolute bottom-0 left-8 h-96 object-contain z-20" />
+            )}
+            
+            {/* Story dialogue */}
+            <div className="absolute bottom-8 left-8 right-8 z-30">
+              <div className="backdrop-blur bg-black/70 border border-white/20 rounded-2xl p-8 max-w-4xl">
+                <div className="flex items-start gap-4 mb-6">
+                  <div className="w-16 h-16 rounded-full bg-gradient-to-br from-cyan-400 to-indigo-600 flex items-center justify-center text-white font-bold text-xl">SC</div>
+                  <div>
+                    <h3 className="text-white font-bold text-xl mb-2">Dr. Sarah Chen</h3>
+                    <p className="text-gray-300 text-sm">Lead Mission Scientist, NASA Ames Research Center</p>
+                  </div>
+                </div>
+                <div className="mb-6">
+                  <p className="text-white text-lg leading-relaxed mb-4">
+                    "We're 6 months out from launch. The Bion‑M1 mission will be humanity's most comprehensive study of biological adaptation to spaceflight."
+                  </p>
+                  <p className="text-gray-300 text-base">
+                    "Forty-five mice will spend 30 days in orbit. Every decision we make now will determine whether we unlock the secrets to long-duration space travel... or watch years of research fail."
+                  </p>
+                </div>
+                
+                <div className="space-y-3">
+                  <p className="text-cyan-400 font-semibold mb-4">Which mouse strain should we prioritize for the bone density study?</p>
+                  
+                  <StoryChoice onClick={()=> selectStrain('C57BL6')} icon="🧬">
+                    <div>
+                      <h4 className="font-bold text-white">C57BL/6 Strain</h4>
+                      <p className="text-gray-300 text-sm">Gold standard for research - reliable, consistent data</p>
+                    </div>
+                  </StoryChoice>
+                  
+                  <StoryChoice onClick={()=> selectStrain('BALB')} icon="🛡️">
+                    <div>
+                      <h4 className="font-bold text-white">BALB/c Strain</h4>
+                      <p className="text-gray-300 text-sm">Immune system specialists - stress response focus</p>
+                    </div>
+                  </StoryChoice>
+                  
+                  <StoryChoice onClick={()=> selectStrain('Mixed')} icon="🌍">
+                    <div>
+                      <h4 className="font-bold text-white">Mixed Population</h4>
+                      <p className="text-gray-300 text-sm">Genetic diversity - mirrors human variation</p>
+                    </div>
+                  </StoryChoice>
+                </div>
+              </div>
             </div>
-          </SceneFrame>
+          </FullScreenScene>
         )}
 
         {chapter === 2 && (
-          <SceneFrame bgClass="from-black via-slate-900 to-indigo-950" imageSrc={assets?.ch2?.bg} imageClass="opacity-25">
-            <ChapterHeader title="Chapter 2 · Launch Day" subtitle="Baikonur Cosmodrome"/>
-            <div className="grid md:grid-cols-3 gap-4">
-              <div className="md:col-span-2 bg-black/60 border border-indigo-500/40 rounded-xl p-4 text-indigo-100">
-                <div className="text-2xl font-mono">T‑minus <span className="font-bold">{timer}</span> s</div>
-                <div className="mt-4 grid sm:grid-cols-3 gap-3 text-sm">
-                  <StatusPill label="Mice" value="All 45 healthy" color="emerald"/>
-                  <StatusPill label="Life Support" value="Optimal" color="sky"/>
-                  <StatusPill label="Telemetry" value={timer<=60? 'Anomaly detected' : 'Strong signal'} color={timer<=60? 'amber':'violet'} />
+          <FullScreenScene bgImage={assets?.ch2?.bg}>
+            {/* Launch pad smoke and effects */}
+            {assets?.ch2?.smoke && (
+              <img src={assets.ch2.smoke} alt="launch smoke" className="absolute bottom-0 left-0 w-full h-2/3 object-cover opacity-50" />
+            )}
+            
+            {/* Rocket */}
+            <div className="absolute right-1/4 bottom-0 top-0 flex items-end justify-center">
+              {assets?.ch2?.rocket ? (
+                <img 
+                  src={assets.ch2.rocket} 
+                  alt="Bion-M1 rocket" 
+                  className={`h-5/6 object-contain transition-all duration-3000 ${
+                    counting && timer <= 0 ? 'transform -translate-y-full opacity-0' : 
+                    counting ? 'animate-pulse' : ''
+                  }`} 
+                />
+              ) : (
+                <div className="w-16 h-80 bg-gradient-to-t from-gray-300 to-white rounded-t-full" />
+              )}
+            </div>
+            
+            {/* Mission Control Interface */}
+            <div className="absolute top-8 left-8 right-8">
+              <div className="backdrop-blur bg-black/80 border border-cyan-500/30 rounded-2xl p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-white font-bold text-2xl tracking-wide">LAUNCH CONTROL</h2>
+                  <div className="text-3xl font-mono text-cyan-400">
+                    T-{String(Math.floor(timer / 60)).padStart(2, '0')}:{String(timer % 60).padStart(2, '0')}
+                  </div>
                 </div>
-                <div className="mt-4 flex items-center gap-3">
+                
+                <div className="grid grid-cols-3 gap-4 mb-6">
+                  <div className="bg-emerald-500/20 border border-emerald-500/50 rounded-lg p-3">
+                    <div className="text-emerald-400 font-bold">BIOLOGICAL PAYLOAD</div>
+                    <div className="text-white text-sm">45 mice - All systems nominal</div>
+                  </div>
+                  <div className="bg-sky-500/20 border border-sky-500/50 rounded-lg p-3">
+                    <div className="text-sky-400 font-bold">LIFE SUPPORT</div>
+                    <div className="text-white text-sm">Optimal parameters</div>
+                  </div>
+                  <div className={`${timer <= 60 ? 'bg-amber-500/20 border-amber-500/50' : 'bg-violet-500/20 border-violet-500/50'} rounded-lg p-3`}>
+                    <div className={`${timer <= 60 ? 'text-amber-400' : 'text-violet-400'} font-bold`}>TELEMETRY</div>
+                    <div className="text-white text-sm">{timer <= 60 ? '⚠️ Anomaly detected' : 'Strong signal'}</div>
+                  </div>
+                </div>
+                
+                <div className="flex items-center gap-4">
                   {!counting ? (
-                    <button onClick={startCountdown} className="px-4 py-2 rounded-md bg-indigo-600 hover:bg-indigo-500 text-white">Start Countdown</button>
+                    <button onClick={startCountdown} className="bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-600 hover:to-indigo-700 text-white font-bold px-8 py-3 rounded-lg transition-all">
+                      🚀 INITIATE LAUNCH SEQUENCE
+                    </button>
                   ) : (
-                    <button onClick={()=> setCounting(false)} className="px-4 py-2 rounded-md bg-gray-700 hover:bg-gray-600 text-white">Pause</button>
+                    <button onClick={()=> setCounting(false)} className="bg-red-600 hover:bg-red-700 text-white font-bold px-6 py-3 rounded-lg">
+                      HOLD
+                    </button>
                   )}
                 </div>
-                {counting && timer<=60 && (
-                  <div className="mt-6 border border-amber-400/60 bg-amber-50/10 text-amber-200 rounded-lg p-4">
-                    <p className="font-semibold">ALERT: Telemetry shows one mouse under stress. Launch in 60 seconds.</p>
-                    <div className="mt-3 flex flex-wrap gap-2">
-                      <button onClick={abortLaunch} className="px-3 py-1.5 rounded-md bg-red-600 hover:bg-red-500 text-white">Abort & Investigate</button>
-                      <button onClick={continueLaunch} className="px-3 py-1.5 rounded-md bg-emerald-600 hover:bg-emerald-500 text-white">Continue Launch</button>
+                
+                {counting && timer <= 60 && (
+                  <div className="mt-6 bg-amber-500/10 border border-amber-500/50 rounded-xl p-6">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-3 h-3 bg-amber-400 rounded-full animate-pulse" />
+                      <span className="text-amber-400 font-bold text-lg">CRITICAL DECISION REQUIRED</span>
+                    </div>
+                    <p className="text-white mb-4">Telemetry indicates Mouse #23 showing elevated stress markers. Launch window closes in {timer} seconds.</p>
+                    <div className="flex gap-4">
+                      <button onClick={abortLaunch} className="bg-red-600 hover:bg-red-700 text-white font-bold px-6 py-3 rounded-lg flex items-center gap-2">
+                        🛑 ABORT LAUNCH
+                        <span className="text-sm opacity-80">Investigate anomaly</span>
+                      </button>
+                      <button onClick={continueLaunch} className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-6 py-3 rounded-lg flex items-center gap-2">
+                        ✓ CONTINUE LAUNCH
+                        <span className="text-sm opacity-80">Monitor remotely</span>
+                      </button>
                     </div>
                   </div>
                 )}
               </div>
-              <div className="relative overflow-hidden rounded-xl bg-gradient-to-b from-indigo-600 to-fuchsia-600 p-6">
-                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-white/10 via-transparent to-transparent"/>
-                <div className="relative h-72">
-                  {/* If rocket sprite exists, show it; else fallback to dot */}
-                  {assets?.ch2?.rocket ? (
-                    <img src={assets.ch2.rocket} alt="rocket" className={`w-16 absolute left-1/2 -translate-x-1/2 bottom-2 ${counting? 'animate-[rocket_3s_linear_infinite]':''}`} />
-                  ) : (
-                    <div className={`w-10 h-10 bg-white/90 rounded-full shadow-lg absolute left-1/2 -translate-x-1/2 ${counting? 'animate-[rocket_3s_linear_infinite]':''}`}></div>
-                  )}
-                </div>
-                <style jsx>{`@keyframes rocket { 0%{ transform: translate(-50%, 100%);} 100%{ transform: translate(-50%, -120%);} }`}</style>
-                <p className="text-white/90 text-sm">Rocket ascent visualization</p>
-              </div>
             </div>
-          </SceneFrame>
+            
+            <style jsx>{`
+              @keyframes rocket { 
+                0% { transform: translateY(0) scale(1); } 
+                100% { transform: translateY(-150vh) scale(0.5); opacity: 0; } 
+              }
+            `}</style>
+          </FullScreenScene>
         )}
 
         {chapter === 3 && (
-          <SceneFrame bgClass="from-slate-900 via-indigo-900 to-black" imageSrc={assets?.ch3?.controlBg} imageClass="opacity-25">
-            <ChapterHeader title="Chapter 3 · First Week in Space" subtitle="Mission Control"/>
-            <div className="grid md:grid-cols-2 gap-4">
-              <div className="bg-black/60 border border-emerald-500/30 rounded-xl p-4 text-emerald-100">
-                <h3 className="font-semibold">LIVE: Day 5 Telemetry</h3>
-                <div className="mt-4 grid grid-cols-2 gap-4 text-xs">
-                  <div>
-                    <p className="mb-2">Heart Rate (BPM)</p>
-                    <div className="flex items-end gap-2 h-28">
-                      <div className="w-1/2 bg-emerald-500/40 rounded-t-md h-[60%] flex items-end justify-center">420</div>
-                      <div className="w-1/2 bg-emerald-400 rounded-t-md h-[75%] flex items-end justify-center">485</div>
+          <FullScreenScene bgImage={assets?.ch3?.controlBg}>
+            {/* Mission Control Environment */}
+            <div className="absolute inset-0">
+              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-blue-900/20 to-black/60" />
+              
+              {/* Floating microgravity habitat view */}
+              <div className="absolute top-1/4 right-8 w-80 h-60 border border-cyan-500/50 rounded-xl overflow-hidden backdrop-blur bg-black/40">
+                {assets?.ch3?.habitatBg && (
+                  <img src={assets.ch3.habitatBg} alt="habitat interior" className="w-full h-full object-cover opacity-70" />
+                )}
+                
+                {/* Floating mice animation */}
+                {assets?.ch3?.mice?.map((mouseImg, i) => (
+                  <img 
+                    key={mouseImg} 
+                    src={mouseImg} 
+                    alt={`mouse ${i+1}`} 
+                    className={`absolute w-12 h-12 object-contain ${
+                      i === 0 ? 'top-4 left-8 animate-[float_4s_ease-in-out_infinite]' :
+                      i === 1 ? 'top-16 right-12 animate-[float_5s_ease-in-out_infinite_0.5s]' :
+                      'top-32 left-1/2 animate-[float_6s_ease-in-out_infinite_1s] transform rotate-45'
+                    }`}
+                  />
+                ))}
+                
+                <div className="absolute bottom-2 left-2 text-cyan-400 text-xs font-mono">HABITAT CAM - DAY 5</div>
+              </div>
+            </div>
+            
+            {/* Main Mission Control Interface */}
+            <div className="absolute bottom-8 left-8 right-8">
+              <div className="grid md:grid-cols-2 gap-6">
+                {/* Telemetry Panel */}
+                <div className="backdrop-blur bg-black/80 border border-emerald-500/40 rounded-2xl p-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-3 h-3 bg-emerald-400 rounded-full animate-pulse" />
+                    <h3 className="text-emerald-400 font-bold text-lg">LIVE TELEMETRY - DAY 5</h3>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <p className="text-gray-400 text-sm mb-2">Heart Rate (BPM)</p>
+                      <div className="flex items-end gap-2 h-16">
+                        <div className="bg-emerald-500/40 rounded-t w-1/2 h-[60%] flex items-end justify-center text-xs text-white">420</div>
+                        <div className="bg-emerald-400 rounded-t w-1/2 h-[75%] flex items-end justify-center text-xs text-white font-bold">485</div>
+                      </div>
+                      <div className="flex justify-between text-xs text-gray-400 mt-1">
+                        <span>Earth</span><span>Space</span>
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <p className="text-gray-400 text-sm mb-2">Activity Level</p>
+                      <div className="bg-emerald-900/40 h-4 rounded-full overflow-hidden mb-2">
+                        <div className="bg-emerald-400 h-full w-[40%] rounded-full" />
+                      </div>
+                      <p className="text-emerald-400 text-sm">40% of Earth baseline</p>
                     </div>
                   </div>
-                  <div>
-                    <p className="mb-2">Activity Level</p>
-                    <div className="w-full h-3 bg-emerald-900/40 rounded-full overflow-hidden"><div className="h-full bg-emerald-400" style={{ width: '40%' }} /></div>
-                    <p className="mt-1">40% of Earth normal</p>
-                  </div>
                 </div>
-              </div>
-              <div className="bg-black/60 border border-amber-500/30 rounded-xl p-4 text-amber-100">
-                <h3 className="font-semibold">Anomaly Detected</h3>
-                <p className="text-sm mt-2">Mouse #23 shows spinning behavior and reduced feeding.</p>
-                <p className="text-sm mt-2">What is your hypothesis?</p>
-                <div className="mt-3 grid gap-2">
-                  <ChoiceButton onClick={()=> diagnose('vestibular')}>🧠 Vestibular disruption (microgravity)</ChoiceButton>
-                  <ChoiceButton onClick={()=> diagnose('stress')}>😰 Stress response</ChoiceButton>
-                  <ChoiceButton onClick={()=> diagnose('equipment')}>🔧 Equipment malfunction</ChoiceButton>
+                
+                {/* Anomaly Alert Panel */}
+                <div className="backdrop-blur bg-black/80 border border-amber-500/40 rounded-2xl p-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-3 h-3 bg-amber-400 rounded-full animate-pulse" />
+                    <h3 className="text-amber-400 font-bold text-lg">⚠️ ANOMALY DETECTED</h3>
+                  </div>
+                  
+                  <div className="mb-4">
+                    <p className="text-white mb-2">Subject #23 exhibiting unusual behavior:</p>
+                    <ul className="text-gray-300 text-sm space-y-1">
+                      <li>• Spinning motions in microgravity</li>
+                      <li>• Reduced feeding activity (60% normal)</li>
+                      <li>• Elevated stress biomarkers</li>
+                    </ul>
+                  </div>
+                  
+                  <div className="border-t border-gray-700 pt-4">
+                    <p className="text-cyan-400 font-semibold mb-4">Dr. Chen, what's your diagnosis?</p>
+                    
+                    <div className="space-y-3">
+                      <StoryChoice onClick={()=> diagnose('vestibular')} icon="🧠" highlight>
+                        <div>
+                          <h4 className="font-bold text-white">Vestibular System Disruption</h4>
+                          <p className="text-gray-300 text-sm">Microgravity affecting inner ear balance</p>
+                        </div>
+                      </StoryChoice>
+                      
+                      <StoryChoice onClick={()=> diagnose('stress')} icon="😰">
+                        <div>
+                          <h4 className="font-bold text-white">Psychological Stress Response</h4>
+                          <p className="text-gray-300 text-sm">Confined environment anxiety</p>
+                        </div>
+                      </StoryChoice>
+                      
+                      <StoryChoice onClick={()=> diagnose('equipment')} icon="🔧">
+                        <div>
+                          <h4 className="font-bold text-white">Equipment Malfunction</h4>
+                          <p className="text-gray-300 text-sm">Habitat system irregularity</p>
+                        </div>
+                      </StoryChoice>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-          </SceneFrame>
+            
+            <style jsx>{`
+              @keyframes float {
+                0%, 100% { transform: translateY(0px) rotate(0deg); }
+                50% { transform: translateY(-10px) rotate(5deg); }
+              }
+            `}</style>
+          </FullScreenScene>
         )}
 
         {chapter === 4 && (
@@ -299,65 +476,4 @@ export default function BionM1Game(){
   )
 }
 
-function SceneFrame({ children, bgClass = "", imageSrc, imageClass }){
-  return (
-    <section className={`relative overflow-hidden rounded-2xl p-6 sm:p-8 text-white min-h-[60vh] bg-gradient-to-br ${bgClass}`}>
-      {imageSrc && <img src={imageSrc} alt="" className={`absolute inset-0 w-full h-full object-cover pointer-events-none ${imageClass||''}`} />}
-      <div className="relative z-10 space-y-4">{children}</div>
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(255,255,255,0.04),transparent_60%)]" />
-    </section>
-  )
-}
 
-function ChapterHeader({ title, subtitle }){
-  return (
-    <div>
-      <p className="uppercase tracking-wider text-xs text-white/70">{subtitle}</p>
-      <h2 className="text-2xl sm:text-3xl font-bold">{title}</h2>
-    </div>
-  )
-}
-
-function ChoiceButton({ children, className = "", ...props }){
-  return (
-    <button {...props} className={`text-left rounded-lg border border-white/20 bg-white/10 hover:bg-white/15 backdrop-blur px-4 py-3 transition shadow-sm ${className}`}>
-      {children}
-    </button>
-  )
-}
-
-function InfoPill({ label, value, color }){
-  const map = {
-    emerald: 'bg-emerald-50 text-emerald-700 border-emerald-200',
-    indigo: 'bg-indigo-50 text-indigo-700 border-indigo-200',
-    gray: 'bg-gray-50 text-gray-700 border-gray-200',
-  }
-  return <span className={`text-[11px] px-2 py-1 rounded-md border ${map[color]||map.gray}`}>{label}: <b>{value}</b></span>
-}
-
-function StatusPill({ label, value, color='gray' }){
-  const colorMap = {
-    emerald: 'bg-emerald-500/20 text-emerald-200 border-emerald-400/30',
-    sky: 'bg-sky-500/20 text-sky-200 border-sky-400/30',
-    violet: 'bg-violet-500/20 text-violet-200 border-violet-400/30',
-    amber: 'bg-amber-500/20 text-amber-200 border-amber-400/30',
-    gray: 'bg-gray-500/20 text-gray-200 border-gray-400/30',
-  }
-  return (
-    <div className="text-xs">
-      <div className="opacity-80">{label}</div>
-      <div className={`mt-1 inline-flex items-center gap-1 px-1.5 py-0.5 rounded border ${colorMap[color]}`}>{value}</div>
-    </div>
-  )
-}
-
-function LabeledSelect({ label, options }){
-  return (
-    <label className="block">
-      <span className="text-xs text-gray-700">{label}</span>
-      <select className="mt-1 w-full rounded-md border-gray-300 text-sm">
-        {options.map(o=> <option key={o.v} value={o.v}>{o.l}</option>)}
-      </select>
-    </label>
-  )
-}
