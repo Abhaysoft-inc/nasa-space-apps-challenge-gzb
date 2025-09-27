@@ -1,5 +1,6 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import Navbar from "@/components/Navbar";
+import ClientNavWrapper from "@/components/ClientNavWrapper";
 import "./globals.css";
 import Link from "next/link";
 
@@ -22,8 +23,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-50`}>
-        <div className="sticky top-0 z-50">
-          <nav className="backdrop-blur supports-[backdrop-filter]:bg-white/70 bg-white/90 border-b border-gray-200">
+        <ClientNavWrapper>
+          <div className="sticky top-0 z-50">
+            <nav className="backdrop-blur supports-[backdrop-filter]:bg-white/70 bg-white/90 border-b border-gray-200">
             <div className="max-w-7xl mx-auto px-4">
               <div className="h-14 flex items-center justify-between">
                 <div className="flex items-center gap-3">
@@ -42,8 +44,9 @@ export default function RootLayout({ children }) {
                 </div>
               </div>
             </div>
-          </nav>
-        </div>
+            </nav>
+          </div>
+        </ClientNavWrapper>
         <main>{children}</main>
       </body>
     </html>

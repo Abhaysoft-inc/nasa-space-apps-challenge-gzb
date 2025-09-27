@@ -55,7 +55,18 @@ export default function SpaceExplorationLanding() {
   }, []);
 
   return (
-    <div className="relative w-full h-screen bg-gradient-to-b from-slate-900 via-purple-900/20 to-black overflow-hidden">
+    <div className="relative w-full h-screen overflow-hidden">
+      {/* Background video */}
+      <video
+        className="absolute inset-0 w-full h-full object-cover -z-20"
+        src="/Landing_bg.mp4"
+        autoPlay
+        muted
+        loop
+        playsInline
+        aria-hidden
+      />
+  {/* Removed tinted overlay to preserve original video colors */}
       {/* Space Header */}
       <SpaceHeader 
         explorerStats={explorerStats}
@@ -69,11 +80,9 @@ export default function SpaceExplorationLanding() {
           eventSource={mainCanvasContainerRef}
           eventPrefix="client"
           camera={{ position: [0, 0, 60], fov: 70 }}
-          gl={{ antialias: true, alpha: false, powerPreference: "high-performance" }}
+          gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
         >
-          <color attach="background" args={['#000014']} />
-          {/* Depth fog for better spatial perception */}
-          <fog attach="fog" args={["#000014", 50, 300]} />
+          {/* Transparent canvas to show video background */}
           
           {/* Galaxy Scene */}
           <Suspense fallback={<GalaxyLoader />}>
@@ -90,18 +99,18 @@ export default function SpaceExplorationLanding() {
               raycast={null}
               radius={350} 
               depth={120} 
-              count={12000} 
-              factor={8} 
-              saturation={1.0} 
+              count={6000} 
+              factor={0.6} 
+              saturation={0.0} 
               fade={true} 
-              speed={0.6}
+              speed={0.1}
             />
             
             {/* Dynamic Lighting (brighter to ensure visibility) */}
-            <ambientLight intensity={0.5} color="#1a1a3e" />
-            <pointLight position={[50, 50, 50]} intensity={1.2} color="#4F46E5" />
-            <pointLight position={[-50, -50, 50]} intensity={0.9} color="#EC4899" />
-            <pointLight position={[0, 0, -100]} intensity={0.6} color="#10B981" />
+            <ambientLight intensity={0.4} color="#f0e7e7" />
+            <pointLight position={[50, 50, 50]} intensity={0.8} color="#fda600" />
+            <pointLight position={[-50, -50, 50]} intensity={0.6} color="#e77d11" />
+            <pointLight position={[0, 0, -100]} intensity={0.4} color="#c1440e" />
             
             {/* Navigation Controls */}
             <OrbitControls
@@ -128,7 +137,7 @@ export default function SpaceExplorationLanding() {
             camera={{ position: [0, 0, 60], fov: 70 }}
             gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
           >
-            <Stars raycast={null} radius={400} depth={80} count={4000} factor={2.5} fade speed={0.2} />
+            <Stars raycast={null} radius={400} depth={80} count={3000} factor={0.5} fade speed={0.05} />
           </Canvas>
         </div>
 
