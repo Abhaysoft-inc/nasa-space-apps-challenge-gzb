@@ -15,7 +15,7 @@ export default function Navbar() {
                         <div className="flex items-center gap-3">
                             <Link href="/" className="inline-flex items-center gap-2">
                                 <img src={'/logo2.png'} className="w-8 rounded-full" />
-                                <span className="text-lg font-semibold text-gray-900">Space Biolores</span>
+                                <span className="text-lg font-semibold text-gray-900">Biolores</span>
                             </Link>
                         </div>
                         <div className="hidden md:flex items-center gap-6">
