@@ -3,14 +3,13 @@ import React, { useState, Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { useGLTF, OrbitControls, Environment } from '@react-three/drei';
 
-function MarsModel({ isSelected, onClick }) {
+function MarsModel({ isSelected }) {
     const gltf = useGLTF('/Mars_1_6792.glb');
 
     if (gltf && gltf.scene) {
         return (
             <primitive
                 object={gltf.scene.clone()}
-                onClick={onClick}
                 scale={isSelected ? 0.01 : 0.006}
                 rotation={[0, 0, 0]}
                 position={[0, 0, 0]}
@@ -20,7 +19,7 @@ function MarsModel({ isSelected, onClick }) {
 
     // Fallback if GLB doesn't load
     return (
-        <mesh onClick={onClick} scale={isSelected ? 0.3 : 0.2}>
+        <mesh scale={isSelected ? 0.3 : 0.2}>
             <sphereGeometry args={[1, 64, 64]} />
             <meshStandardMaterial
                 color="#cd5c5c"
@@ -32,15 +31,14 @@ function MarsModel({ isSelected, onClick }) {
     );
 }
 
-function MoonModel({ isSelected, onClick }) {
+function MoonModel({ isSelected }) {
     const gltf = useGLTF('/Moon_1_3474.glb');
 
     if (gltf && gltf.scene) {
         return (
             <primitive
                 object={gltf.scene.clone()}
-                onClick={onClick}
-                scale={isSelected ? 0.012 : 0.008}
+                scale={isSelected ? 0.008 : 0.005}
                 rotation={[0, 0, 0]}
                 position={[0, 0, 0]}
             />
@@ -49,7 +47,7 @@ function MoonModel({ isSelected, onClick }) {
 
     // Fallback if GLB doesn't load
     return (
-        <mesh onClick={onClick} scale={isSelected ? 0.25 : 0.15}>
+        <mesh scale={isSelected ? 0.25 : 0.15}>
             <sphereGeometry args={[1, 32, 32]} />
             <meshStandardMaterial color="#c0c0c0" />
         </mesh>
@@ -100,6 +98,44 @@ export default function SpaceHeroPage() {
             {/* Overlay for better text readability */}
             <div className="absolute inset-0 bg-black/30 z-10"></div>
 
+            {/* Navigation Menu */}
+            <nav className="absolute top-0 left-0 right-0 z-30 p-6">
+                <div className="flex items-center justify-between">
+                    {/* Logo */}
+                    <div className="flex items-center space-x-3">
+                        <span className="text-white font-semibold text-xl">Biolore</span>
+                    </div>
+
+                    {/* Navigation Links */}
+                    <div className="hidden md:flex items-center space-x-8">
+                        <a href="/" className="text-white/80 hover:text-white transition-colors duration-300 ">
+                            Home
+                        </a>
+                        <a href="/papers" className="text-white/80 hover:text-white transition-colors duration-300 ">
+                            Research
+                        </a>
+                        <a href="/games" className="text-white/80 hover:text-white transition-colors duration-300 ">
+                            Games
+                        </a>
+                        <a href="/mission" className="text-white/80 hover:text-white transition-colors duration-300">
+                            Mission
+                        </a>
+                        <button className=" text-white px-6 py-2 rounded-full font-medium transition-all duration-300 transform hover:scale-105 bg-orange-500/90 backdrop-blur-2xl  ">
+                            Learn
+                        </button>
+                    </div>
+
+                    {/* Mobile Menu Button */}
+                    <div className="md:hidden">
+                        <button className="text-white p-2">
+                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </nav>
+
             {/* Left Hero Section - Dynamic width based on selection */}
             <div className={`flex flex-col justify-center p-8 z-20 transition-all duration-1000 ease-out ${selectedPlanet ? 'w-1/2' : 'w-1/3'}`}>
                 <div className="space-y-6">
@@ -125,17 +161,17 @@ export default function SpaceHeroPage() {
                         </>
                     ) : (
                         <>
-                            <h1 className="text-5xl font-bold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent leading-tight">
-                                Explore the Cosmos
+                            <h1 className="text-5xl font-bold bg-white  bg-clip-text text-transparent leading-tight">
+                                Explore Biolores From Space
                             </h1>
                             <p className="text-xl text-gray-300 leading-relaxed">
                                 Embark on an interplanetary journey through space and time. Click on the celestial bodies to discover their secrets and unlock the mysteries of our solar system.
                             </p>
                             <div className="flex space-x-4 mt-8">
-                                <button className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full font-semibold hover:from-blue-600 hover:to-purple-700 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl">
+                                <button className="px-6 py-3 bg-[#e77d11] rounded-full font-semibold  transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl">
                                     Start Journey
                                 </button>
-                                <button className="px-6 py-3 border border-white/30 rounded-full font-semibold hover:bg-white/10 transition-all duration-300">
+                                <button className="px-6 py-3 border border-white/30 rounded-full font-semibold hover:bg-white/10 transition-all duration-300 text-white">
                                     Learn More
                                 </button>
                             </div>
@@ -156,6 +192,7 @@ export default function SpaceHeroPage() {
                                 ? 'w-0 h-0 opacity-0 scale-0'
                                 : 'w-32 h-32 hover:scale-110'
                             } flex items-center justify-center`}
+                        onClick={() => handlePlanetClick('moon')}
                     >
                         <Canvas
                             camera={{
@@ -183,7 +220,6 @@ export default function SpaceHeroPage() {
                                 <pointLight position={[5, -5, 10]} intensity={0.3} color="#ffa500" />
                                 <MoonModel
                                     isSelected={selectedPlanet === 'moon'}
-                                    onClick={() => handlePlanetClick('moon')}
                                 />
                                 <OrbitControls
                                     enableZoom={false}
@@ -208,6 +244,7 @@ export default function SpaceHeroPage() {
                                 ? 'w-0 h-0 opacity-0 scale-0'
                                 : 'w-40 h-40 hover:scale-110'
                             } flex items-center justify-center`}
+                        onClick={() => handlePlanetClick('mars')}
                     >
                         <Canvas
                             camera={{
@@ -235,7 +272,6 @@ export default function SpaceHeroPage() {
                                 <pointLight position={[5, -5, 10]} intensity={0.3} color="#ffa500" />
                                 <MarsModel
                                     isSelected={selectedPlanet === 'mars'}
-                                    onClick={() => handlePlanetClick('mars')}
                                 />
                                 <OrbitControls
                                     enableZoom={false}
