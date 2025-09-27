@@ -66,9 +66,9 @@ export default function ProfilePage() {
     ]
     const progressRatio = 0.35
     const recs = [
-        { id: 'p1', title: 'Bone Density Changes in Microgravity', authors: 'Chen et al.', tags: ['Human Biology','ISS'], reason: 'Builds on your interest in physiology' },
-        { id: 'p2', title: 'Plant Growth Strategies for Mars', authors: 'Rodriguez et al.', tags: ['Plant Biology','Mars'], reason: 'Related to Microgravity Effects pathway' },
-        { id: 'p3', title: 'Shielding Against Cosmic Rays', authors: 'Kim et al.', tags: ['Radiation','Materials'], reason: 'High impact potential for missions' },
+        { id: 'p1', title: 'Bone Density Changes in Microgravity', authors: 'Chen et al.', tags: ['Human Biology', 'ISS'], reason: 'Builds on your interest in physiology' },
+        { id: 'p2', title: 'Plant Growth Strategies for Mars', authors: 'Rodriguez et al.', tags: ['Plant Biology', 'Mars'], reason: 'Related to Microgravity Effects pathway' },
+        { id: 'p3', title: 'Shielding Against Cosmic Rays', authors: 'Kim et al.', tags: ['Radiation', 'Materials'], reason: 'High impact potential for missions' },
     ]
 
     return (
@@ -118,13 +118,8 @@ export default function ProfilePage() {
                                 <span className="text-xs text-gray-500">Recent activity</span>
                             </div>
 
-                            <div className="space-y-6">
+                            <div className="space-y-3">
                                 <ContributionHeatmap data={contributions} cellSize={12} gap={4} minWeeks={18} maxWeeks={52} />
-
-                                <div>
-                                    <p className="text-sm font-medium text-gray-900 mb-2">This Week</p>
-                                    <MiniBarChart data={weeklyActivity} />
-                                </div>
                             </div>
                         </div>
 
