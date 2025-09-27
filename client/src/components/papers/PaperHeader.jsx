@@ -1,5 +1,6 @@
 "use client"
 import React, { useEffect, useState } from 'react'
+import Link from 'next/link'
 
 const PaperHeader = ({ paperData }) => {
     const doiUrl = paperData?.doi
@@ -12,6 +13,7 @@ const PaperHeader = ({ paperData }) => {
     // Favorites (stored in localStorage)
     const key = paperData?.doi || paperData?.pmcid || paperData?.title
     const [favorite, setFavorite] = useState(false)
+    // Compare (no toggle, navigate to compare page with this as primary)
 
     useEffect(() => {
         try {
@@ -19,7 +21,7 @@ const PaperHeader = ({ paperData }) => {
             if (!raw) return
             const set = new Set(JSON.parse(raw))
             setFavorite(set.has(key))
-        } catch {}
+        } catch { }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [key])
 
@@ -36,8 +38,30 @@ const PaperHeader = ({ paperData }) => {
                 setFavorite(true)
             }
             localStorage.setItem('favorites', JSON.stringify(Array.from(set)))
-        } catch {}
+        } catch { }
     }
+
+    const goToCompare = () => {
+        try {
+            const item = buildCompareItem()
+            localStorage.setItem('comparePrimary', JSON.stringify(item))
+            document.body.classList.add('fade-out')
+        } catch { }
+        // Navigate
+        window.location.href = '/papers/compare'
+    }
+
+    const buildCompareItem = () => ({
+        key,
+        title: paperData.title,
+        source: paperData.source,
+        year: paperData.date,
+        citations: paperData.citations,
+        doi: paperData.doi,
+        pmcid: paperData.pmcid,
+        url: originalUrl,
+        ts: Date.now(),
+    })
 
     const handleCopyCitation = async () => {
         const authors = Array.isArray(paperData.authors) ? paperData.authors.join(', ') : paperData.authors
@@ -128,14 +152,26 @@ const PaperHeader = ({ paperData }) => {
             <div className="flex items-center gap-2 flex-wrap">
                 <button
                     type="button"
+                    onClick={goToCompare}
+                    title={'Compare this paper'}
+                    className={`inline-flex items-center gap-2 px-3 py-2 text-sm rounded-lg border border-indigo-300 bg-indigo-50 text-indigo-800 hover:bg-indigo-100`}
+                >
+                    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M3 3h6v18H3zM15 9h6v12h-6z" />
+                    </svg>
+                    Compare
+                </button>
+
+                <button
+                    type="button"
                     onClick={toggleFavorite}
                     title={favorite ? 'Remove from favorites' : 'Save to favorites'}
                     className={`inline-flex items-center gap-2 px-3 py-2 text-sm rounded-lg border  ${favorite ? 'border-amber-300 bg-amber-50 text-amber-800' : 'border-gray-200 bg-white text-gray-700 hover:bg-gray-50'}`}
                 >
                     {favorite ? (
-                        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 6 4 4 6.5 4c1.74 0 3.41.81 4.5 2.09C12.09 4.81 13.76 4 15.5 4 18 4 20 6 20 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 6 4 4 6.5 4c1.74 0 3.41.81 4.5 2.09C12.09 4.81 13.76 4 15.5 4 18 4 20 6 20 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" /></svg>
                     ) : (
-                        <svg className="w-4 h-4 text-gray-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20.84 4.61A5.5 5.5 0 0 0 12 8.28a5.5 5.5 0 0 0-8.84-3.67C.64 6.5 1.31 10.28 6.55 15.05L12 20l5.45-4.95c5.24-4.77 5.91-8.55 3.39-10.44z"/></svg>
+                        <svg className="w-4 h-4 text-gray-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20.84 4.61A5.5 5.5 0 0 0 12 8.28a5.5 5.5 0 0 0-8.84-3.67C.64 6.5 1.31 10.28 6.55 15.05L12 20l5.45-4.95c5.24-4.77 5.91-8.55 3.39-10.44z" /></svg>
                     )}
                     {favorite ? 'Saved' : 'Favorite'}
                 </button>
