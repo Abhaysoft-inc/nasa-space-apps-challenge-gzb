@@ -42,12 +42,12 @@ export default function GapFinderPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-black text-white">
       <div className="max-w-5xl mx-auto px-4 py-8">
         <div className="mb-6">
-          <h1 className="text-2xl font-bold text-gray-900">Gap Finder</h1>
+          <h1 className="text-2xl font-bold text-white">Gap Finder</h1>
           {(title || doi) && (
-            <p className="text-sm text-gray-600 mt-1">
+            <p className="text-sm text-gray-400 mt-1">
               Context: {title ? `“${title}”` : ''}{title && doi ? ' • ' : ''}{doi ? `DOI: ${doi}` : ''}
             </p>
           )}
@@ -55,31 +55,31 @@ export default function GapFinderPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="md:col-span-2 space-y-4">
-            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-4">
-              <h2 className="text-lg font-semibold text-gray-900 mb-2">Potential Research Gaps</h2>
+            <div className="bg-neutral-900 rounded-2xl border border-neutral-800 p-4">
+              <h2 className="text-lg font-semibold text-white mb-2">Potential Research Gaps</h2>
               <ul className="space-y-3">
                 {gaps.map((g, i) => (
-                  <li key={i} className="p-3 rounded-lg border border-gray-100 bg-gray-50/60">
-                    <div className="text-gray-900 font-medium">{g.heading}</div>
-                    <div className="text-sm text-gray-700">{g.detail}</div>
+                  <li key={i} className="p-3 rounded-lg border border-neutral-800 bg-neutral-900">
+                    <div className="text-gray-100 font-medium">{g.heading}</div>
+                    <div className="text-sm text-gray-300">{g.detail}</div>
                   </li>
                 ))}
               </ul>
             </div>
 
-            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-4">
-              <h2 className="text-lg font-semibold text-gray-900 mb-2">Recommended Study Designs</h2>
-              <div className="space-y-3 text-sm text-gray-800">
-                <div className="rounded-lg border border-gray-100 bg-gray-50/60 p-3">
-                  <div className="font-medium text-gray-900">Prospective Multi-center Cohort</div>
+            <div className="bg-neutral-900 rounded-2xl border border-neutral-800 p-4">
+              <h2 className="text-lg font-semibold text-white mb-2">Recommended Study Designs</h2>
+              <div className="space-y-3 text-sm text-gray-300">
+                <div className="rounded-lg border border-neutral-800 bg-neutral-900 p-3">
+                  <div className="font-medium text-gray-100">Prospective Multi-center Cohort</div>
                   <div>ISS and cislunar missions with pre-, in-, and post-flight sampling; include matched ground controls.</div>
                 </div>
-                <div className="rounded-lg border border-gray-100 bg-gray-50/60 p-3">
-                  <div className="font-medium text-gray-900">Randomized Countermeasure Trial</div>
+                <div className="rounded-lg border border-neutral-800 bg-neutral-900 p-3">
+                  <div className="font-medium text-gray-100">Randomized Countermeasure Trial</div>
                   <div>Compare exercise, nutritional, and pharmacological countermeasures with harmonized endpoints.</div>
                 </div>
-                <div className="rounded-lg border border-gray-100 bg-gray-50/60 p-3">
-                  <div className="font-medium text-gray-900">Analog Environment Cross-over</div>
+                <div className="rounded-lg border border-neutral-800 bg-neutral-900 p-3">
+                  <div className="font-medium text-gray-100">Analog Environment Cross-over</div>
                   <div>Antarctic/HERA crews with cross-over protocols to isolate isolation vs. microgravity proxies.</div>
                 </div>
               </div>
@@ -87,24 +87,24 @@ export default function GapFinderPage() {
           </div>
 
           <div className="space-y-4">
-            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-4">
-              <h2 className="text-lg font-semibold text-gray-900 mb-2">Suggested Papers to Approach</h2>
+            <div className="bg-neutral-900 rounded-2xl border border-neutral-800 p-4">
+              <h2 className="text-lg font-semibold text-white mb-2">Suggested Papers to Approach</h2>
               <ul className="space-y-3">
                 {suggestedStudies.map((s, i) => (
-                  <li key={i} className="flex items-start justify-between gap-3 p-3 rounded-lg border border-gray-100 bg-gray-50/60">
+                  <li key={i} className="flex items-start justify-between gap-3 p-3 rounded-lg border border-neutral-800 bg-neutral-900">
                     <div>
-                      <div className="font-medium text-gray-900">{s.title}</div>
-                      <div className="text-xs text-gray-600">{s.why}</div>
+                      <div className="font-medium text-gray-100">{s.title}</div>
+                      <div className="text-xs text-gray-400">{s.why}</div>
                     </div>
-                    <a className="text-sm text-blue-600 hover:underline" href={s.link} target="_blank" rel="noopener noreferrer">Open</a>
+                    <a className="text-sm text-sky-400 hover:underline" href={s.link} target="_blank" rel="noopener noreferrer">Open</a>
                   </li>
                 ))}
               </ul>
             </div>
 
-            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-4">
-              <h2 className="text-lg font-semibold text-gray-900 mb-2">Next Steps</h2>
-              <ol className="list-decimal list-inside text-sm text-gray-800 space-y-1">
+            <div className="bg-neutral-900 rounded-2xl border border-neutral-800 p-4">
+              <h2 className="text-lg font-semibold text-white mb-2">Next Steps</h2>
+              <ol className="list-decimal list-inside text-sm text-gray-300 space-y-1">
                 <li>Refine endpoints and align with NASA Human Research Roadmap.</li>
                 <li>Pre-register protocols and define data harmonization plan.</li>
                 <li>Establish data sharing via NASA Open Science policy.</li>
