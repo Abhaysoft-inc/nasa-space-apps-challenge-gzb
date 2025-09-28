@@ -1,6 +1,7 @@
 "use client"
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import Link from 'next/link'
+import { ChatBubbleLeftIcon, MicrophoneIcon, SpeakerWaveIcon, ClipboardIcon, ArrowPathIcon } from '@heroicons/react/24/outline'
 
 // Ensure we always have at least 2-3 items by seeding demo papers when needed
 function ensureDemo(arr) {
@@ -39,6 +40,14 @@ function ensureDemo(arr) {
 export default function ComparePage() {
     const [items, setItems] = useState([])
     const [primary, setPrimary] = useState(null)
+
+    // Chat state
+    const [isChatOpen, setIsChatOpen] = useState(false)
+    const [chatMessages, setChatMessages] = useState([])
+    const [chatInput, setChatInput] = useState('')
+    const [isGenerating, setIsGenerating] = useState(false)
+    const [chatError, setChatError] = useState(null)
+    const sessionRef = useRef(Date.now())
 
     useEffect(() => {
         try {
@@ -80,6 +89,90 @@ export default function ComparePage() {
         try { localStorage.setItem('comparePapers', JSON.stringify(next)) } catch { }
         setAddText('')
     }
+
+    // Chat functions
+    const requestChatCompletion = async (prompt) => {
+        const comparisonContext = items.length > 0 ?
+            `You are helping with a comparison of the following papers:\n${items.map((item, idx) =>
+                `${idx + 1}. "${item.title}" (${item.source}, ${item.year})`
+            ).join('\n')}\n\nContext: The user is comparing these papers and wants to understand similarities, differences, and insights from this comparison.\n\n` :
+            'No papers are currently being compared.\n\n'
+
+        const payload = {
+            query: comparisonContext + prompt,
+            chat_history: chatMessages.map(msg => ({
+                type: msg.type === 'user' ? 'user' : 'assistant',
+                message: msg.message
+            }))
+        }
+
+        const res = await fetch('http://127.0.0.1:8000/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+        })
+
+        if (!res.ok) {
+            throw new Error('Chat service unavailable')
+        }
+
+        const data = await res.json()
+        if (data?.answer) return data.answer
+        return 'I could not find a confident answer yet, but I will keep learning from these papers.'
+    }
+
+    const handleChatSubmit = async (e) => {
+        e.preventDefault()
+        const trimmed = chatInput.trim()
+        if (!trimmed || isGenerating) return
+
+        setChatInput('')
+        setChatError(null)
+        setChatMessages(prev => [...prev, { type: 'user', message: trimmed }])
+        const sessionId = sessionRef.current
+        setIsGenerating(true)
+
+        try {
+            const aiReply = await requestChatCompletion(trimmed)
+            if (sessionId !== sessionRef.current) return
+            setChatMessages(prev => [...prev, { type: 'ai', message: aiReply, prompt: trimmed }])
+        } catch (err) {
+            console.error('Chat failed', err)
+            setChatError('Unable to get response. Please try again.')
+        } finally {
+            setIsGenerating(false)
+        }
+    }
+
+    const formatAIResponse = (text) => {
+        return text.split('\n').map((line, i) => {
+            if (line.startsWith('**') && line.endsWith('**')) {
+                return <div key={i} className="font-semibold text-gray-900 mt-3 mb-2">{line.slice(2, -2)}</div>
+            }
+            if (line.startsWith('- ')) {
+                return <div key={i} className="ml-4 mb-1">• {line.slice(2)}</div>
+            }
+            if (line.match(/^\d+\./)) {
+                return <div key={i} className="ml-4 mb-1">{line}</div>
+            }
+            if (line.trim() === '') {
+                return <div key={i} className="h-2"></div>
+            }
+            return <div key={i} className="mb-2">{line}</div>
+        })
+    }
+
+    // Initialize chat with welcome message when items change
+    useEffect(() => {
+        if (items.length > 0 && chatMessages.length === 0) {
+            setChatMessages([{
+                type: 'ai',
+                message: `Hello! I can help you analyze and compare the ${items.length} paper${items.length > 1 ? 's' : ''} you've selected:\n\n${items.map((item, idx) =>
+                    `${idx + 1}. "${item.title}"`
+                ).join('\n')}\n\nAsk me anything about similarities, differences, methodologies, or insights from these papers!`
+            }])
+        }
+    }, [items])
 
     return (
         <div className="min-h-screen bg-black text-white">
@@ -215,6 +308,76 @@ export default function ComparePage() {
                     </div>
                 )}
             </div>
+
+            {/* Floating Chat Button */}
+            {items.length > 0 && (
+                <button
+                    onClick={() => setIsChatOpen(!isChatOpen)}
+                    className="fixed bottom-6 right-6 w-14 h-14 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center z-50"
+                >
+                    <ChatBubbleLeftIcon className="h-6 w-6 text-white" />
+                </button>
+            )}
+
+            {/* Chat Panel */}
+            {isChatOpen && items.length > 0 && (
+                <div className="fixed bottom-24 right-6 w-96 h-96 bg-white rounded-xl shadow-2xl border border-gray-200 flex flex-col z-50">
+                    <div className="p-4 border-b border-gray-200 flex items-center justify-between">
+                        <h3 className="font-semibold text-gray-900">Paper Comparison Assistant</h3>
+                        <button
+                            onClick={() => setIsChatOpen(false)}
+                            className="text-gray-400 hover:text-gray-600"
+                        >
+                            ×
+                        </button>
+                    </div>
+
+                    <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                        {chatMessages.map((msg, idx) => (
+                            <div key={idx} className={`flex ${msg.type === 'user' ? 'justify-end' : 'justify-start'}`}>
+                                <div className={`max-w-xs rounded-lg p-3 text-sm ${msg.type === 'user'
+                                        ? 'bg-blue-500 text-white'
+                                        : 'bg-gray-100 text-gray-900'
+                                    }`}>
+                                    {msg.type === 'ai' ? formatAIResponse(msg.message) : msg.message}
+                                </div>
+                            </div>
+                        ))}
+                        {isGenerating && (
+                            <div className="flex justify-start">
+                                <div className="bg-gray-100 rounded-lg p-3 text-sm text-gray-900">
+                                    <div className="flex items-center space-x-2">
+                                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-500"></div>
+                                        <span>Analyzing papers...</span>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
+                    <form onSubmit={handleChatSubmit} className="p-4 border-t border-gray-200">
+                        <div className="flex space-x-2">
+                            <input
+                                value={chatInput}
+                                onChange={(e) => setChatInput(e.target.value)}
+                                placeholder="Ask about paper comparison..."
+                                className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                disabled={isGenerating}
+                            />
+                            <button
+                                type="submit"
+                                disabled={isGenerating || !chatInput.trim()}
+                                className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                Send
+                            </button>
+                        </div>
+                        {chatError && (
+                            <p className="text-red-600 text-xs mt-2">{chatError}</p>
+                        )}
+                    </form>
+                </div>
+            )}
         </div>
     )
 }
