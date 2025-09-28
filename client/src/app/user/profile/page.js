@@ -12,7 +12,7 @@ export default function ProfilePage() {
         name: 'Alex Johnson',
         username: 'alexj',
         joined: 'Jan 2025',
-        avatar: null, // fallback to initials
+        avatar: "/5209083.png", // fallback to initials
     }
 
     const stats = {
@@ -78,7 +78,7 @@ export default function ProfilePage() {
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-8">
                     <div className="flex items-center justify-between gap-6 flex-wrap">
                         <div className="flex items-center gap-4">
-                            <div className="relative w-14 h-14 rounded-full overflow-hidden bg-gradient-to-br from-blue-500 to-purple-600 text-white flex items-center justify-center text-lg font-semibold">
+                            <div className="relative w-14 h-14 rounded-full overflow-hidden bg-gradient-to-br  text-white flex items-center justify-center text-lg font-semibold">
                                 {user.avatar ? (
                                     <Image src={user.avatar} alt={user.name} fill sizes="56px" className="object-cover" />
                                 ) : (
@@ -127,12 +127,12 @@ export default function ProfilePage() {
                         <NextRecommendations items={recs} />
 
                         {/* Knowledge Assessment Games */}
-                        <KnowledgeGamesSection seed={3} />
+                        {/* <KnowledgeGamesSection seed={3} /> */}
 
 
 
                         {/* Progress by Topic */}
-                        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                        {/* <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
                             <div className="flex items-center justify-between mb-4">
                                 <h2 className="text-lg font-semibold text-gray-900">Reading Progress</h2>
                                 <span className="text-xs text-gray-500">{stats.totalRead} total papers</span>
@@ -160,7 +160,7 @@ export default function ProfilePage() {
                                     )
                                 })}
                             </div>
-                        </div>
+                        </div> */}
                     </div>
 
                     {/* Right: Stats, Donut, Badges */}

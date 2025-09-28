@@ -7,7 +7,7 @@ IMAGE_INDEX_NAME = "my-multimodal-rag-image"
 PINECONE_REGION = "us-east-1"
 
 # LLM
-GEMINI_MODEL_NAME = "gemini-pro-latest"
+GEMINI_MODEL_NAME = "gemini-2.5-pro"
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY", "AIzaSyC5XlpDGwiPOc-cHX1jKtFsMSVYd3xPGGM")
 
 # Retrieval

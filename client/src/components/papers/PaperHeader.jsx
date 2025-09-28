@@ -169,7 +169,7 @@ const PaperHeader = ({ paperData }) => {
                     </svg>
                     Compare
                 </button>
-                 <button
+                <button
                     type="button"
                     onClick={goToGapFinder}
                     title="Gap Finder"
@@ -195,7 +195,7 @@ const PaperHeader = ({ paperData }) => {
                     )}
                     {favorite ? 'Saved' : 'Favorite'}
                 </button>
-               
+
                 <button
                     type="button"
                     onClick={handleShare}
@@ -242,7 +242,7 @@ const PaperHeader = ({ paperData }) => {
                         target="_blank"
                         rel="noopener noreferrer"
                         title="Open original paper"
-                        className="ml-auto inline-flex items-center gap-2 px-4 py-2 text-sm rounded-full bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:shadow-md"
+                        className="ml-auto inline-flex items-center gap-2 px-4 py-2 text-sm rounded-full bg-gradient-to-r from-gray-500 to-gray-600 text-white hover:shadow-md"
                     >
                         <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                             <path d="M7 17l9-9M7 7h9v9" />
