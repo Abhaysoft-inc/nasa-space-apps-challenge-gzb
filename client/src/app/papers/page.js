@@ -237,7 +237,7 @@ export default function PapersIndexPage() {
                             {/* Domain filter (checkbox list) */}
                             <div className="mb-6">
                                 <h3 className="text-sm font-medium text-gray-100 mb-2">Domain</h3>
-                                <div className="max-h-60 overflow-auto pr-1 space-y-2">
+                                <div className="max-h-60 overflow-auto pr-1 space-y-2 scrollbar-thin-dark">
                                     {allDomains.map(domain => (
                                         <label key={domain} className="flex items-center gap-2 text-sm text-gray-300">
                                             <input
