@@ -215,7 +215,7 @@ const PapersPage = () => {
 
     const formatAIResponse = (text) => {
         // Convert **bold** to <strong>
-        let formatted = text.replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold text-gray-900">$1</strong>')
+        let formatted = text.replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold text-gray-100">$1</strong>')
 
         // Convert bullet points (lines starting with *) to proper list items
         const lines = formatted.split('\n')
@@ -230,14 +230,14 @@ const PapersPage = () => {
                     result.push('<ul class="list-disc list-inside ml-4 space-y-1 mt-2 mb-2">')
                     inList = true
                 }
-                result.push(`<li class="text-gray-700">${line.substring(2)}</li>`)
+                result.push(`<li class="text-gray-300">${line.substring(2)}</li>`)
             } else {
                 if (inList) {
                     result.push('</ul>')
                     inList = false
                 }
                 if (line) {
-                    result.push(`<p class="mb-2">${line}</p>`)
+                    result.push(`<p class="mb-2 text-gray-300">${line}</p>`)
                 } else {
                     result.push('<br/>')
                 }
@@ -274,7 +274,7 @@ const PapersPage = () => {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 pb-32">
+        <div className="min-h-screen bg-black text-white pb-32">
             <div className="max-w-7xl mx-auto px-4 py-8">
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     {/* Main Content */}
@@ -282,13 +282,13 @@ const PapersPage = () => {
                         <PaperHeader paperData={paperData} />
                         <PaperSummary paperData={paperData} />
                         {chatMessages.length > 0 && (
-                            <div className="mt-6 bg-white rounded-2xl shadow-sm border border-gray-100 p-4 md:p-6">
+                            <div className="mt-6 bg-neutral-900 rounded-2xl border border-neutral-800 p-4 md:p-6">
                                 <div className="flex items-center justify-between mb-3">
-                                    <h3 className="text-lg font-semibold text-gray-900">AI Q&A</h3>
+                                    <h3 className="text-lg font-semibold text-white">AI Q&A</h3>
                                     <button
                                         type="button"
                                         onClick={handleResetChat}
-                                        className="inline-flex items-center gap-1 text-xs px-2 py-1 rounded-full border border-gray-200 bg-white hover:bg-gray-100 text-gray-600"
+                                        className="inline-flex items-center gap-1 text-xs px-2 py-1 rounded-full border border-neutral-800 bg-neutral-900 hover:bg-neutral-800 text-gray-300"
                                         title="Reset chat history"
                                     >
                                         <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -303,12 +303,12 @@ const PapersPage = () => {
                                         <div key={i} className={`flex ${m.type === 'user' ? 'justify-end' : 'justify-start'}`}>
                                             <div className={`flex flex-col gap-1 ${m.type === 'user' ? 'items-end' : 'items-start'}`}>
                                                 <div className={`max-w-[85%] md:max-w-[70%] rounded-2xl px-4 py-2 text-sm border ${m.type === 'user'
-                                                    ? 'bg-blue-50 text-blue-900 border-blue-100'
-                                                    : 'bg-gray-50 text-gray-800 border-gray-100'
+                                                    ? 'bg-sky-950 text-sky-100 border-sky-900'
+                                                    : 'bg-neutral-900 text-gray-100 border-neutral-800'
                                                     }`}>
                                                     {m.type === 'ai' ? (
                                                         <div
-                                                            className="prose prose-sm max-w-none"
+                                                            className="prose prose-sm max-w-none prose-invert"
                                                             dangerouslySetInnerHTML={{
                                                                 __html: formatAIResponse(m.message)
                                                             }}
@@ -318,11 +318,11 @@ const PapersPage = () => {
                                                     )}
                                                 </div>
                                                 {m.type === 'ai' && (
-                                                    <div className="flex gap-2 text-[11px] text-gray-500">
+                                                    <div className="flex gap-2 text-[11px] text-gray-400">
                                                         <button
                                                             type="button"
                                                             onClick={() => handleTextToSpeech(m.message)}
-                                                            className="inline-flex items-center gap-1 px-2 py-1 rounded-full border border-gray-200 bg-white hover:bg-gray-100"
+                                                            className="inline-flex items-center gap-1 px-2 py-1 rounded-full border border-neutral-800 bg-neutral-900 hover:bg-neutral-800"
                                                             title="Listen to response"
                                                         >
                                                             <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -335,7 +335,7 @@ const PapersPage = () => {
                                                         <button
                                                             type="button"
                                                             onClick={() => handleCopyResponse(m.message)}
-                                                            className="inline-flex items-center gap-1 px-2 py-1 rounded-full border border-gray-200 bg-white hover:bg-gray-100"
+                                                            className="inline-flex items-center gap-1 px-2 py-1 rounded-full border border-neutral-800 bg-neutral-900 hover:bg-neutral-800"
                                                             title="Copy response"
                                                         >
                                                             <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -347,7 +347,7 @@ const PapersPage = () => {
                                                         <button
                                                             type="button"
                                                             onClick={() => handleRegenerateResponse(i)}
-                                                            className="inline-flex items-center gap-1 px-2 py-1 rounded-full border border-gray-200 bg-white hover:bg-gray-100"
+                                                            className="inline-flex items-center gap-1 px-2 py-1 rounded-full border border-neutral-800 bg-neutral-900 hover:bg-neutral-800"
                                                             title="Regenerate response"
                                                         >
                                                             <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -364,7 +364,7 @@ const PapersPage = () => {
                                     {isGenerating && (
                                         <div className="flex justify-start">
                                             <div className="flex flex-col items-start">
-                                                <div className="inline-flex items-center gap-2 rounded-2xl border border-gray-200 bg-gray-50 px-4 py-2 text-xs text-gray-600">
+                                                <div className="inline-flex items-center gap-2 rounded-2xl border border-neutral-800 bg-neutral-900 px-4 py-2 text-xs text-gray-300">
                                                     <span className="w-2.5 h-2.5 rounded-full bg-blue-500 animate-ping" />
                                                     <span>Analyzing paper…</span>
                                                 </div>
@@ -395,7 +395,7 @@ const PapersPage = () => {
                     {/* Desktop: align with main content (col-span-2) */}
                     <div className="hidden lg:grid max-w-7xl mx-auto grid-cols-3 gap-8">
                         <div className="col-span-2">
-                            <div className="bg-white/70 backdrop-blur-md rounded-2xl border border-white/30 shadow-lg p-4">
+                            <div className="bg-black/70 backdrop-blur-md rounded-2xl border border-neutral-800 shadow-lg p-4">
                                 {/* Quick suggestion buttons - top */}
                                 <div className="mb-3 flex flex-wrap gap-2">
                                     {[
@@ -407,7 +407,7 @@ const PapersPage = () => {
                                         <button
                                             key={index}
                                             onClick={() => setChatInput(question)}
-                                            className="text-[11px] bg-gray-100 text-gray-700 px-2.5 py-1.5 rounded-full hover:bg-blue-100 hover:text-blue-700 transition-colors border border-gray-200"
+                                            className="text-[11px] bg-neutral-900 text-gray-300 px-2.5 py-1.5 rounded-full hover:bg-neutral-800 hover:text-sky-400 transition-colors border border-neutral-800"
                                         >
                                             {question}
                                         </button>
@@ -415,12 +415,12 @@ const PapersPage = () => {
                                 </div>
                                 <form onSubmit={handleChatSubmit} className="flex items-center gap-4">
                                     <div className="flex items-center gap-3">
-                                        <div className="w-8 h-8 bg-gradient-to-r from-gray-500 to-gray-600 rounded-full flex items-center justify-center">
+                                        <div className="w-8 h-8 bg-gradient-to-r from-gray-700 to-gray-500 rounded-full flex items-center justify-center">
                                             <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                                             </svg>
                                         </div>
-                                        <span className="text-sm font-medium text-gray-700">Ask AI about this paper</span>
+                                        <span className="text-sm font-medium text-gray-300">Ask AI about this paper</span>
                                     </div>
 
                                     <div className="flex-1 flex gap-3">
@@ -429,12 +429,12 @@ const PapersPage = () => {
                                             value={chatInput}
                                             onChange={(e) => setChatInput(e.target.value)}
                                             placeholder="What would you like to know about this research?"
-                                            className="flex-1 px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                                            className="flex-1 px-4 py-2 border border-neutral-800 bg-neutral-900 text-gray-100 placeholder-gray-500 rounded-full focus:outline-none focus:ring-2 focus:ring-sky-500/40 focus:border-neutral-700 text-sm"
                                         />
                                         <button
                                             type="button"
                                             onClick={handleVoiceInput}
-                                            className={`w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center transition-colors ${isListening ? 'bg-blue-100 border-blue-300 text-blue-600' : 'bg-white hover:bg-gray-100 text-gray-600'}`}
+                                            className={`w-10 h-10 rounded-full border flex items-center justify-center transition-colors ${isListening ? 'bg-neutral-800 border-neutral-700 text-sky-400' : 'bg-neutral-900 border-neutral-800 hover:bg-neutral-800 text-gray-300'}`}
                                             title={isListening ? 'Listening…' : 'Voice search'}
                                         >
                                             {isListening ? (
@@ -454,7 +454,7 @@ const PapersPage = () => {
                                         <button
                                             type="submit"
                                             disabled={!chatInput.trim()}
-                                            className="bg-gradient-to-r from-gray-500 to-gray-600 text-white px-6 py-2 rounded-full hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 text-sm font-medium"
+                                            className="bg-gradient-to-r from-gray-700 to-gray-600 text-white px-6 py-2 rounded-full hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 text-sm font-medium"
                                         >
                                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
@@ -469,7 +469,7 @@ const PapersPage = () => {
 
                     {/* Mobile/Tablet: centered and narrower */}
                     <div className="lg:hidden">
-                        <div className="mx-auto w-full max-w-2xl md:max-w-3xl bg-white/70 backdrop-blur-md rounded-2xl border border-white/30 shadow-lg p-4">
+                        <div className="mx-auto w-full max-w-2xl md:max-w-3xl bg-black/70 backdrop-blur-md rounded-2xl border border-neutral-800 shadow-lg p-4">
                             {/* Quick suggestion buttons - top */}
                             <div className="mb-3 flex flex-wrap gap-2">
                                 {[
@@ -481,7 +481,7 @@ const PapersPage = () => {
                                     <button
                                         key={index}
                                         onClick={() => setChatInput(question)}
-                                        className="text-[11px] bg-gray-100 text-gray-700 px-2.5 py-1.5 rounded-full hover:bg-blue-100 hover:text-blue-700 transition-colors border border-gray-200"
+                                        className="text-[11px] bg-neutral-900 text-gray-300 px-2.5 py-1.5 rounded-full hover:bg-neutral-800 hover:text-sky-400 transition-colors border border-neutral-800"
                                     >
                                         {question}
                                     </button>
@@ -489,12 +489,12 @@ const PapersPage = () => {
                             </div>
                             <form onSubmit={handleChatSubmit} className="flex items-center gap-4">
                                 <div className="flex items-center gap-3">
-                                    <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+                                    <div className="w-8 h-8 bg-gradient-to-r from-gray-700 to-gray-500 rounded-full flex items-center justify-center">
                                         <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                                         </svg>
                                     </div>
-                                    <span className="text-sm font-medium text-gray-700">Ask AI about this paper</span>
+                                    <span className="text-sm font-medium text-gray-300">Ask AI about this paper</span>
                                 </div>
 
                                 <div className="flex-1 flex gap-3">
@@ -503,12 +503,12 @@ const PapersPage = () => {
                                         value={chatInput}
                                         onChange={(e) => setChatInput(e.target.value)}
                                         placeholder="What would you like to know about this research?"
-                                        className="flex-1 px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                                        className="flex-1 px-4 py-2 border border-neutral-800 bg-neutral-900 text-gray-100 placeholder-gray-500 rounded-full focus:outline-none focus:ring-2 focus:ring-sky-500/40 focus:border-neutral-700 text-sm"
                                     />
                                     <button
                                         type="button"
                                         onClick={handleVoiceInput}
-                                        className={`w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center transition-colors ${isListening ? 'bg-blue-100 border-blue-300 text-blue-600' : 'bg-white hover:bg-gray-100 text-gray-600'}`}
+                                        className={`w-10 h-10 rounded-full border flex items-center justify-center transition-colors ${isListening ? 'bg-neutral-800 border-neutral-700 text-sky-400' : 'bg-neutral-900 border-neutral-800 hover:bg-neutral-800 text-gray-300'}`}
                                         title={isListening ? 'Listening…' : 'Voice search'}
                                     >
                                         {isListening ? (
@@ -528,7 +528,7 @@ const PapersPage = () => {
                                     <button
                                         type="submit"
                                         disabled={!chatInput.trim()}
-                                        className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-2 rounded-full hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 text-sm font-medium"
+                                        className="bg-gradient-to-r from-gray-700 to-gray-600 text-white px-6 py-2 rounded-full hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 text-sm font-medium"
                                     >
                                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />

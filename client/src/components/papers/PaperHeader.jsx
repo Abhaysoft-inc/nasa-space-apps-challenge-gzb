@@ -94,19 +94,19 @@ const PaperHeader = ({ paperData }) => {
     }
 
     return (
-        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-            <h1 className="text-3xl font-bold text-gray-900 mb-4">
+        <div className="bg-neutral-900 rounded-lg border border-neutral-800 p-6 mb-6">
+            <h1 className="text-3xl font-bold text-white mb-4">
                 {paperData.title}
             </h1>
             {/* Authors - One Line under title */}
-            <p className="text-sm text-gray-600 mb-4 whitespace-nowrap overflow-hidden text-ellipsis">
+            <p className="text-sm text-gray-400 mb-4 whitespace-nowrap overflow-hidden text-ellipsis">
                 <span className="font-medium">By:</span> {paperData.authors.join(', ')}
             </p>
 
             {/* Paper Metadata */}
             <div className="flex flex-wrap gap-2 mb-6">
-                <div className="group relative bg-blue-50 hover:bg-blue-100 px-3 py-1 rounded-full transition-all duration-200 cursor-pointer">
-                    <span className="text-xs text-blue-800 font-medium">
+                <div className="group relative bg-neutral-800 hover:bg-neutral-700 px-3 py-1 rounded-full transition-all duration-200 cursor-pointer">
+                    <span className="text-xs text-gray-200 font-medium">
                         Source: {paperData.source}
                     </span>
                     <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-10">
@@ -115,8 +115,8 @@ const PaperHeader = ({ paperData }) => {
                     </div>
                 </div>
 
-                <div className="group relative bg-green-50 hover:bg-green-100 px-3 py-1 rounded-full transition-all duration-200 cursor-pointer">
-                    <span className="text-xs text-green-800 font-medium">
+                <div className="group relative bg-neutral-800 hover:bg-neutral-700 px-3 py-1 rounded-full transition-all duration-200 cursor-pointer">
+                    <span className="text-xs text-gray-200 font-medium">
                         {paperData.citations} Citations
                     </span>
                     <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-10">
@@ -125,8 +125,8 @@ const PaperHeader = ({ paperData }) => {
                     </div>
                 </div>
 
-                <div className="group relative bg-purple-50 hover:bg-purple-100 px-3 py-1 rounded-full transition-all duration-200 cursor-pointer">
-                    <span className="text-xs text-purple-800 font-medium">
+                <div className="group relative bg-neutral-800 hover:bg-neutral-700 px-3 py-1 rounded-full transition-all duration-200 cursor-pointer">
+                    <span className="text-xs text-gray-200 font-medium">
                         {paperData.date}
                     </span>
                     <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-10">
@@ -135,8 +135,8 @@ const PaperHeader = ({ paperData }) => {
                     </div>
                 </div>
 
-                <div className="group relative bg-orange-50 hover:bg-orange-100 px-3 py-1 rounded-full transition-all duration-200 cursor-pointer">
-                    <span className="text-xs text-orange-800 font-medium">
+                <div className="group relative bg-neutral-800 hover:bg-neutral-700 px-3 py-1 rounded-full transition-all duration-200 cursor-pointer">
+                    <span className="text-xs text-gray-200 font-medium">
                         DOI: {paperData.doi.split('/').pop()}
                     </span>
                     <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-10 max-w-xs">
@@ -145,8 +145,8 @@ const PaperHeader = ({ paperData }) => {
                     </div>
                 </div>
 
-                <div className="group relative bg-gray-50 hover:bg-gray-100 px-3 py-1 rounded-full transition-all duration-200 cursor-pointer">
-                    <span className="text-xs text-gray-800 font-medium">
+                <div className="group relative bg-neutral-800 hover:bg-neutral-700 px-3 py-1 rounded-full transition-all duration-200 cursor-pointer">
+                    <span className="text-xs text-gray-200 font-medium">
                         PMC: {paperData.pmcid}
                     </span>
                     <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-10">
@@ -162,7 +162,7 @@ const PaperHeader = ({ paperData }) => {
                     type="button"
                     onClick={goToCompare}
                     title={'Compare this paper'}
-                    className={`inline-flex items-center gap-2 px-3 py-2 text-sm rounded-lg border border-indigo-300 bg-indigo-50 text-indigo-800 hover:bg-indigo-100`}
+                    className={`inline-flex items-center gap-2 px-3 py-2 text-sm rounded-lg border border-neutral-800 bg-neutral-900 text-gray-200 hover:bg-neutral-800`}
                 >
                     <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                         <path d="M3 3h6v18H3zM15 9h6v12h-6z" />
@@ -173,7 +173,7 @@ const PaperHeader = ({ paperData }) => {
                     type="button"
                     onClick={goToGapFinder}
                     title="Gap Finder"
-                    className="inline-flex items-center gap-2 px-3 py-2 text-sm rounded-lg border border-indigo-200 bg-indigo-50 text-indigo-800 hover:bg-indigo-100"
+                    className="inline-flex items-center gap-2 px-3 py-2 text-sm rounded-lg border border-neutral-800 bg-neutral-900 text-gray-200 hover:bg-neutral-800"
                 >
                     {/* Lightbulb/target icon to represent gaps/opportunities */}
                     <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -186,7 +186,7 @@ const PaperHeader = ({ paperData }) => {
                     type="button"
                     onClick={toggleFavorite}
                     title={favorite ? 'Remove from favorites' : 'Save to favorites'}
-                    className={`inline-flex items-center gap-2 px-3 py-2 text-sm rounded-lg border  ${favorite ? 'border-amber-300 bg-amber-50 text-amber-800' : 'border-gray-200 bg-white text-gray-700 hover:bg-gray-50'}`}
+                    className={`inline-flex items-center gap-2 px-3 py-2 text-sm rounded-lg border  ${favorite ? 'border-amber-400 bg-amber-950/40 text-amber-300' : 'border-neutral-800 bg-neutral-900 text-gray-300 hover:bg-neutral-800'}`}
                 >
                     {favorite ? (
                         <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 6 4 4 6.5 4c1.74 0 3.41.81 4.5 2.09C12.09 4.81 13.76 4 15.5 4 18 4 20 6 20 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" /></svg>
@@ -200,7 +200,7 @@ const PaperHeader = ({ paperData }) => {
                     type="button"
                     onClick={handleShare}
                     title="Share"
-                    className="inline-flex items-center gap-2 px-3 py-2 text-sm rounded-lg border border-gray-200 bg-white hover:bg-gray-50"
+                    className="inline-flex items-center gap-2 px-3 py-2 text-sm rounded-lg border border-neutral-800 bg-neutral-900 hover:bg-neutral-800 text-gray-300"
                 >
                     <svg className="w-4 h-4 text-gray-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                         <circle cx="18" cy="5" r="3" />
@@ -216,7 +216,7 @@ const PaperHeader = ({ paperData }) => {
                         target="_blank"
                         rel="noopener noreferrer"
                         title="Download PDF"
-                        className="inline-flex items-center gap-2 px-3 py-2 text-sm rounded-lg border border-gray-200 bg-white hover:bg-gray-50"
+                        className="inline-flex items-center gap-2 px-3 py-2 text-sm rounded-lg border border-neutral-800 bg-neutral-900 hover:bg-neutral-800 text-gray-300"
                     >
                         <svg className="w-4 h-4 text-gray-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                             <path d="M12 5v14M5 12l7 7 7-7" />
@@ -228,7 +228,7 @@ const PaperHeader = ({ paperData }) => {
                         type="button"
                         disabled
                         title="PDF not available"
-                        className="inline-flex items-center gap-2 px-3 py-2 text-sm rounded-lg border border-gray-200 bg-gray-50 text-gray-400 cursor-not-allowed"
+                        className="inline-flex items-center gap-2 px-3 py-2 text-sm rounded-lg border border-neutral-800 bg-neutral-900 text-gray-500 cursor-not-allowed"
                     >
                         <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                             <path d="M12 5v14M5 12l7 7 7-7" />
@@ -242,7 +242,7 @@ const PaperHeader = ({ paperData }) => {
                         target="_blank"
                         rel="noopener noreferrer"
                         title="Open original paper"
-                        className="ml-auto inline-flex items-center gap-2 px-4 py-2 text-sm rounded-full bg-gradient-to-r from-gray-500 to-gray-600 text-white hover:shadow-md"
+                        className="ml-auto inline-flex items-center gap-2 px-4 py-2 text-sm rounded-full bg-gradient-to-r from-gray-700 to-gray-600 text-white hover:shadow-md"
                     >
                         <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                             <path d="M7 17l9-9M7 7h9v9" />
