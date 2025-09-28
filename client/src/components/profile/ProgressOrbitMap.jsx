@@ -18,8 +18,8 @@ export default function ProgressOrbitMap({ nodes = [], progress = 0 }) {
   const progressX = pad + (w - pad * 2) * progress
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
-      <h2 className="text-lg font-semibold text-gray-900 mb-3">Visual Progress Map</h2>
+    <div className="bg-neutral-900 rounded-2xl shadow-sm border border-neutral-800 p-5">
+      <h2 className="text-lg font-semibold text-white mb-3">Visual Progress Map</h2>
       <div className="overflow-x-auto">
         <svg width={w} height={h} className="min-w-[600px]">
           <defs>
@@ -28,7 +28,7 @@ export default function ProgressOrbitMap({ nodes = [], progress = 0 }) {
               <stop offset="100%" stopColor="#ec4899" />
             </linearGradient>
           </defs>
-          <path d={path} fill="none" stroke="#e5e7eb" strokeWidth="2" />
+          <path d={path} fill="none" stroke="#1f2937" strokeWidth="2" />
           <clipPath id="clip">
             <rect x="0" y="0" width={progressX} height={h} />
           </clipPath>
@@ -37,7 +37,7 @@ export default function ProgressOrbitMap({ nodes = [], progress = 0 }) {
           {points.map((p, i) => (
             <g key={i}>
               <circle cx={p.x} cy={p.y} r={10} fill={nodes[i]?.completed ? '#10b981' : '#9ca3af'} />
-              <text x={p.x} y={p.y + 26} textAnchor="middle" className="fill-gray-700" fontSize="10">
+              <text x={p.x} y={p.y + 26} textAnchor="middle" className="fill-gray-300" fontSize="10">
                 {nodes[i]?.label}
               </text>
             </g>

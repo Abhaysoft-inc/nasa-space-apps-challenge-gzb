@@ -50,32 +50,32 @@ export default function MissionDashboard() {
 
     // --- UI ---
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-black">
             <div className="max-w-7xl mx-auto px-4 py-8">
                 <header className="mb-6">
-                    <h1 className="text-2xl font-bold text-gray-900">Mission Knowledge Dashboard</h1>
-                    <p className="text-sm text-gray-600">Explore scientific progress, knowledge gaps, consensus, and actionable insights across space research studies.</p>
+                    <h1 className="text-2xl font-bold text-white">Mission Knowledge Dashboard</h1>
+                    <p className="text-sm text-gray-400">Explore scientific progress, knowledge gaps, consensus, and actionable insights across space research studies.</p>
                 </header>
 
                 {/* Filters */}
-                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 md:p-6 mb-6">
+                <div className="bg-neutral-900 rounded-2xl shadow-sm border border-neutral-800 p-4 md:p-6 mb-6">
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                         <div className="md:col-span-2">
-                            <label className="block text-xs font-medium text-gray-600 mb-1">Search</label>
+                            <label className="block text-xs font-medium text-gray-400 mb-1">Search</label>
                             <input
                                 value={query}
                                 onChange={(e) => setQuery(e.target.value)}
                                 placeholder="Search titles, summaries, keywords..."
-                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full px-3 py-2 border border-neutral-800 bg-neutral-900 text-gray-100 placeholder-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500/50"
                             />
                         </div>
 
                         <div>
-                            <label className="block text-xs font-medium text-gray-600 mb-1">Source</label>
+                            <label className="block text-xs font-medium text-gray-400 mb-1">Source</label>
                             <select
                                 value={source}
                                 onChange={(e) => setSource(e.target.value)}
-                                className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                                className="w-full px-3 py-2 border border-neutral-800 bg-neutral-900 text-gray-100 rounded-lg"
                             >
                                 <option>All</option>
                                 {sources.map((s) => (
@@ -85,11 +85,11 @@ export default function MissionDashboard() {
                         </div>
 
                         <div>
-                            <label className="block text-xs font-medium text-gray-600 mb-1">Year Range</label>
+                            <label className="block text-xs font-medium text-gray-400 mb-1">Year Range</label>
                             <div className="flex items-center gap-2">
                                 <input
                                     type="number"
-                                    className="w-1/2 px-3 py-2 border border-gray-300 rounded-lg"
+                                    className="w-1/2 px-3 py-2 border border-neutral-800 bg-neutral-900 text-gray-100 rounded-lg"
                                     value={yearRange[0]}
                                     min={years[0]}
                                     max={yearRange[1]}
@@ -98,7 +98,7 @@ export default function MissionDashboard() {
                                 <span className="text-gray-400">–</span>
                                 <input
                                     type="number"
-                                    className="w-1/2 px-3 py-2 border border-gray-300 rounded-lg"
+                                    className="w-1/2 px-3 py-2 border border-neutral-800 bg-neutral-900 text-gray-100 rounded-lg"
                                     value={yearRange[1]}
                                     min={yearRange[0]}
                                     max={years[years.length - 1]}
@@ -116,8 +116,8 @@ export default function MissionDashboard() {
                                     key={t}
                                     onClick={() => toggleArray(selectedTopics, setSelectedTopics, t)}
                                     className={`text-xs px-3 py-1.5 rounded-full border transition ${selectedTopics.includes(t)
-                                            ? "bg-blue-50 text-blue-700 border-blue-200"
-                                            : "bg-white text-gray-700 border-gray-200 hover:bg-gray-50"
+                                            ? "bg-blue-950/40 text-blue-300 border-blue-800"
+                                            : "bg-neutral-900 text-gray-300 border-neutral-700 hover:bg-neutral-800"
                                         }`}
                                 >
                                     {t}
@@ -136,8 +136,8 @@ export default function MissionDashboard() {
                                     key={o.k}
                                     onClick={() => toggleArray(outcomes, setOutcomes, o.k)}
                                     className={`text-xs px-3 py-1.5 rounded-full border transition ${outcomes.includes(o.k)
-                                            ? "bg-purple-50 text-purple-700 border-purple-200"
-                                            : "bg-white text-gray-700 border-gray-200 hover:bg-gray-50"
+                                            ? "bg-purple-950/40 text-purple-300 border-purple-800"
+                                            : "bg-neutral-900 text-gray-300 border-neutral-700 hover:bg-neutral-800"
                                         }`}
                                 >
                                     {o.label}
@@ -158,19 +158,19 @@ export default function MissionDashboard() {
                 {/* Charts + Insights */}
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
                     {/* Trend */}
-                    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 lg:col-span-2">
+                    <div className="bg-neutral-900 rounded-2xl shadow-sm border border-neutral-800 p-6 lg:col-span-2">
                         <div className="flex items-center justify-between mb-3">
-                            <h2 className="text-lg font-semibold text-gray-900">Progress Over Time</h2>
-                            <span className="text-xs text-gray-500">{yearRange[0]}–{yearRange[1]}</span>
+                            <h2 className="text-lg font-semibold text-white">Progress Over Time</h2>
+                            <span className="text-xs text-gray-400">{yearRange[0]}–{yearRange[1]}</span>
                         </div>
                         <LineChart data={stats.byYear} years={years} range={yearRange} />
                     </div>
 
                     {/* Consensus */}
-                    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                        <h2 className="text-lg font-semibold text-gray-900 mb-3">Consensus vs Disagreement</h2>
+                    <div className="bg-neutral-900 rounded-2xl shadow-sm border border-neutral-800 p-6">
+                        <h2 className="text-lg font-semibold text-white mb-3">Consensus vs Disagreement</h2>
                         <DonutChart data={[{ name: "Consensus", value: stats.consensus }, { name: "Disagreement", value: stats.disagreement }]} size={160} />
-                        <div className="mt-3 text-sm text-gray-600">
+                        <div className="mt-3 text-sm text-gray-400">
                             <p>Consensus reflects majority agreement within topics. Disagreement includes contradictory or inconclusive results.</p>
                         </div>
                     </div>
@@ -178,19 +178,19 @@ export default function MissionDashboard() {
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
                     {/* Topic coverage */}
-                    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 lg:col-span-2">
+                    <div className="bg-neutral-900 rounded-2xl shadow-sm border border-neutral-800 p-6 lg:col-span-2">
                         <div className="flex items-center justify-between mb-3">
-                            <h2 className="text-lg font-semibold text-gray-900">Topic Coverage</h2>
-                            <span className="text-xs text-gray-500">Last {years.length} years</span>
+                            <h2 className="text-lg font-semibold text-white">Topic Coverage</h2>
+                            <span className="text-xs text-gray-400">Last {years.length} years</span>
                         </div>
                         <TopicBarChart data={stats.byTopic} />
                     </div>
 
                     {/* Heatmap */}
-                    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                        <h2 className="text-lg font-semibold text-gray-900 mb-3">Where are the gaps?</h2>
+                    <div className="bg-neutral-900 rounded-2xl shadow-sm border border-neutral-800 p-6">
+                        <h2 className="text-lg font-semibold text-white mb-3">Where are the gaps?</h2>
                         <MatrixHeatmap matrix={stats.matrix} rows={topics} cols={years} />
-                        <p className="mt-3 text-xs text-gray-500">Darker cells = more studies. Light or empty cells indicate potential knowledge gaps.</p>
+                        <p className="mt-3 text-xs text-gray-400">Darker cells = more studies. Light or empty cells indicate potential knowledge gaps.</p>
                     </div>
                 </div>
 
@@ -202,14 +202,14 @@ export default function MissionDashboard() {
                 </div>
 
                 {/* Table */}
-                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                    <div className="p-4 border-b border-gray-100 flex items-center justify-between">
-                        <h2 className="text-lg font-semibold text-gray-900">Studies</h2>
-                        <span className="text-xs text-gray-500">{filtered.length} results</span>
+                <div className="bg-neutral-900 rounded-2xl shadow-sm border border-neutral-800 overflow-hidden">
+                    <div className="p-4 border-b border-neutral-800 flex items-center justify-between">
+                        <h2 className="text-lg font-semibold text-white">Studies</h2>
+                        <span className="text-xs text-gray-400">{filtered.length} results</span>
                     </div>
                     <div className="overflow-x-auto">
                         <table className="min-w-full text-sm">
-                            <thead className="bg-gray-50 text-gray-600">
+                            <thead className="bg-neutral-900 text-gray-400">
                                 <tr>
                                     <Th>Title</Th>
                                     <Th>Topics</Th>
@@ -222,15 +222,15 @@ export default function MissionDashboard() {
                             </thead>
                             <tbody>
                                 {filtered.map((s) => (
-                                    <tr key={s.id} className="border-t border-gray-100 hover:bg-gray-50">
+                                    <tr key={s.id} className="border-t border-neutral-800 hover:bg-neutral-800">
                                         <Td>
-                                            <p className="font-medium text-gray-900">{s.title}</p>
-                                            <p className="text-xs text-gray-500 line-clamp-1">{s.summary}</p>
+                                            <p className="font-medium text-white">{s.title}</p>
+                                            <p className="text-xs text-gray-400 line-clamp-1">{s.summary}</p>
                                         </Td>
                                         <Td>
                                             <div className="flex flex-wrap gap-1">
                                                 {s.topics.map((t) => (
-                                                    <span key={t} className="text-[10px] px-2 py-0.5 rounded-full bg-gray-100 text-gray-700 border border-gray-200">{t}</span>
+                                                    <span key={t} className="text-[10px] px-2 py-0.5 rounded-full bg-neutral-800 text-gray-200 border border-neutral-700">{t}</span>
                                                 ))}
                                             </div>
                                         </Td>
@@ -241,7 +241,7 @@ export default function MissionDashboard() {
                                             <OutcomePill outcome={s.outcome} />
                                         </Td>
                                         <Td>
-                                            <span className="text-xs text-gray-700">{Math.round(s.consensusScore * 100)}%</span>
+                                            <span className="text-xs text-gray-300">{Math.round(s.consensusScore * 100)}%</span>
                                         </Td>
                                     </tr>
                                 ))}
@@ -256,41 +256,41 @@ export default function MissionDashboard() {
 
 // --- Small UI bits ---
 function Th({ children }) {
-    return <th className="text-left font-semibold px-4 py-2 whitespace-nowrap">{children}</th>
+    return <th className="text-left font-semibold px-4 py-2 whitespace-nowrap text-gray-300">{children}</th>
 }
 function Td({ children }) {
-    return <td className="px-4 py-3 align-top">{children}</td>
+    return <td className="px-4 py-3 align-top text-gray-300">{children}</td>
 }
 
 function StatCard({ label, value }) {
     return (
-        <div className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
-            <p className="text-[11px] uppercase tracking-wide text-gray-500">{label}</p>
-            <p className="text-xl font-semibold text-gray-900">{value}</p>
+        <div className="rounded-2xl border border-neutral-800 bg-neutral-900 p-4 shadow-sm">
+            <p className="text-[11px] uppercase tracking-wide text-gray-400">{label}</p>
+            <p className="text-xl font-semibold text-white">{value}</p>
         </div>
     )
 }
 
 function OutcomePill({ outcome }) {
     const map = {
-        support: "bg-emerald-50 text-emerald-700 border-emerald-200",
-        inconclusive: "bg-gray-50 text-gray-700 border-gray-200",
-        contradictory: "bg-rose-50 text-rose-700 border-rose-200",
-        risk: "bg-amber-50 text-amber-700 border-amber-200",
+        support: "bg-emerald-950/40 text-emerald-300 border-emerald-800",
+        inconclusive: "bg-neutral-800 text-gray-200 border-neutral-700",
+        contradictory: "bg-rose-950/40 text-rose-300 border-rose-800",
+        risk: "bg-amber-950/40 text-amber-300 border-amber-800",
     }
     return <span className={`text-[10px] px-2 py-0.5 rounded-full border ${map[outcome]}`}>{outcome}</span>
 }
 
 function InsightCard({ title, items, accent }) {
     return (
-        <div className="rounded-2xl border border-gray-100 bg-white p-6">
+        <div className="rounded-2xl border border-neutral-800 bg-neutral-900 p-6">
             <div className={`inline-flex items-center gap-2 rounded-full bg-gradient-to-r ${accent} text-white px-3 py-1 text-xs mb-3`}>
                 <span className="w-1.5 h-1.5 bg-white/90 rounded-full" />
                 {title}
             </div>
             <ul className="space-y-2">
                 {items.map((t, i) => (
-                    <li key={i} className="text-sm text-gray-800">• {t}</li>
+                    <li key={i} className="text-sm text-gray-200">• {t}</li>
                 ))}
             </ul>
         </div>
@@ -332,7 +332,7 @@ function LineChart({ data, years, range }) {
             />
             {/* Grid */}
             {Array.from({ length: 5 }).map((_, i) => (
-                <line key={i} x1="0" x2="100" y1={i * 25} y2={i * 25} stroke="#e5e7eb" strokeWidth="0.3" />
+                <line key={i} x1="0" x2="100" y1={i * 25} y2={i * 25} stroke="#1f2937" strokeWidth="0.3" />
             ))}
         </svg>
     )
@@ -345,11 +345,11 @@ function TopicBarChart({ data }) {
         <div className="space-y-2">
             {entries.map(([k, v]) => (
                 <div key={k}>
-                    <div className="flex justify-between text-xs text-gray-600 mb-1">
+                    <div className="flex justify-between text-xs text-gray-400 mb-1">
                         <span>{k}</span>
                         <span>{v}</span>
                     </div>
-                    <div className="h-2.5 bg-gray-100 rounded-full overflow-hidden">
+                    <div className="h-2.5 bg-neutral-800 rounded-full overflow-hidden">
                         <div className="h-full bg-gradient-to-r from-blue-500 to-purple-500" style={{ width: `${(v / max) * 100}%` }} />
                     </div>
                 </div>
@@ -373,10 +373,10 @@ function DonutChart({ data, size = 160 }) {
     return (
         <div className="relative mx-auto" style={{ width: size, height: size }}>
             <div className="rounded-full" style={{ width: size, height: size, background: `conic-gradient(${gradient})` }} />
-            <div className="absolute inset-5 bg-white rounded-full flex items-center justify-center">
+            <div className="absolute inset-5 bg-neutral-950 rounded-full flex items-center justify-center">
                 <div className="text-center">
-                    <p className="text-xs text-gray-500">Consensus</p>
-                    <p className="text-lg font-semibold text-gray-900">{total}</p>
+                    <p className="text-xs text-gray-400">Consensus</p>
+                    <p className="text-lg font-semibold text-white">{total}</p>
                 </div>
             </div>
         </div>
@@ -391,11 +391,11 @@ function MatrixHeatmap({ matrix, rows, cols }) {
                 <div className="grid" style={{ gridTemplateColumns: `120px repeat(${cols.length}, minmax(0, 1fr))` }}>
                     <div />
                     {cols.map((c) => (
-                        <div key={c} className="text-[10px] text-gray-500 text-center py-1">{c}</div>
+                        <div key={c} className="text-[10px] text-gray-400 text-center py-1">{c}</div>
                     ))}
                     {rows.map((r, ri) => (
                         <React.Fragment key={r}>
-                            <div className="text-xs text-gray-700 py-1 pr-2 flex items-center">{r}</div>
+                            <div className="text-xs text-gray-300 py-1 pr-2 flex items-center">{r}</div>
                             {cols.map((c, ci) => {
                                 const v = matrix[r]?.[c] ?? 0
                                 const color = heat(v)
