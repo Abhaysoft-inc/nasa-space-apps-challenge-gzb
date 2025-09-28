@@ -80,34 +80,44 @@ export default function GamesCenter(){
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900">
+    <div className="min-h-screen relative overflow-hidden">
+      {/* Video Background */}
+      <div className="absolute inset-0 z-0">
+        <video 
+          autoPlay 
+          loop 
+          muted 
+          playsInline
+          className="w-full h-full object-cover"
+        >
+          <source src="/Landing_bg.mp4" type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 bg-black/40"></div>
+      </div>
+
       {/* NASA-Style Header */}
-      <div className="relative overflow-hidden">
-        <div 
-          className="absolute inset-0 bg-cover bg-center opacity-30"
-          style={{ backgroundImage: 'url(/nasa_games_images/headers/space_exploration_banner.jpg)' }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-900/80 to-indigo-900/80" />
+      <div className="relative overflow-hidden z-10">
+        <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/60" />
         
-        <div className="relative max-w-7xl mx-auto px-4 py-16 text-center text-white">
+        <div className="relative max-w-7xl mx-auto px-4 py-20 text-center text-white z-10">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h1 className="text-5xl font-bold mb-4">
+            <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-white via-blue-100 to-cyan-100 bg-clip-text text-transparent">
               Games and Interactives
             </h1>
-            <p className="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">
+            <p className="text-xl md:text-2xl text-blue-100 mb-8 max-w-3xl mx-auto leading-relaxed">
               Immerse yourself in cutting-edge space biology missions. Experience real NASA research through interactive storytelling and scientific discovery.
             </p>
             
             {/* NASA Mission Categories */}
-            <div className="flex flex-wrap justify-center gap-3 mb-8">
+            <div className="flex flex-wrap justify-center gap-4 mb-8">
               {['Biology', 'Space Research', 'Exploration', 'Research', 'Training'].map((category) => (
                 <span
                   key={category}
-                  className="px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-sm font-medium border border-white/20"
+                  className="px-6 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full text-white font-medium hover:bg-white/20 transition-all cursor-pointer"
                 >
                   {category}
                 </span>
@@ -118,7 +128,7 @@ export default function GamesCenter(){
       </div>
 
       {/* Mission Cards Grid */}
-      <div className="max-w-7xl mx-auto px-4 py-12">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 py-12">
         <motion.div 
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
           layout
@@ -173,7 +183,7 @@ function MissionCard({ mission, index, isExpanded, onExpand }) {
         stiffness: 300,
         damping: 30
       }}
-      className={`relative bg-slate-800/80 backdrop-blur-sm rounded-2xl overflow-hidden border border-slate-700/50 hover:border-blue-400/50 transition-all duration-300 cursor-pointer ${
+      className={`relative bg-black/20 backdrop-blur-md rounded-2xl overflow-hidden border border-white/10 hover:border-blue-400/50 transition-all duration-300 cursor-pointer hover:bg-black/30 ${
         isExpanded ? 'col-span-full' : ''
       }`}
       onClick={onExpand}
@@ -186,11 +196,11 @@ function MissionCard({ mission, index, isExpanded, onExpand }) {
             alt={mission.title}
             className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
           
           {/* Status Badge */}
           <div className="absolute top-4 left-4">
-            <span className={`px-3 py-1 rounded-full text-xs font-medium text-white ${statusColors[mission.status]}`}>
+            <span className={`px-3 py-1 rounded-full text-xs font-medium text-white backdrop-blur-sm ${statusColors[mission.status]}`}>
               {mission.status}
             </span>
           </div>
@@ -206,7 +216,7 @@ function MissionCard({ mission, index, isExpanded, onExpand }) {
         {/* Mission Content */}
         <div className={`p-6 ${isExpanded ? 'w-1/2' : 'w-full'}`}>
           <div className="flex items-center gap-2 mb-3">
-            <h3 className="text-xl font-bold text-white group-hover:text-blue-300 transition-colors">
+            <h3 className="text-xl font-bold text-white group-hover:text-cyan-400 transition-colors">
               {mission.title}
             </h3>
             <span className={`text-sm font-medium ${difficultyColors[mission.difficulty]}`}>
@@ -214,18 +224,18 @@ function MissionCard({ mission, index, isExpanded, onExpand }) {
             </span>
           </div>
           
-          <p className="text-blue-200 text-sm mb-4 font-medium">
+          <p className="text-cyan-200 text-sm mb-4 font-medium">
             {mission.subtitle}
           </p>
           
-          <p className="text-slate-300 text-sm mb-4 leading-relaxed">
+          <p className="text-blue-100 text-sm mb-4 leading-relaxed">
             {mission.description}
           </p>
 
           {/* Mission Stats */}
-          <div className="flex items-center gap-4 text-xs text-slate-400 mb-4">
+          <div className="flex items-center gap-4 text-xs text-blue-200 mb-4">
             <span>⏱️ {mission.duration}</span>
-            <span>👥 {mission.features.length} Features</span>
+            <span>🎯 {mission.features.length} Features</span>
           </div>
 
           {/* Expanded Content */}
@@ -236,14 +246,14 @@ function MissionCard({ mission, index, isExpanded, onExpand }) {
                 animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0 }}
                 transition={{ duration: 0.3 }}
-                className="border-t border-slate-600 pt-4 mt-4"
+                className="border-t border-white/10 pt-4 mt-4"
               >
                 {/* Features */}
                 <div className="mb-4">
-                  <h4 className="text-sm font-semibold text-blue-300 mb-2">Mission Features:</h4>
+                  <h4 className="text-sm font-semibold text-cyan-300 mb-2">Mission Features:</h4>
                   <div className="flex flex-wrap gap-2">
                     {mission.features.map((feature, idx) => (
-                      <span key={idx} className="px-2 py-1 bg-blue-900/50 text-blue-200 text-xs rounded-md">
+                      <span key={idx} className="px-2 py-1 bg-white/10 backdrop-blur-sm text-blue-100 text-xs rounded-md border border-white/20">
                         {feature}
                       </span>
                     ))}
@@ -255,8 +265,8 @@ function MissionCard({ mission, index, isExpanded, onExpand }) {
                   <h4 className="text-sm font-semibold text-green-300 mb-2">Scientific Facts:</h4>
                   <ul className="space-y-1">
                     {mission.scientificFacts.map((fact, idx) => (
-                      <li key={idx} className="text-xs text-slate-300 flex items-start gap-2">
-                        <span className="text-green-400 mt-0.5">•</span>
+                      <li key={idx} className="text-xs text-blue-100 flex items-start gap-2">
+                        <span className="text-cyan-400 mt-0.5">•</span>
                         {fact}
                       </li>
                     ))}
@@ -269,7 +279,7 @@ function MissionCard({ mission, index, isExpanded, onExpand }) {
                     <motion.button
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
-                      className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 shadow-lg hover:shadow-blue-500/25"
+                      className="w-full bg-gradient-to-r from-blue-600/80 to-indigo-600/80 hover:from-blue-500 hover:to-indigo-500 backdrop-blur-sm text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 shadow-lg hover:shadow-blue-500/25 border border-white/10"
                     >
                       🚀 Start Mission
                     </motion.button>
@@ -279,7 +289,7 @@ function MissionCard({ mission, index, isExpanded, onExpand }) {
                 {mission.status === 'Coming Soon' && (
                   <button
                     disabled
-                    className="w-full bg-slate-600 text-slate-300 font-semibold py-3 px-6 rounded-lg cursor-not-allowed"
+                    className="w-full bg-gray-600/50 backdrop-blur-sm text-gray-300 font-semibold py-3 px-6 rounded-lg cursor-not-allowed border border-white/10"
                   >
                     🔒 Coming Soon
                   </button>
@@ -294,7 +304,7 @@ function MissionCard({ mission, index, isExpanded, onExpand }) {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-300 text-sm"
+                className="w-full bg-gradient-to-r from-blue-600/80 to-indigo-600/80 hover:from-blue-500 hover:to-indigo-500 backdrop-blur-sm text-white font-semibold py-2 px-4 rounded-lg transition-all duration-300 text-sm border border-white/10"
                 onClick={(e) => e.stopPropagation()}
               >
                 🚀 Start Mission
