@@ -64,7 +64,7 @@ export default function NavigationPanel({
               animate={{ opacity: 1, y: 0 }}
               className="mt-2 text-sm text-gray-400"
             >
-              <span style={{color:'#f0e7e7aa'}}>Scanning galaxy for: </span><span className="font-semibold" style={{color:'#fda600'}}>"{searchTerm}"</span>
+              <span style={{color:'#f0e7e7aa'}}>Scanning galaxy for: </span><span className="font-semibold" style={{color:'#fda600'}}>&quot;{searchTerm}&quot;</span>
             </motion.div>
           )}
         </div>

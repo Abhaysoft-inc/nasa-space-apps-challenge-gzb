@@ -139,7 +139,7 @@ export default function SearchInterface({ searchQuery, onSearch }) {
                         <div className="w-1.5 h-1.5 bg-blue-400 rounded-full" />
                         <div className="flex-1 min-w-0">
                           <div className="text-gray-300 text-xs truncate">
-                            Paper about "{localQuery}"
+                            Paper about &quot;{localQuery}&quot;
                           </div>
                           <div className="text-gray-500 text-xs">
                             {2020 + i} • {Math.floor(Math.random() * 100)} citations
