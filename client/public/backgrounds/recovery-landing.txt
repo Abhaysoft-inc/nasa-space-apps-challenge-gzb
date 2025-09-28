@@ -1,0 +1,9 @@
+GENERATE: backgrounds/recovery-landing.jpg
+DIMENSIONS: 1920x1080
+FORMAT: JPG
+TYPE: background
+
+PROMPT:
+Soyuz capsule recovery site in Kazakhstan steppe, wide open grassland landscape, clear blue sky, recovery vehicles and helicopters in distance, parachute visible, peaceful successful mission completion mood, ground level perspective, anime visual novel background style, bright daylight, 16:9 aspect ratio
+
+After generation, replace this file with the actual image!

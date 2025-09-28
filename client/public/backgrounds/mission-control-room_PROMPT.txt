@@ -1,0 +1,9 @@
+FILE: backgrounds/mission-control-room.jpg
+PROMPT: NASA Mission Control Houston interior, multiple tiers of control stations, large wall screens displaying orbital data, professional flight controllers at computer consoles, blue and green ambient lighting, high-tech atmosphere, serious focused environment, anime visual novel background style, 16:9 aspect ratio
+
+INSTRUCTIONS:
+1. Copy the prompt above
+2. Use Leonardo AI, Midjourney, or DALL-E
+3. Generate the image
+4. Save as specified filename
+5. Replace this text file with the image

@@ -1,16 +1,19 @@
 "use client"
-import React, { useState, Suspense } from 'react';
+import React, { useState, Suspense, useRef } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { useGLTF, OrbitControls, Environment } from '@react-three/drei';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import Image from 'next/image';
+import Link from 'next/link';
 
-function MarsModel({ isSelected }) {
+function MarsModel({ isSelected, scaleOverride }) {
     const gltf = useGLTF('/Mars_1_6792.glb');
 
     if (gltf && gltf.scene) {
         return (
             <primitive
                 object={gltf.scene.clone()}
-                scale={isSelected ? 0.01 : 0.006}
+                scale={scaleOverride ?? (isSelected ? 0.01 : 0.006)}
                 rotation={[0, 0, 0]}
                 position={[0, 0, 0]}
             />
@@ -56,6 +59,24 @@ function MoonModel({ isSelected }) {
 
 export default function SpaceHeroPage() {
     const [selectedPlanet, setSelectedPlanet] = useState(null);
+    // Moon section scroll animations
+    const moonSectionRef = useRef(null);
+    const { scrollYProgress } = useScroll({ target: moonSectionRef, offset: ["start start", "end start"] });
+    const headerY = useTransform(scrollYProgress, [0, 0.7, 1], [0, -40, -80]);
+    const headerOpacity = useTransform(scrollYProgress, [0, 0.6, 0.8], [1, 0.4, 0]);
+    const moonLabelOpacity = useTransform(scrollYProgress, [0.6, 0.9], [0, 1]);
+    const moonX = useTransform(scrollYProgress, [0, 1], ["-50%", "0%"]);
+    // Keep the moon fully opaque once it starts entering
+    // (we remove opacity animation to avoid any transparent look)
+    const leftWidth = '55%';
+    // Mars section scroll animations
+    const marsSectionRef = useRef(null);
+    const { scrollYProgress: marsProgress } = useScroll({ target: marsSectionRef, offset: ["start start", "end start"] });
+    const marsHeaderY = useTransform(marsProgress, [0, 0.7, 1], [0, -40, -80]);
+    const marsHeaderOpacity = useTransform(marsProgress, [0, 0.6, 0.8], [1, 0.4, 0]);
+    const marsLabelOpacity = useTransform(marsProgress, [0.6, 0.9], [0, 1]);
+    // For Mars section we will slide the model in from the right
+    const marsX = useTransform(marsProgress, [0, 1], ["50%", "0%"]);
 
     const planets = {
         moon: {
@@ -83,23 +104,26 @@ export default function SpaceHeroPage() {
     };
 
     return (
-        <div className="min-h-screen flex overflow-hidden relative">
-            {/* Video Background */}
-            <video
-                autoPlay
-                muted
-                loop
-                playsInline
-                className="absolute inset-0 w-full h-full object-cover z-0"
-            >
-                <source src="/Landing_bg.mp4" type="video/mp4" />
-            </video>
+        <div className="w-full relative">
+            {/* Global fixed background: shared by all sections */}
+            <div className="fixed inset-0 -z-10">
+                <video
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    className="absolute inset-0 w-full h-full object-cover"
+                >
+                    <source src="/landing_bg.mp4" type="video/mp4" />
+                    <source src="/Landing_bg.mp4" type="video/mp4" />
+                </video>
+                <div className="absolute inset-0 bg-black/30" />
+            </div>
+            {/* Section 1: Hero */}
+            <section className="relative min-h-screen flex">
 
-            {/* Overlay for better text readability */}
-            <div className="absolute inset-0 bg-black/30 z-10"></div>
-
-            {/* Navigation Menu */}
-            <nav className="absolute top-0 left-0 right-0 z-30 p-6">
+                {/* Navigation Menu */}
+                <nav className="absolute top-0 left-0 right-0 z-30 p-6">
                 <div className="flex items-center justify-between">
                     {/* Logo */}
                     <div className="flex items-center space-x-3">
@@ -134,20 +158,20 @@ export default function SpaceHeroPage() {
                         </button>
                     </div>
                 </div>
-            </nav>
+                </nav>
 
-            {/* Left Hero Section - Dynamic width based on selection */}
-            <div className={`flex flex-col justify-center p-8 z-20 transition-all duration-1000 ease-out ${selectedPlanet ? 'w-1/2' : 'w-1/3'}`}>
-                <div className="space-y-6">
+                {/* Left Hero Section - Dynamic width based on selection */}
+                <div className={`flex flex-col justify-center p-8 z-20 transition-all duration-1000 ease-out ${selectedPlanet ? 'w-1/2' : 'w-1/3'}`}>
+                <div className="space-y-4">
                     {selectedPlanet ? (
                         <>
-                            <h1 className="text-5xl font-bold bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent leading-tight">
+                            <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent leading-tight">
                                 {planets[selectedPlanet].heroText.title}
                             </h1>
-                            <p className="text-xl text-gray-300 leading-relaxed">
+                            <p className="text-base md:text-lg text-gray-300 leading-relaxed">
                                 {planets[selectedPlanet].heroText.subtitle}
                             </p>
-                            <div className="flex space-x-4 mt-8">
+                            <div className="flex space-x-4 mt-6">
                                 <button className="px-6 py-3 bg-gradient-to-r from-orange-500 to-red-600 rounded-full font-semibold hover:from-orange-600 hover:to-red-700 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl">
                                     Explore {planets[selectedPlanet].name}
                                 </button>
@@ -161,27 +185,27 @@ export default function SpaceHeroPage() {
                         </>
                     ) : (
                         <>
-                            <h1 className="text-5xl font-bold bg-white  bg-clip-text text-transparent leading-tight">
+                            <h1 className="text-4xl md:text-5xl font-bold bg-white  bg-clip-text text-transparent leading-tight">
                                 Explore Biolores From Space
                             </h1>
-                            <p className="text-xl text-gray-300 leading-relaxed">
+                            <p className="text-base md:text-lg text-gray-300 leading-relaxed">
                                 Embark on an interplanetary journey through space and time. Click on the celestial bodies to discover their secrets and unlock the mysteries of our solar system.
                             </p>
-                            <div className="flex space-x-4 mt-8">
+                            <div className="flex space-x-4 mt-6">
                                 <button className="px-6 py-3 bg-[#e77d11] rounded-full font-semibold  transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl">
                                     Start Journey
                                 </button>
-                                <button className="px-6 py-3 border border-white/30 rounded-full font-semibold hover:bg-white/10 transition-all duration-300 text-white">
-                                    Learn More
-                                </button>
+                                <Link href="/knowledge-graphs" className="px-6 py-3 border border-white/30 rounded-full font-semibold hover:bg-white/10 transition-all duration-300 text-white">
+                                    Knowledge Graph
+                                </Link>
                             </div>
                         </>
                     )}
                 </div>
-            </div>
+                </div>
 
-            {/* Right Planet Section - Dynamic width based on selection */}
-            <div className={`relative flex items-center justify-center z-20 transition-all duration-1000 ease-out ${selectedPlanet ? 'w-1/2' : 'w-2/3'}`}>
+                {/* Right Planet Section - Dynamic width based on selection */}
+                <div className={`relative flex items-center justify-center z-20 transition-all duration-1000 ease-out ${selectedPlanet ? 'w-1/2' : 'w-2/3'}`}>
                 {/* Horizontal Planet Container */}
                 <div className={`flex items-center justify-center transition-all duration-1000 ease-out ${selectedPlanet ? 'gap-0' : 'gap-32'} relative w-full h-full`}>
                     {/* Moon 3D Model */}
@@ -302,7 +326,118 @@ export default function SpaceHeroPage() {
                         }}
                     />
                 ))}
-            </div>
+                </div>
+                    </section>
+
+                    {/* Section 2: Moon research scroll section */}
+                    <section ref={moonSectionRef} className="relative min-h-screen h-screen overflow-hidden">
+                        {/* Sticky header showing only MOON */}
+                        <div className="sticky top-0 z-30">
+                            <motion.div style={{ y: headerY, opacity: headerOpacity }} className="p-6">
+                                <div className="flex items-center justify-center">
+                                    <span className="text-white/90 font-bold text-2xl md:text-3xl tracking-wide">MOON</span>
+                                </div>
+                            </motion.div>
+                        </div>
+
+                        {/* Moon image slides in from left, half width, full height, below header */}
+                        <motion.div
+                            className="absolute top-0 left-0 h-full z-10 flex items-center justify-start"
+                            style={{ x: moonX, width: leftWidth }}
+                        >
+                            <div className="relative h-full w-full">
+                                <Image src="/moon-unscreen.gif" alt="Moon animation" fill priority unoptimized className="object-contain object-left" />
+                            </div>
+                        </motion.div>
+
+                        {/* Right-side hardcoded moon research text */}
+                        <div className="relative z-20 h-full" style={{ marginLeft: leftWidth }}>
+                            <div className="h-full flex items-center">
+                                <div className="max-w-3xl px-6 md:px-12">
+                                    <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">Research on and for the Moon</h2>
+                                    <p className="text-lg text-gray-200 mb-4">
+                                        The Moon is our nearest off-world laboratory. Studies here inform planetary science, human health in partial gravity, and technologies for sustainable presence.
+                                    </p>
+                                    <ul className="space-y-3 text-gray-200 text-base list-disc pl-5">
+                                        <li><span className="font-semibold text-white">Lunar Regolith Biology:</span> Plant and microbial responses to regolith simulants and Apollo samples; nutrient cycling and toxicity mitigation.</li>
+                                        <li><span className="font-semibold text-white">Radiation Biology:</span> DNA damage/repair dynamics and shielding approaches under lunar surface radiation and SPEs.</li>
+                                        <li><span className="font-semibold text-white">Dust Toxicology:</span> Ultra-fine dust impacts on lungs, eyes, skin; filtration and adhesion control for suits and habitats.</li>
+                                        <li><span className="font-semibold text-white">Human Physiology (1/6 g):</span> Locomotion, cardiovascular load, bone remodeling, fluid shifts, and circadian adaptation in partial gravity.</li>
+                                        <li><span className="font-semibold text-white">ISRU & Life Support:</span> Regolith-based materials, oxygen extraction, and polar ice utilization for water and propellant.</li>
+                                        <li><span className="font-semibold text-white">Polar Volatiles:</span> Prospecting permanently shadowed regions; cold-trap chemistry relevant to fuel and life support.</li>
+                                        <li><span className="font-semibold text-white">Biocontainment:</span> Preventing forward/back contamination during sample return and in-situ biology experiments.</li>
+                                    </ul>
+                                    <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        <div className="rounded-xl border border-white/10 bg-white/5 p-4 text-gray-200">
+                                            <h3 className="text-white font-semibold mb-2">Artemis Science Objectives</h3>
+                                            <p>Surface ops validating habitat systems, EVA biomedical monitoring, and long-duration partial gravity studies.</p>
+                                        </div>
+                                        <div className="rounded-xl border border-white/10 bg-white/5 p-4 text-gray-200">
+                                            <h3 className="text-white font-semibold mb-2">Lunar Analog Research</h3>
+                                            <p>Antarctic stations and volcanic fields simulate isolation, dust, and cold for testing life support and biology payloads.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Section 3: Mars research scroll section */}
+                    {/* Text on left, GLB on right */}
+                    <section ref={marsSectionRef} className="relative min-h-screen h-screen overflow-hidden">
+                        {/* Sticky header showing only MARS */}
+                        <div className="sticky top-0 z-30">
+                            <motion.div style={{ y: marsHeaderY, opacity: marsHeaderOpacity }} className="p-6">
+                                <div className="flex items-center justify-center">
+                                    <span className="text-white/90 font-bold text-2xl md:text-3xl tracking-wide">MARS</span>
+                                </div>
+                            </motion.div>
+                        </div>
+
+                        {/* Mars GLB slides in from right, fixed width, full height */}
+                        <motion.div
+                            className="absolute top-0 right-0 h-full z-10 flex items-center justify-end"
+                            style={{ x: marsX, width: leftWidth }}
+                        >
+                            <div className="relative h-full w-full">
+                                <Canvas
+                                    style={{ width: '100%', height: '100%' }}
+                                    gl={{ alpha: true, antialias: true }}
+                                    camera={{ position: [0, 0, 10], fov: 45 }}
+                                >
+                                    <ambientLight intensity={0.4} />
+                                    <directionalLight position={[10, 10, 5]} intensity={1.1} />
+                                    <pointLight position={[-10, -10, -5]} intensity={0.4} color="#4169e1" />
+                                    <pointLight position={[5, -5, 10]} intensity={0.3} color="#ffa500" />
+                                    <Suspense fallback={null}>
+                                        {/* Reduce GLB scale specifically for this section */}
+                                        <MarsModel isSelected scaleOverride={0.005} />
+                                        <OrbitControls enableZoom={false} enablePan={false} autoRotate autoRotateSpeed={0.4} />
+                                    </Suspense>
+                                </Canvas>
+                            </div>
+                        </motion.div>
+
+                        {/* Left-side hardcoded Mars research text */}
+                        <div className="relative z-20 h-full" style={{ marginRight: leftWidth }}>
+                            <div className="h-full flex items-center">
+                                <div className="max-w-3xl px-6 md:px-12">
+                                    <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">Mars Research Highlights</h2>
+                                    <p className="text-lg text-gray-200 mb-4">
+                                        Investigations on Mars inform habitability, human health, and systems needed for sustained surface operations under dust, cold, and radiation.
+                                    </p>
+                                    <ul className="space-y-3 text-gray-200 text-base list-disc pl-5">
+                                        <li><span className="font-semibold text-white">Regolith Mechanics:</span> Trafficability, excavation, and construction with in-situ materials for habitats and berms.</li>
+                                        <li><span className="font-semibold text-white">Atmospheric Dust & Toxicology:</span> Fine dust behavior, filtration, and health impacts in habitat systems.</li>
+                                        <li><span className="font-semibold text-white">Radiation & Shielding:</span> Dose mapping, storm shelters, and biological responses under galactic cosmic rays.</li>
+                                        <li><span className="font-semibold text-white">ISRU Water & Oxygen:</span> Subsurface ice prospecting and oxygen production from CO₂ or regolith.</li>
+                                        <li><span className="font-semibold text-white">Human Physiology (0.38 g):</span> Locomotion, cardiovascular load, bone/muscle adaptation in Martian gravity.</li>
+                                        <li><span className="font-semibold text-white">Planetary Protection:</span> Clean sampling and bioburden control for life detection missions.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
         </div>
     );
 }

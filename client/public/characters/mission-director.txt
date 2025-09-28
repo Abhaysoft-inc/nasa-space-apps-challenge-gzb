@@ -1,0 +1,9 @@
+GENERATE: characters/mission-director.png
+DIMENSIONS: 512x1024
+FORMAT: PNG
+TYPE: character
+
+PROMPT:
+NASA Mission Director, authoritative Caucasian male, age 50-55, anime visual novel character style, dark blue NASA polo shirt with logo, military bearing and experienced look, confident leadership expression, short professional gray hair, commanding presence, standing pose facing forward, full body from head to feet, transparent background, 1:2 aspect ratio
+
+After generation, replace this file with the actual image!

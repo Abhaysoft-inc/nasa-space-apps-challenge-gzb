@@ -1,0 +1,9 @@
+FILE: ui/dialogue-panel.png
+PROMPT: Visual novel dialogue text panel UI element, rounded rectangle with subtle shadows, dark navy blue background with bright cyan glowing borders, semi-transparent for text overlay, professional game interface style, clean modern design, 1100x200 dimensions, PNG transparency
+
+INSTRUCTIONS:
+1. Copy the prompt above
+2. Use Leonardo AI, Midjourney, or DALL-E
+3. Generate the image
+4. Save as specified filename
+5. Replace this text file with the image

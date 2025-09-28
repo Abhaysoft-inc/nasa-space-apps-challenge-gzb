@@ -1,0 +1,69 @@
+{
+  "name": "Bion-M1: Space Biology Mission",
+  "version": "1.0.0",
+  "w": 1920,
+  "h": 1080,
+  "renderer": "AUTO",
+  "scaleMode": "SHOW_ALL",
+  "loadingScreen": {
+    "background": "#000011",
+    "loadingBar": {
+      "asset": "gui/loadingbar.png",
+      "position": {
+        "x": "50%",
+        "y": "80%"
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "loadingText": {
+      "text": "Preparing Mission...",
+      "style": {
+        "font": "Arial",
+        "fontSize": 32,
+        "fill": "#00FFFF"
+      },
+      "position": {
+        "x": "50%",
+        "y": "75%"
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    }
+  },
+  "fonts": {
+    "nasa": "assets/fonts/nasa.ttf"
+  },
+  "guiConfig": {
+    "textSpeed": 50,
+    "autoSpeed": 2000,
+    "textbox": {
+      "asset": "gui/textbox.png",
+      "position": {
+        "x": 0,
+        "y": "75%"
+      }
+    },
+    "textStyle": {
+      "font": "Arial",
+      "fontSize": 24,
+      "fill": "#FFFFFF",
+      "wordWrap": true,
+      "wordWrapWidth": 800
+    },
+    "nameboxStyle": {
+      "font": "Arial",
+      "fontSize": 28,
+      "fill": "#00FFFF",
+      "fontWeight": "bold"
+    }
+  },
+  "storyConfig": {
+    "logChoices": true,
+    "developer": true
+  }
+}

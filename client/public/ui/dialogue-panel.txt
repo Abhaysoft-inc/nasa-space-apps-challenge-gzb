@@ -1,0 +1,9 @@
+GENERATE: ui/dialogue-panel.png
+DIMENSIONS: 1100x200
+FORMAT: PNG
+TYPE: ui
+
+PROMPT:
+Visual novel dialogue text panel UI element, rounded rectangle design with subtle shadows, dark navy blue background with bright cyan glowing borders, semi-transparent for text overlay, professional game interface style, clean modern design, 1100x200 pixel dimensions, PNG with transparency
+
+After generation, replace this file with the actual image!

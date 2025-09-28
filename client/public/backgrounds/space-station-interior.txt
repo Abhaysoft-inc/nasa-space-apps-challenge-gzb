@@ -1,0 +1,9 @@
+GENERATE: backgrounds/space-station-interior.jpg
+DIMENSIONS: 1920x1080
+FORMAT: JPG
+TYPE: background
+
+PROMPT:
+International Space Station interior module, cylindrical corridor with curved walls, scientific equipment and experiments floating in zero gravity, control panels and monitors, cables and technical apparatus, clean technical environment, natural lighting from Earth viewport, anime visual novel background style, 16:9 aspect ratio
+
+After generation, replace this file with the actual image!

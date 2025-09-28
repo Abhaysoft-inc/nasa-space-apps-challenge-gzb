@@ -1,0 +1,9 @@
+GENERATE: characters/scientist-team.png
+DIMENSIONS: 512x1024
+FORMAT: PNG
+TYPE: character
+
+PROMPT:
+Young research scientist team member, diverse background, age 25-35, anime visual novel character style, white lab coat over casual professional attire, friendly collaborative facial expression, modern professional appearance, team player presence, standing pose facing forward, full body from head to feet, transparent background, 1:2 aspect ratio portrait
+
+After generation, replace this file with the actual image!

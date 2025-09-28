@@ -1,0 +1,9 @@
+FILE: backgrounds/recovery-landing.jpg
+PROMPT: Soyuz capsule recovery site in Kazakhstan steppe, wide open grassland, clear blue sky, recovery vehicles and helicopters in distance, parachute visible, peaceful mission completion mood, anime visual novel background style, bright daylight, 16:9 aspect ratio
+
+INSTRUCTIONS:
+1. Copy the prompt above
+2. Use Leonardo AI, Midjourney, or DALL-E
+3. Generate the image
+4. Save as specified filename
+5. Replace this text file with the image

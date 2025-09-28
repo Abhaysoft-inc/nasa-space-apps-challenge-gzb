@@ -1,0 +1,9 @@
+FILE: effects/spark-particle.png
+PROMPT: Small bright particle effect, white to cyan gradient sparkle, glowing center with radiating light rays, for launch and success animations, 32x32 pixels, PNG with full transparency, game particle effect style
+
+INSTRUCTIONS:
+1. Copy the prompt above
+2. Use Leonardo AI, Midjourney, or DALL-E
+3. Generate the image
+4. Save as specified filename
+5. Replace this text file with the image

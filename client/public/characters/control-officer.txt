@@ -1,0 +1,9 @@
+GENERATE: characters/control-officer.png
+DIMENSIONS: 512x1024
+FORMAT: PNG
+TYPE: character
+
+PROMPT:
+Mission Control Officer, technical specialist, diverse ethnicity, age 30-35, anime visual novel character style, NASA uniform with communication headset, holding tablet device, focused analytical expression, professional but approachable appearance, expert technician look, standing pose facing forward, full body visible, transparent background, 1:2 aspect ratio
+
+After generation, replace this file with the actual image!
