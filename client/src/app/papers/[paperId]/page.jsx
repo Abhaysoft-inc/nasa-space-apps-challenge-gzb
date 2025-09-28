@@ -52,8 +52,21 @@ const PapersPage = () => {
     ]
 
     const requestChatCompletion = async (prompt) => {
+        // Add paper context to the query
+        const contextualQuery = `I am asking about the paper "${paperData.title}" by ${paperData.authors.join(', ')} published in ${paperData.source} (${paperData.date}). 
+
+Paper Summary: ${paperData.summary}
+
+Keywords: ${paperData.keywords.join(', ')}
+
+My question about this paper: ${prompt}`
+
         const payload = {
-            query: prompt
+            query: contextualQuery,
+            chat_history: chatMessages.map(msg => ({
+                type: msg.type === 'user' ? 'user' : 'assistant',
+                message: msg.message
+            }))
         }
 
         const res = await fetch('http://127.0.0.1:8000/chat', {
@@ -70,6 +83,16 @@ const PapersPage = () => {
         if (data?.answer) return data.answer
         return 'I could not find a confident answer yet, but I will keep learning from this paper.'
     }
+
+    // Initialize chat with welcome message
+    useEffect(() => {
+        setChatMessages([
+            {
+                type: 'ai',
+                message: `Hello! I'm ready to help you with questions about "${paperData.title}" by ${paperData.authors.slice(0, 2).join(', ')}${paperData.authors.length > 2 ? ' et al.' : ''}. This paper discusses ${paperData.summary.split('.')[0].toLowerCase()}. What would you like to know about this research?`
+            }
+        ])
+    }, [])
 
     useEffect(() => {
         if (typeof window === 'undefined') return

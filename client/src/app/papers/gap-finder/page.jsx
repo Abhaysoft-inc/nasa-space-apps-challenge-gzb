@@ -1,22 +1,14 @@
-'use client'
+"use client"
+import React, { Suspense } from 'react'
+import { useSearchParams } from 'next/navigation'
 
-import React, { useState, useMemo } from 'react'
-import { ChevronDownIcon, ChevronUpIcon, FunnelIcon, ViewColumnsIcon, RectangleStackIcon } from '@heroicons/react/24/outline'
+function GapFinderContent() {
+  const params = useSearchParams()
+  const title = params.get('title')
+  const doi = params.get('doi')
 
-export default function GapFinder() {
-  // State management
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
-  const [viewMode, setViewMode] = useState('cards')
-  const [selectedFilters, setSelectedFilters] = useState({
-    discipline: 'all',
-    year: 'all',
-    confidence: 'all',
-    relevance: 'all'
-  })
-  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false)
-
-  // Mock research gap data
-  const researchGaps = [
+  // Hard-coded recommendations for now
+  const gaps = [
     {
       id: 1,
       topic: "Long-term Cardiovascular Adaptations in Microgravity",
@@ -382,5 +374,18 @@ export default function GapFinder() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function GapFinderPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="text-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+        <p className="text-gray-600">Loading Gap Finder...</p>
+      </div>
+    </div>}>
+      <GapFinderContent />
+    </Suspense>
   )
 }

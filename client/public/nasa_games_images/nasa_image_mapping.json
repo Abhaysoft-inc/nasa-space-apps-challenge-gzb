@@ -1,0 +1,20 @@
+{
+  "headers": {
+    "main_banner": "/nasa_games_images/headers/space_exploration_banner.jpg",
+    "mars_header": "/nasa_games_images/headers/mars_missions_header.jpg",
+    "space_station_header": "/nasa_games_images/headers/space_station_header.jpg"
+  },
+  "story_cards": {
+    "tardigrade_mission": "/nasa_games_images/story_cards/tardigrade_mission_card.jpg",
+    "bion_m1_mission": "/nasa_games_images/story_cards/bion_m1_mission_card.jpg",
+    "mars_exploration": "/nasa_games_images/story_cards/mars_exploration_card.jpg",
+    "space_biology": "/nasa_games_images/story_cards/space_biology_card.jpg",
+    "astronaut_training": "/nasa_games_images/story_cards/astronaut_training_card.jpg",
+    "lunar_missions": "/nasa_games_images/story_cards/lunar_missions_card.jpg"
+  },
+  "backgrounds": {
+    "nasa_logo": "/nasa_games_images/backgrounds/nasa_logo_overlay.png",
+    "earth_space": "/nasa_games_images/backgrounds/earth_from_space.jpg",
+    "space_nebula": "/nasa_games_images/backgrounds/space_nebula.jpg"
+  }
+}
