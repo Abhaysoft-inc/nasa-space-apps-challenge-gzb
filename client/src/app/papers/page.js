@@ -1,6 +1,7 @@
 "use client"
-import React, { useMemo, useState } from 'react'
+import React, { useMemo, useState, useMemo as useReactMemo } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 
 // Static list of 50 papers (titles shown on cards; metadata used for filtering)
 // Note: All cards navigate to /papers/[paperId] which currently renders a single hard-coded paper
@@ -131,17 +132,46 @@ export default function PapersIndexPage() {
         if (allYears.length) setYearFrom(allYears[allYears.length - 1])
     }
 
-    // Compute a domain-based placeholder image URL for cards
+    // Map papers to local images deterministically
     const getPaperImage = (paper) => {
-        const domain = paper.domain || 'Paper'
-        // Pick a color based on domain hash
-        const colors = ['0ea5e9', '22c55e', 'a855f7', 'ef4444', 'f59e0b', '14b8a6', '3b82f6', '8b5cf6', '84cc16', '06b6d4']
-        const text = 'ffffff'
-        let hash = 0
-        for (let i = 0; i < domain.length; i++) hash = (hash + domain.charCodeAt(i)) % colors.length
-        const bg = colors[hash]
-        // Use placehold.co to generate a simple, non-copyrighted placeholder with the domain label
-        return `https://placehold.co/800x600/${bg}/${text}?text=${encodeURIComponent(domain)}`
+        const title = (paper.title || '').toLowerCase()
+        const domain = (paper.domain || '').toLowerCase()
+        const tags = (paper.tags || []).map(t => t.toLowerCase())
+
+        // Strong keyword checks
+        if (domain.includes('mars') || tags.includes('mars') || title.includes('mars')) return '/mars.jpg'
+        if (domain.includes('lunar') || tags.includes('lunar') || tags.includes('moon') || title.includes('lunar') || title.includes('moon')) return '/moon.jpg'
+        if (domain.includes('iss') || tags.includes('iss') || title.includes('iss')) return '/moon.jpg'
+        if (domain.includes('ai') || tags.includes('ai') || title.includes('ai') || title.includes('anomaly') || title.includes('telemetry')) return '/nasa_ai.jpeg'
+        if (domain.includes('satellite') || domain.includes('earth observation') || tags.includes('satellites') || tags.includes('earth observation') || title.includes('satellite')) return '/nasa_rovers.jpeg'
+
+        // Radiation/biology fallback
+        if (domain.includes('radiation') || tags.includes('radiation')) return '/biology.jpeg'
+        return '/biology.jpeg'
+    }
+
+    // Choose a local fallback image if external fetch fails or offline
+    const getLocalFallback = (paper) => getPaperImage(paper)
+
+    // Inline Image component with robust fallback handling
+    function PaperCardImage({ paper }){
+    const initial = getPaperImage(paper)
+    const fallback = getLocalFallback(paper)
+        const [src, setSrc] = useState(initial)
+        const handleError = () => {
+            if (src !== fallback) setSrc(fallback)
+        }
+        return (
+            <Image
+                src={src}
+                alt={paper.title}
+                width={800}
+                height={600}
+                className="w-full h-40 object-cover rounded-md bg-gray-200"
+                loading="lazy"
+                onError={handleError}
+            />
+        )
     }
 
     return (
@@ -256,12 +286,7 @@ export default function PapersIndexPage() {
                                     <div className="h-full bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow">
                                         {/* Image header */}
                                         <div className="mb-3">
-                                            <img
-                                                src={getPaperImage(paper)}
-                                                alt={paper.title}
-                                                className="w-full h-40 object-cover rounded-md bg-gray-200"
-                                                loading="lazy"
-                                            />
+                                            <PaperCardImage paper={paper} />
                                         </div>
 
                                         {/* Title */}

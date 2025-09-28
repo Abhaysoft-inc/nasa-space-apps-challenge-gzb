@@ -1,5 +1,5 @@
-import SpaceExplorationLanding from "@/components/SpaceExplorationLanding";
+import LandingPage from "./landing/page";
 
 export default function Home() {
-  return <SpaceExplorationLanding />;
+  return <LandingPage />;
 }

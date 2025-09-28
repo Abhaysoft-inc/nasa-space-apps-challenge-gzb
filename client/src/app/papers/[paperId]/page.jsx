@@ -53,18 +53,10 @@ const PapersPage = () => {
 
     const requestChatCompletion = async (prompt) => {
         const payload = {
-            message: prompt,
-            paper: {
-                title: paperData.title,
-                summary: paperData.summary,
-                keywords: paperData.keywords,
-                authors: paperData.authors,
-                source: paperData.source,
-                date: paperData.date,
-            }
+            query: prompt
         }
 
-        const res = await fetch('/api/chat', {
+        const res = await fetch('http://127.0.0.1:8000/chat', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload),
@@ -75,7 +67,7 @@ const PapersPage = () => {
         }
 
         const data = await res.json()
-        if (data?.reply) return data.reply
+        if (data?.answer) return data.answer
         return 'I could not find a confident answer yet, but I will keep learning from this paper.'
     }
 
@@ -221,6 +213,44 @@ const PapersPage = () => {
         }
     }
 
+    const formatAIResponse = (text) => {
+        // Convert **bold** to <strong>
+        let formatted = text.replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold text-gray-900">$1</strong>')
+
+        // Convert bullet points (lines starting with *) to proper list items
+        const lines = formatted.split('\n')
+        let inList = false
+        let result = []
+
+        for (let i = 0; i < lines.length; i++) {
+            const line = lines[i].trim()
+
+            if (line.startsWith('* ')) {
+                if (!inList) {
+                    result.push('<ul class="list-disc list-inside ml-4 space-y-1 mt-2 mb-2">')
+                    inList = true
+                }
+                result.push(`<li class="text-gray-700">${line.substring(2)}</li>`)
+            } else {
+                if (inList) {
+                    result.push('</ul>')
+                    inList = false
+                }
+                if (line) {
+                    result.push(`<p class="mb-2">${line}</p>`)
+                } else {
+                    result.push('<br/>')
+                }
+            }
+        }
+
+        if (inList) {
+            result.push('</ul>')
+        }
+
+        return result.join('')
+    }
+
     const handleResetChat = () => {
         // Invalidate any in-flight responses
         sessionRef.current += 1
@@ -228,13 +258,13 @@ const PapersPage = () => {
         try {
             const rec = recognitionRef.current
             if (rec) rec.stop()
-        } catch {}
+        } catch { }
         // Stop any ongoing speech synthesis
         try {
             if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
                 window.speechSynthesis.cancel()
             }
-        } catch {}
+        } catch { }
         // Clear UI state
         setIsListening(false)
         setIsGenerating(false)
@@ -273,10 +303,19 @@ const PapersPage = () => {
                                         <div key={i} className={`flex ${m.type === 'user' ? 'justify-end' : 'justify-start'}`}>
                                             <div className={`flex flex-col gap-1 ${m.type === 'user' ? 'items-end' : 'items-start'}`}>
                                                 <div className={`max-w-[85%] md:max-w-[70%] rounded-2xl px-4 py-2 text-sm border ${m.type === 'user'
-                                                        ? 'bg-blue-50 text-blue-900 border-blue-100'
-                                                        : 'bg-gray-50 text-gray-800 border-gray-100'
+                                                    ? 'bg-blue-50 text-blue-900 border-blue-100'
+                                                    : 'bg-gray-50 text-gray-800 border-gray-100'
                                                     }`}>
-                                                    {m.message}
+                                                    {m.type === 'ai' ? (
+                                                        <div
+                                                            className="prose prose-sm max-w-none"
+                                                            dangerouslySetInnerHTML={{
+                                                                __html: formatAIResponse(m.message)
+                                                            }}
+                                                        />
+                                                    ) : (
+                                                        m.message
+                                                    )}
                                                 </div>
                                                 {m.type === 'ai' && (
                                                     <div className="flex gap-2 text-[11px] text-gray-500">
@@ -376,7 +415,7 @@ const PapersPage = () => {
                                 </div>
                                 <form onSubmit={handleChatSubmit} className="flex items-center gap-4">
                                     <div className="flex items-center gap-3">
-                                        <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+                                        <div className="w-8 h-8 bg-gradient-to-r from-gray-500 to-gray-600 rounded-full flex items-center justify-center">
                                             <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                                             </svg>
@@ -415,7 +454,7 @@ const PapersPage = () => {
                                         <button
                                             type="submit"
                                             disabled={!chatInput.trim()}
-                                            className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-2 rounded-full hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 text-sm font-medium"
+                                            className="bg-gradient-to-r from-gray-500 to-gray-600 text-white px-6 py-2 rounded-full hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 text-sm font-medium"
                                         >
                                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />

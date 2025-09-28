@@ -6,7 +6,7 @@ export default function ProfileSidebarCard({ user }) {
     const data = user || {
         name: 'Alex Johnson',
         username: 'alexj',
-        avatar: null,
+        avatar: '/5209083.png',
         rankingPercentile: 12,
         streakDays: 6,
         totalRead: 27,
@@ -26,9 +26,9 @@ export default function ProfileSidebarCard({ user }) {
     return (
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
             <div className="flex items-center gap-3 mb-3">
-                <div className="relative w-12 h-12 rounded-full overflow-hidden bg-gradient-to-br from-blue-500 to-purple-600 text-white flex items-center justify-center font-semibold">
+                <div className="relative w-12 h-12 rounded-full overflow-hidden bg-gradient-to-br  text-white flex items-center justify-center font-semibold">
                     {data.avatar ? (
-                        <Image src={data.avatar} alt={data.name} fill sizes="48px" className="object-cover" />
+                        <Image src={data.avatar} alt={data.name} fill sizes="48px" className="object-contain" />
                     ) : (
                         <span>{initials}</span>
                     )}
@@ -50,7 +50,7 @@ export default function ProfileSidebarCard({ user }) {
                     <p className="text-[11px] text-gray-500">{data.thisWeek}/{data.weeklyGoal}</p>
                 </div>
                 <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
-                    <div className="h-full bg-gradient-to-r from-blue-500 to-purple-600" style={{ width: `${weeklyPct}%` }} />
+                    <div className="h-full bg-gradient-to-r from-gray-500 to-gray-600" style={{ width: `${weeklyPct}%` }} />
                 </div>
             </div>
 
