@@ -40,7 +40,7 @@ function ensureDemo(arr) {
 export default function ComparePage() {
     const [items, setItems] = useState([])
     const [primary, setPrimary] = useState(null)
-    
+
     // Chat state
     const [isChatOpen, setIsChatOpen] = useState(false)
     const [chatMessages, setChatMessages] = useState([])
@@ -92,10 +92,10 @@ export default function ComparePage() {
 
     // Chat functions
     const requestChatCompletion = async (prompt) => {
-        const comparisonContext = items.length > 0 ? 
-            `You are helping with a comparison of the following papers:\n${items.map((item, idx) => 
+        const comparisonContext = items.length > 0 ?
+            `You are helping with a comparison of the following papers:\n${items.map((item, idx) =>
                 `${idx + 1}. "${item.title}" (${item.source}, ${item.year})`
-            ).join('\n')}\n\nContext: The user is comparing these papers and wants to understand similarities, differences, and insights from this comparison.\n\n` : 
+            ).join('\n')}\n\nContext: The user is comparing these papers and wants to understand similarities, differences, and insights from this comparison.\n\n` :
             'No papers are currently being compared.\n\n'
 
         const payload = {
@@ -167,7 +167,7 @@ export default function ComparePage() {
         if (items.length > 0 && chatMessages.length === 0) {
             setChatMessages([{
                 type: 'ai',
-                message: `Hello! I can help you analyze and compare the ${items.length} paper${items.length > 1 ? 's' : ''} you've selected:\n\n${items.map((item, idx) => 
+                message: `Hello! I can help you analyze and compare the ${items.length} paper${items.length > 1 ? 's' : ''} you've selected:\n\n${items.map((item, idx) =>
                     `${idx + 1}. "${item.title}"`
                 ).join('\n')}\n\nAsk me anything about similarities, differences, methodologies, or insights from these papers!`
             }])
@@ -324,22 +324,21 @@ export default function ComparePage() {
                 <div className="fixed bottom-24 right-6 w-96 h-96 bg-white rounded-xl shadow-2xl border border-gray-200 flex flex-col z-50">
                     <div className="p-4 border-b border-gray-200 flex items-center justify-between">
                         <h3 className="font-semibold text-gray-900">Paper Comparison Assistant</h3>
-                        <button 
+                        <button
                             onClick={() => setIsChatOpen(false)}
                             className="text-gray-400 hover:text-gray-600"
                         >
                             ×
                         </button>
                     </div>
-                    
+
                     <div className="flex-1 overflow-y-auto p-4 space-y-4">
                         {chatMessages.map((msg, idx) => (
                             <div key={idx} className={`flex ${msg.type === 'user' ? 'justify-end' : 'justify-start'}`}>
-                                <div className={`max-w-xs rounded-lg p-3 text-sm ${
-                                    msg.type === 'user' 
-                                        ? 'bg-blue-500 text-white' 
+                                <div className={`max-w-xs rounded-lg p-3 text-sm ${msg.type === 'user'
+                                        ? 'bg-blue-500 text-white'
                                         : 'bg-gray-100 text-gray-900'
-                                }`}>
+                                    }`}>
                                     {msg.type === 'ai' ? formatAIResponse(msg.message) : msg.message}
                                 </div>
                             </div>
