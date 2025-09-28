@@ -27,17 +27,17 @@ export default function GamesCenter(){
   }), [])
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-neutral-900">
       <div className="max-w-7xl mx-auto px-4 py-6 space-y-6">
         {/* Page Header */}
-        <header className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+        <header className="bg-neutral-800 rounded-2xl shadow-sm border border-neutral-700 p-6">
           <div className="flex items-start justify-between gap-4 flex-wrap">
             <div>
               <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500 to-fuchsia-500 text-white mb-2">
                 <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 8h12M6 12h12M6 16h6"/></svg>
               </div>
-              <h1 className="text-2xl font-bold text-gray-900">Game Center</h1>
-              <p className="text-sm text-gray-600">Level up your knowledge with quizzes and challenges — earn rewards and track progress.</p>
+              <h1 className="text-2xl font-bold text-white">Game Center</h1>
+              <p className="text-sm text-gray-400">Level up your knowledge with quizzes and challenges — earn rewards and track progress.</p>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 w-full sm:w-auto">
               <StatCard label="Total XP" value={stats.xp} gradient="from-violet-500 to-fuchsia-500"/>
@@ -50,7 +50,7 @@ export default function GamesCenter(){
 
         {/* Sub Navigation Tabs */}
         <div className="sticky top-[56px] z-40">
-          <div className="bg-white/90 backdrop-blur supports-[backdrop-filter]:bg-white/70 border border-gray-200 rounded-2xl p-2">
+          <div className="bg-neutral-800/90 backdrop-blur supports-[backdrop-filter]:bg-neutral-800/70 border border-neutral-700 rounded-2xl p-2">
             <div className="flex items-center gap-2 overflow-x-auto">
               <TabButton active={tab==='overview'} onClick={()=> setRouteTab('overview')}>Overview</TabButton>
               <TabButton active={tab==='stories'} onClick={()=> setRouteTab('stories')}>
@@ -268,7 +268,7 @@ export default function GamesCenter(){
             </section>
 
             {/* Classic Interactive Story - Updated Design */}
-            <section className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl shadow-lg border border-indigo-100 p-8">
+            <section className="bg-neutral-800 rounded-2xl shadow-lg border border-neutral-700 p-8">
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center space-x-3">
                   <div className="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center">
@@ -279,8 +279,8 @@ export default function GamesCenter(){
                     </svg>
                   </div>
                   <div>
-                    <h2 className="text-2xl font-bold text-gray-900">Classic Interactive Story</h2>
-                    <p className="text-indigo-600">Experience the original Bion-M1 mission</p>
+                    <h2 className="text-2xl font-bold text-white">Classic Interactive Story</h2>
+                    <p className="text-indigo-400">Experience the original Bion-M1 mission</p>
                   </div>
                 </div>
                 <a href="/games/bion-m1" className="inline-flex items-center px-6 py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-700 hover:to-purple-700 transition-all font-semibold shadow-lg hover:shadow-xl">
@@ -289,7 +289,7 @@ export default function GamesCenter(){
               </div>
               
               <div className="grid lg:grid-cols-[1fr,2fr] gap-8 items-center">
-                <div className="rounded-2xl overflow-hidden shadow-lg border border-indigo-200">
+                <div className="rounded-2xl overflow-hidden shadow-lg border border-neutral-600">
                   <div className="aspect-[16/9] bg-gradient-to-br from-indigo-600 to-fuchsia-600 relative">
                     <img src="/biology.jpeg" alt="Bion‑M1" className="absolute inset-0 w-full h-full object-cover opacity-60 mix-blend-luminosity"/>
                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
@@ -299,19 +299,19 @@ export default function GamesCenter(){
                   </div>
                 </div>
                 <div className="space-y-4">
-                  <h3 className="text-2xl font-bold text-gray-900">Mission Bion‑M1: The Complete Story</h3>
-                  <p className="text-gray-700 leading-relaxed">A story‑driven web experience that follows 30 days of space biology aboard the Bion‑M1 biosatellite. Make decisions, analyze telemetry, and unlock the bone‑health breakthrough that could save future astronauts.</p>
+                  <h3 className="text-2xl font-bold text-white">Mission Bion‑M1: The Complete Story</h3>
+                  <p className="text-gray-300 leading-relaxed">A story‑driven web experience that follows 30 days of space biology aboard the Bion‑M1 biosatellite. Make decisions, analyze telemetry, and unlock the bone‑health breakthrough that could save future astronauts.</p>
                   <div className="flex flex-wrap gap-2">
-                    <span className="px-3 py-1 rounded-lg bg-emerald-100 text-emerald-700 border border-emerald-200 text-sm">Educational</span>
-                    <span className="px-3 py-1 rounded-lg bg-indigo-100 text-indigo-700 border border-indigo-200 text-sm">Narrative</span>
-                    <span className="px-3 py-1 rounded-lg bg-amber-100 text-amber-700 border border-amber-200 text-sm">Beginner‑friendly</span>
+                    <span className="px-3 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-sm">Educational</span>
+                    <span className="px-3 py-1 rounded-lg bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-sm">Narrative</span>
+                    <span className="px-3 py-1 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/30 text-sm">Beginner‑friendly</span>
                   </div>
                   <div className="pt-2">
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm font-medium text-gray-600">Mission Progress</span>
+                      <span className="text-sm font-medium text-gray-400">Mission Progress</span>
                       <span className="text-sm text-gray-500">0/5 chapters</span>
                     </div>
-                    <div className="w-full h-3 bg-gray-200 rounded-full overflow-hidden">
+                    <div className="w-full h-3 bg-neutral-700 rounded-full overflow-hidden">
                       <div className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full" style={{ width: '0%' }}></div>
                     </div>
                   </div>
@@ -544,7 +544,7 @@ function TabButton({ active, onClick, children }){
     <button
       onClick={onClick}
       aria-selected={active}
-      className={`px-3.5 py-2 rounded-lg text-sm whitespace-nowrap border transition ${active ? 'bg-indigo-600 text-white border-indigo-600 shadow' : 'bg-white text-gray-700 border-gray-200 hover:border-gray-300'}`}
+      className={`px-3.5 py-2 rounded-lg text-sm whitespace-nowrap border transition ${active ? 'bg-indigo-600 text-white border-indigo-600 shadow' : 'bg-neutral-700 text-gray-300 border-neutral-600 hover:border-neutral-500'}`}
     >
       {children}
     </button>
@@ -567,22 +567,22 @@ function DailyChallenges(){
     { id:'c3', title:'Take a Knowledge Quiz', desc:'Test your understanding of space biology', difficulty:'medium', reward:200, progress:[0,1] },
   ]
   return (
-    <section className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+    <section className="bg-neutral-800 rounded-2xl shadow-sm border border-neutral-700 p-6">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-semibold text-gray-900">Daily Challenges</h2>
-        <span className="text-xs text-gray-500">Resets in ~4h</span>
+        <h2 className="text-lg font-semibold text-white">Daily Challenges</h2>
+        <span className="text-xs text-gray-400">Resets in ~4h</span>
       </div>
       <div className="grid md:grid-cols-3 gap-4">
         {items.map((c)=> (
-          <div key={c.id} className="rounded-xl border border-gray-200 p-4">
+          <div key={c.id} className="rounded-xl border border-neutral-600 bg-neutral-700/50 p-4">
             <div className="flex items-center justify-between mb-2">
-              <span className={`text-[10px] px-1.5 py-0.5 rounded-full ${c.difficulty==='easy'?'bg-emerald-50 text-emerald-700 border border-emerald-200':'bg-amber-50 text-amber-700 border border-amber-200'}`}>{c.difficulty}</span>
-              <span className="text-[11px] text-indigo-600 font-medium">+{c.reward} XP</span>
+              <span className={`text-[10px] px-1.5 py-0.5 rounded-full ${c.difficulty==='easy'?'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30':'bg-amber-500/20 text-amber-300 border border-amber-500/30'}`}>{c.difficulty}</span>
+              <span className="text-[11px] text-indigo-400 font-medium">+{c.reward} XP</span>
             </div>
-            <p className="text-sm font-semibold text-gray-900">{c.title}</p>
-            <p className="text-xs text-gray-600 mb-3">{c.desc}</p>
+            <p className="text-sm font-semibold text-white">{c.title}</p>
+            <p className="text-xs text-gray-400 mb-3">{c.desc}</p>
             <ProgressBar num={c.progress[0]} den={c.progress[1]} />
-            <button className="mt-3 w-full rounded-md bg-indigo-600 text-white text-sm py-2">{c.progress[0]===c.progress[1] ? 'Completed' : 'Continue'}</button>
+            <button className="mt-3 w-full rounded-md bg-indigo-600 text-white text-sm py-2 hover:bg-indigo-500 transition-colors">{c.progress[0]===c.progress[1] ? 'Completed' : 'Continue'}</button>
           </div>
         ))}
       </div>
@@ -593,18 +593,20 @@ function DailyChallenges(){
 function ProgressBar({ num=0, den=1 }){
   const pct = Math.min(100, Math.round((num/Math.max(1,den))*100))
   return (
-    <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
-      <div className="h-full bg-gradient-to-r from-indigo-500 to-fuchsia-500" style={{ width: `${pct}%` }} />
-      <div className="mt-1 text-[11px] text-gray-600">Progress <span className="font-medium">{num}/{den}</span></div>
+    <div>
+      <div className="w-full h-2 bg-neutral-600 rounded-full overflow-hidden">
+        <div className="h-full bg-gradient-to-r from-indigo-500 to-fuchsia-500" style={{ width: `${pct}%` }} />
+      </div>
+      <div className="mt-1 text-[11px] text-gray-400">Progress <span className="font-medium text-gray-300">{num}/{den}</span></div>
     </div>
   )
 }
 
 function Competitions(){
   return (
-    <section className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-      <h2 className="text-lg font-semibold text-gray-900 mb-3">Competitions</h2>
-      <div className="rounded-xl border border-dashed border-gray-300 p-6 text-sm text-gray-700">
+    <section className="bg-neutral-800 rounded-2xl shadow-sm border border-neutral-700 p-6">
+      <h2 className="text-lg font-semibold text-white mb-3">Competitions</h2>
+      <div className="rounded-xl border border-dashed border-neutral-600 bg-neutral-700/30 p-6 text-sm text-gray-300">
         Upcoming: Weekly Research Trivia — compete with others and climb the leaderboard. Stay tuned!
       </div>
     </section>
@@ -618,18 +620,18 @@ function Achievements(){
     { id:'strategist', name:'Impact Analyst', desc:'Rated 5 impact studies', color:'from-amber-500 to-orange-600', earned:false },
   ]
   return (
-    <section className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-      <h2 className="text-lg font-semibold text-gray-900 mb-3">Achievements</h2>
+    <section className="bg-neutral-800 rounded-2xl shadow-sm border border-neutral-700 p-6">
+      <h2 className="text-lg font-semibold text-white mb-3">Achievements</h2>
       <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-3">
         {badges.map((b)=> (
-          <div key={b.id} className={`relative rounded-xl border p-4 ${b.earned ? 'border-gray-200' : 'border-dashed border-gray-200 opacity-80'}`}>
+          <div key={b.id} className={`relative rounded-xl border p-4 ${b.earned ? 'border-neutral-600 bg-neutral-700/50' : 'border-dashed border-neutral-600 bg-neutral-700/20 opacity-60'}`}>
             <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${b.color} text-white flex items-center justify-center mb-2`}>
               <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></svg>
             </div>
-            <p className="text-sm font-semibold text-gray-900">{b.name}</p>
-            <p className="text-xs text-gray-500">{b.desc}</p>
+            <p className="text-sm font-semibold text-white">{b.name}</p>
+            <p className="text-xs text-gray-400">{b.desc}</p>
             {!b.earned && (
-              <span className="absolute top-2 right-2 text-[10px] px-1.5 py-0.5 rounded-full bg-gray-100 text-gray-600">Locked</span>
+              <span className="absolute top-2 right-2 text-[10px] px-1.5 py-0.5 rounded-full bg-neutral-600 text-gray-400">Locked</span>
             )}
           </div>
         ))}
