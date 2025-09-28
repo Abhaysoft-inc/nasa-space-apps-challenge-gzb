@@ -16,8 +16,74 @@ const PALETTE = {
   accent3: '#fda600', // amber
 };
 
-// Research data generator - realistic NASA papers
-const generateResearchGalaxy = () => {
+// Real NASA/NCBI Research Papers
+const REAL_RESEARCH_PAPERS = [
+  // Human Biology & Microgravity Studies
+  { title: "Mice in Bion-M 1 space mission: training and selection", category: "Human Biology", year: 2018 },
+  { title: "Microgravity induces pelvic bone loss through osteoclastic activity", category: "Human Biology", year: 2019 },
+  { title: "Stem Cell Health and Tissue Regeneration in Microgravity", category: "Human Biology", year: 2021 },
+  { title: "Microgravity Reduces Differentiation of Embryonic Stem Cells", category: "Cell Biology", year: 2020 },
+  { title: "RNA isolation and multiplex PCR on International Space Station", category: "Microbiology", year: 2017 },
+  { title: "Spaceflight Modulates Oxidative Stress in Heart", category: "Human Biology", year: 2021 },
+  { title: "Ion-Dependent Effects in Space-Like Radiation Response", category: "Radiation Effects", year: 2017 },
+  { title: "NASA life sciences translational research for exploration", category: "Human Biology", year: 2017 },
+  
+  // Plant Biology & Gravitropism
+  { title: "AtRabD2b and AtRabD2c in pollen development", category: "Plant Biology", year: 2011 },
+  { title: "TNO1 salt tolerance and vacuolar trafficking in Arabidopsis", category: "Plant Biology", year: 2011 },
+  { title: "trans-Golgi network SNARE family in Arabidopsis thaliana", category: "Plant Biology", year: 2024 },
+  { title: "Root growth movements: Waving and skewing", category: "Gravity Studies", year: 2017 },
+  { title: "Gravitropism and lateral root emergence depend on TNO1", category: "Gravity Studies", year: 2015 },
+  { title: "TNO1 modulates root skewing in Arabidopsis", category: "Plant Biology", year: 2017 },
+  { title: "Regulation of plant gravity sensing by actin cytoskeleton", category: "Gravity Studies", year: 2021 },
+  
+  // Drosophila & Space Biology
+  { title: "Drosophila SUN protein Spag4 cooperates with Yuri Gagarin", category: "Cell Biology", year: 2010 },
+  { title: "Toll infection response altered by gravity in Drosophila", category: "Microbiology", year: 2014 },
+  { title: "Innate immune responses of Drosophila altered by spaceflight", category: "Microbiology", year: 2020 },
+  { title: "Microgravity Reduces Cardiac Contractility in Drosophila", category: "Human Biology", year: 2021 },
+  
+  // GeneLab & Space Omics
+  { title: "Multi-omics analysis reveals lipid dysregulation in mouse liver", category: "Cell Biology", year: 2020 },
+  { title: "GeneLab analyses suggest cardiovascular impact via FYN activation", category: "Human Biology", year: 2019 },
+  { title: "NASA GeneLab platform for biological response to space radiation", category: "Radiation Effects", year: 2020 },
+  { title: "Circulating miRNA spaceflight signature reveals targets", category: "Cell Biology", year: 2021 },
+  { title: "Machine learning for ISS surface microbiome antimicrobial resistance", category: "Microbiology", year: 2022 },
+  
+  // Space Medicine & Cancer
+  { title: "Extraterrestrial Gynecology: Cancer Risk in Female Astronauts", category: "Radiation Effects", year: 2022 },
+  { title: "Muscle atrophy gene expression during spaceflight", category: "Human Biology", year: 2022 },
+  { title: "Chromosomal positioning and DNA methylation from cosmic radiation", category: "Radiation Effects", year: 2024 },
+  { title: "Aging and frailty biomarkers altered by spaceflight", category: "Human Biology", year: 2024 },
+  { title: "Space radiation damage rescued by miRNA inhibition", category: "Radiation Effects", year: 2024 },
+  
+  // Tardigrades & Extreme Survival
+  { title: "Evidence for horizontal gene transfer in tardigrade genome", category: "Cell Biology", year: 2015 },
+  { title: "Tardigrades Use Disordered Proteins to Survive Desiccation", category: "Cell Biology", year: 2024 },
+  { title: "Biology of tardigrade disordered proteins in stress tolerance", category: "Cell Biology", year: 2024 },
+  { title: "Reactive oxygen species in tardigrade anhydrobiosis", category: "Cell Biology", year: 2022 },
+  
+  // Bone & Musculoskeletal Studies
+  { title: "Partial weight suspension: novel murine model", category: "Human Biology", year: 2013 },
+  { title: "Partial reductions in mechanical loading yield bone changes", category: "Human Biology", year: 2014 },
+  { title: "Spaceflight and electrical impedance in mouse muscle", category: "Human Biology", year: 2015 },
+  { title: "Spaceflight Activates Lipotoxic Pathways in Mouse Liver", category: "Human Biology", year: 2019 },
+  
+  // Mechanosensitive Channels
+  { title: "S. aureus MscL is a pentamer with variable stoichiometries", category: "Microbiology", year: 2010 },
+  { title: "Manipulating permeation through MscL nanovalve", category: "Microbiology", year: 2011 },
+  { title: "MscS and MscL as microbial emergency release valves", category: "Microbiology", year: 2012 },
+  
+  // Additional Studies
+  { title: "High-precision method for cyclic loading of vertebrae", category: "Human Biology", year: 2018 },
+  { title: "Effects of ionizing radiation on mouse vertebrae collagen", category: "Radiation Effects", year: 2018 },
+  { title: "Brassinosteroids inhibit root straightening via actin organization", category: "Plant Biology", year: 2020 },
+  { title: "Cell type-specific calcium signaling in Arabidopsis roots", category: "Plant Biology", year: 2020 },
+  { title: "Microgravity Stress: Bone and Connective Tissue", category: "Human Biology", year: 2024 }
+];
+
+// Research data generator using real papers
+const generateResearchGalaxy = (categoriesParam) => {
   // Fallback patterns as data URIs for when external images fail
   const fallbackPatterns = {
     'Human Biology': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMTUiIGZpbGw9IiNFRjQ0NDQiIGZpbGwtb3BhY2l0eT0iMC4zIi8+CjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjgiIGZpbGw9IiNFRjQ0NDQiIGZpbGwtb3BhY2l0eT0iMC42Ii8+CjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjMiIGZpbGw9IiNGRkZGRkYiLz4KPC9zdmc+',
@@ -31,78 +97,69 @@ const generateResearchGalaxy = () => {
   const categories = [
     { 
       name: 'Human Biology', 
-      color: PALETTE.accent3, 
+      color: '#FF6B6B', // Coral red gradient
+      gradientColor: 'linear-gradient(135deg, #FF6B6B 0%, #FF8E8E 100%)',
       position: [0, 20, 0],
-      imageUrl: 'https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=512&q=60',
-      fallbackUrl: fallbackPatterns['Human Biology'],
-      texture: 'DNA_HELIX',
       description: 'Human physiological adaptation to space environments'
     },
     { 
       name: 'Plant Biology', 
-      color: PALETTE.accent3, 
+      color: '#4ECDC4', // Turquoise gradient 
+      gradientColor: 'linear-gradient(135deg, #4ECDC4 0%, #6FE6DD 100%)',
       position: [30, 10, -20],
-      imageUrl: 'https://images.unsplash.com/photo-1461354464878-ad92f492a5a0?auto=format&fit=crop&w=512&q=60',
-      fallbackUrl: fallbackPatterns['Plant Biology'],
-      texture: 'PLANT_CELLS',
       description: 'Botanical research in microgravity conditions'
     },
     { 
       name: 'Microbiology', 
-      color: PALETTE.accent3, 
+      color: '#45B7D1', // Ocean blue gradient
+      gradientColor: 'linear-gradient(135deg, #45B7D1 0%, #68C5E8 100%)',
       position: [-25, 0, 15],
-      imageUrl: 'https://images.unsplash.com/photo-1559757175-0eb30cd92a79?auto=format&fit=crop&w=512&q=60',
-      fallbackUrl: fallbackPatterns['Microbiology'],
-      texture: 'BACTERIA',
       description: 'Microbial behavior in space environments'
     },
     { 
       name: 'Cell Biology', 
-      color: PALETTE.accent3, 
+      color: '#96CEB4', // Sage green gradient
+      gradientColor: 'linear-gradient(135deg, #96CEB4 0%, #B5DCC7 100%)',
       position: [15, -15, 25],
-      imageUrl: 'https://images.unsplash.com/photo-1581091870622-7c77c9c1cf3f?auto=format&fit=crop&w=512&q=60',
-      fallbackUrl: fallbackPatterns['Cell Biology'],
-      texture: 'CELL_STRUCTURE',
       description: 'Cellular processes under cosmic radiation'
     },
     { 
       name: 'Radiation Effects', 
-      color: PALETTE.accent3, 
+      color: '#FECA57', // Golden yellow gradient
+      gradientColor: 'linear-gradient(135deg, #FECA57 0%, #FFD77A 100%)',
       position: [-30, -10, -10],
-      imageUrl: 'https://images.unsplash.com/photo-1529257414771-1960e7e0d8a5?auto=format&fit=crop&w=512&q=60',
-      fallbackUrl: fallbackPatterns['Radiation Effects'],
-      texture: 'COSMIC_RAYS',
       description: 'Impact of cosmic radiation on biological systems'
     },
     { 
       name: 'Gravity Studies', 
-      color: PALETTE.accent3, 
+      color: '#FF9FF3', // Pink-purple gradient
+      gradientColor: 'linear-gradient(135deg, #FF9FF3 0%, #FFB8F5 100%)',
       position: [5, 25, -30],
-      imageUrl: 'https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&w=512&q=60',
-      fallbackUrl: fallbackPatterns['Gravity Studies'],
-      texture: 'SPACE_STATION',
       description: 'Gravitational effects on biological processes'
     }
   ];
 
   const eras = {
-    '1990s': { years: [1990, 1999], papers: 45 },
-    '2000s': { years: [2000, 2009], papers: 120 },
-    '2010s': { years: [2010, 2019], papers: 280 },
-    '2020s': { years: [2020, 2024], papers: 163 }
+    '1990s': { years: [1990, 1999], papers: 8 },
+    '2000s': { years: [2000, 2009], papers: 12 },
+    '2010s': { years: [2010, 2019], papers: 15 },
+    '2020s': { years: [2020, 2024], papers: 10 }
   };
 
   const papers = [];
   let paperId = 0;
 
+  // Shuffle the real papers and distribute them across eras
+  const shuffledPapers = [...REAL_RESEARCH_PAPERS].sort(() => Math.random() - 0.5);
+  
   Object.entries(eras).forEach(([era, config]) => {
-    for (let i = 0; i < config.papers; i++) {
-      const category = categories[Math.floor(Math.random() * categories.length)];
-      const year = config.years[0] + Math.floor(Math.random() * (config.years[1] - config.years[0] + 1));
-      const citations = Math.floor(Math.random() * 150) + 5;
+    for (let i = 0; i < config.papers && paperId < shuffledPapers.length; i++) {
+      const realPaper = shuffledPapers[paperId];
+      const category = categoriesParam.find(cat => cat.name === realPaper.category) || categoriesParam[0];
+      const citations = Math.floor(Math.random() * 150) + 10;
       
-      // Position papers in clusters around category centers
-      const clusterSpread = 15;
+      // Position papers in clusters around category centers with more spread
+      const clusterSpread = 35;
       const position = [
         category.position[0] + (Math.random() - 0.5) * clusterSpread,
         category.position[1] + (Math.random() - 0.5) * clusterSpread,
@@ -111,36 +168,35 @@ const generateResearchGalaxy = () => {
 
       papers.push({
         id: paperId++,
-        title: `${category.name} Research: ${generateResearchTitle(category.name)}`,
-        authors: generateAuthors(),
-        year,
+        title: realPaper.title,
+        authors: generateAuthors(), // Keep generated authors for variety
+        year: realPaper.year,
         era,
         category: category.name,
         citations,
         color: category.color,
-        imageUrl: category.imageUrl,
-        fallbackUrl: category.fallbackUrl,
-        texture: category.texture,
+        gradientColor: category.gradientColor,
         description: category.description,
         position,
-        size: Math.max(0.8, Math.log(citations + 1) * 0.4),
-        connections: Math.floor(citations / 10),
+        size: Math.max(1.2, Math.log(citations + 10) * 0.6), // Better size scaling
+        connections: Math.min(3, Math.floor(citations / 20)), // Limit connections
         abstract: generateAbstract(category.name)
       });
     }
   });
 
-  return papers;
+  // Apply spatial relaxation to prevent overlap
+  return relaxPositions(papers);
 };
 
 // Simple spatial relaxation to reduce bubble overlaps (fast grid-based)
 function relaxPositions(papers, {
-  iterations = 6,
-  cellSize = 4,
-  padding = 0.3,
-  bounds = 80
+  iterations = 8,
+  cellSize = 8,
+  padding = 1.5, // More padding for larger bubbles
+  bounds = 120 // Larger bounds for spread
 } = {}) {
-  const getRadius = (p) => 1.6 * p.size; // account for ring radius visually
+  const getRadius = (p) => 3.0 * (p.size || 1); // account for larger bubble sizes
 
   for (let iter = 0; iter < iterations; iter++) {
     // Spatial hash grid
@@ -228,8 +284,56 @@ export default function GalaxyScene({ onPaperClick, currentEra, selectedCategory
   const [hoveredPaper, setHoveredPaper] = useState(null);
   const { camera } = useThree();
   
-  // Generate research papers
-  const allPapers = useMemo(() => generateResearchGalaxy(), []);
+  // Define categories inside component to avoid scope issues
+  const categories = useMemo(() => [
+    { 
+      name: 'Human Biology', 
+      color: '#FF6B6B', // Coral red gradient
+      gradientColor: 'linear-gradient(135deg, #FF6B6B 0%, #FF8E8E 100%)',
+      position: [0, 20, 0],
+      description: 'Human physiological adaptation to space environments'
+    },
+    { 
+      name: 'Plant Biology', 
+      color: '#4ECDC4', // Turquoise gradient 
+      gradientColor: 'linear-gradient(135deg, #4ECDC4 0%, #6FE6DD 100%)',
+      position: [30, 10, -20],
+      description: 'Botanical research in microgravity conditions'
+    },
+    { 
+      name: 'Microbiology', 
+      color: '#45B7D1', // Ocean blue gradient
+      gradientColor: 'linear-gradient(135deg, #45B7D1 0%, #68C5E8 100%)',
+      position: [-25, 0, 15],
+      description: 'Microbial behavior in space environments'
+    },
+    { 
+      name: 'Cell Biology', 
+      color: '#96CEB4', // Sage green gradient
+      gradientColor: 'linear-gradient(135deg, #96CEB4 0%, #B5DCC7 100%)',
+      position: [15, -15, 25],
+      description: 'Cellular processes under cosmic radiation'
+    },
+    { 
+      name: 'Radiation Effects', 
+      color: '#FECA57', // Golden yellow gradient
+      gradientColor: 'linear-gradient(135deg, #FECA57 0%, #FFD77A 100%)',
+      position: [-30, -10, -10],
+      description: 'Impact of cosmic radiation on biological systems'
+    },
+    { 
+      name: 'Gravity Studies', 
+      color: '#FF9FF3', // Pink-purple gradient
+      gradientColor: 'linear-gradient(135deg, #FF9FF3 0%, #FFB8F5 100%)',
+      position: [5, 25, -30],
+      description: 'Gravitational effects on biological processes'
+    }
+  ], []);
+  
+  // Generate research papers using categories
+  const allPapers = useMemo(() => {
+    return generateResearchGalaxy(categories);
+  }, [categories]);
   
   // Filter papers based on era and category
   const visiblePapers = useMemo(() => {
@@ -240,14 +344,29 @@ export default function GalaxyScene({ onPaperClick, currentEra, selectedCategory
     });
   }, [allPapers, currentEra, selectedCategory]);
 
-  // Generate connections between papers
+  // Generate meaningful connections between papers
   const connections = useMemo(() => {
     const conns = [];
     visiblePapers.forEach(paper => {
-      const connectionCount = Math.min(paper.connections, 4);
-      for (let i = 0; i < connectionCount; i++) {
-        const targetPaper = visiblePapers[Math.floor(Math.random() * visiblePapers.length)];
-        if (targetPaper.id !== paper.id && targetPaper.year <= paper.year) {
+      // Limit connections to prevent clutter
+      const connectionCount = Math.min(paper.connections, 2);
+      
+      // Connect to papers in same category or similar time period
+      const candidates = visiblePapers.filter(target => 
+        target.id !== paper.id && 
+        target.year <= paper.year &&
+        (target.category === paper.category || Math.abs(target.year - paper.year) <= 5)
+      );
+      
+      for (let i = 0; i < Math.min(connectionCount, candidates.length); i++) {
+        const targetPaper = candidates[Math.floor(Math.random() * candidates.length)];
+        // Avoid duplicate connections
+        const isDuplicate = conns.some(conn => 
+          (conn.fromId === paper.id && conn.toId === targetPaper.id) ||
+          (conn.fromId === targetPaper.id && conn.toId === paper.id)
+        );
+        
+        if (!isDuplicate) {
           conns.push({
             from: paper.position,
             to: targetPaper.position,
@@ -301,16 +420,15 @@ export default function GalaxyScene({ onPaperClick, currentEra, selectedCategory
         />
       ))}
 
-      {/* Category Centers - subtle indicators (recolor to palette and dim) */}
-      {['Human Biology', 'Plant Biology', 'Microbiology', 'Cell Biology', 'Radiation Effects', 'Gravity Studies'].map((category, index) => {
-        const positions = [[0, 20, 0], [30, 10, -20], [-25, 0, 15], [15, -15, 25], [-30, -10, -10], [5, 25, -30]];
+      {/* Category Centers - vibrant indicators with gradient colors */}
+      {categories.map((category, index) => {
         return (
-          <mesh key={category} position={positions[index]} raycast={null}>
-            <sphereGeometry args={[0.4, 16, 16]} />
+          <mesh key={category.name} position={category.position} raycast={null}>
+            <sphereGeometry args={[0.6, 16, 16]} />
             <meshBasicMaterial 
-              color={PALETTE.light}
+              color={category.color}
               transparent 
-              opacity={selectedCategory === category ? 0.18 : 0.08}
+              opacity={selectedCategory === category.name ? 0.25 : 0.12}
             />
           </mesh>
         );
@@ -381,76 +499,110 @@ function ResearchStar({ paper, isSelected, isHovered, isHighlighted, onClick, on
   useFrame((state) => {
     if (meshRef.current) {
       if (isPlaying) {
-        // Very gentle rotation
+        // Very gentle rotation for sphere only
         meshRef.current.rotation.y += 0.002;
         meshRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.2 + paper.id * 0.1) * 0.02;
-        // Very subtle floating
-        meshRef.current.position.y = paper.position[1] + Math.sin(state.clock.elapsedTime * 0.4 + paper.id * 0.2) * 0.03;
-      } else {
-        meshRef.current.position.y = paper.position[1];
       }
     }
 
     if (glowRef.current) {
       if (isPlaying) {
-        // Tiny subtle glow
-        const glowIntensity = 0.08 + Math.sin(state.clock.elapsedTime * 0.6 + paper.id * 0.05) * 0.05;
+        // Very subtle glow animation
+        const glowIntensity = 0.06 + Math.sin(state.clock.elapsedTime * 0.4 + paper.id * 0.05) * 0.02;
         glowRef.current.material.opacity = glowIntensity;
       } else {
-        glowRef.current.material.opacity = 0.12; // steady glow
+        glowRef.current.material.opacity = 0.06; // gentle steady glow
       }
     }
   });
 
-  // Make all bubbles tiny; enlarge a bit on hover
-  const STAR_SIZE = 0.14;
-  const scaleFactor = isHovered ? 1.6 : 1.0;
+  // Make bubbles properly sized and visible
+  const STAR_SIZE = 3.5; // Larger size to fit text inside
+  const scaleFactor = isHovered ? 1.3 : 1.0;
   const scale = STAR_SIZE * scaleFactor;
-  const opacity = 0.95;
+  const opacity = 0.85; // Slightly more transparent to see text better
 
   return (
     <group position={paper.position}>
-      {/* Main Scientific Sphere */}
-      <mesh
-        ref={meshRef}
-        onClick={(e) => {
-          e.stopPropagation();
-          onClick();
-        }}
-        onPointerOver={(e) => {
-          e.stopPropagation();
-          onHover(paper);
-          document.body.style.cursor = 'pointer';
-        }}
-        onPointerOut={(e) => {
-          e.stopPropagation();
-          onHover(null);
-          document.body.style.cursor = 'auto';
-        }}
-        scale={[scale, scale, scale]}
-      >
-        <sphereGeometry args={[1.0, 16, 16]} />
-        {/* Core dot: black fill */}
-        <meshBasicMaterial color="#000000" transparent opacity={opacity} />
-      </mesh>
+      {/* Main Scientific Sphere - rotates independently */}
+      <group>
+        <mesh
+          ref={meshRef}
+          onClick={(e) => {
+            e.stopPropagation();
+            onClick();
+          }}
+          onPointerOver={(e) => {
+            e.stopPropagation();
+            onHover(paper);
+            document.body.style.cursor = 'pointer';
+          }}
+          onPointerOut={(e) => {
+            e.stopPropagation();
+            onHover(null);
+            document.body.style.cursor = 'auto';
+          }}
+          scale={[scale, scale, scale]}
+        >
+          <sphereGeometry args={[1.0, 32, 32]} />
+          {/* Core sphere: vibrant gradient colors */}
+          <meshLambertMaterial 
+            color={paper.color || '#FF6B6B'} 
+            transparent 
+            opacity={isSelected || isHovered ? 1.0 : 0.9}
+            emissive={paper.color || '#FF6B6B'}
+            emissiveIntensity={isSelected || isHovered ? 0.2 : 0.1}
+          />
+        </mesh>
 
-      {/* Star border: thin white ring slightly larger than core */}
-      <mesh rotation={[Math.PI / 2, 0, 0]} scale={[scale, scale, 1]} raycast={null}>
-        <ringGeometry args={[1.1, 1.35, 64]} />
-        <meshBasicMaterial color="#ffffff" transparent opacity={0.7} side={THREE.DoubleSide} />
-      </mesh>
+        {/* Star border: contrasting ring slightly larger than core */}
+        <mesh rotation={[Math.PI / 2, 0, 0]} scale={[scale, scale, 1]} raycast={null}>
+          <ringGeometry args={[1.05, 1.25, 64]} />
+          <meshBasicMaterial 
+            color={isSelected ? "#ffffff" : "#f0e7e7"} 
+            transparent 
+            opacity={isSelected || isHovered ? 0.9 : 0.6} 
+            side={THREE.DoubleSide} 
+          />
+        </mesh>
 
-      {/* Shine glow: soft additive white spheres for a star-like blur */}
-      <mesh ref={glowRef} scale={[scale * 1.7, scale * 1.7, scale * 1.7]} raycast={null}>
-        <sphereGeometry args={[0.9, 16, 16]} />
-        <meshBasicMaterial color="#ffffff" transparent opacity={0.16} blending={THREE.AdditiveBlending} depthWrite={false} />
-      </mesh>
-      <mesh scale={[scale * 2.2, scale * 2.2, scale * 2.2]} raycast={null}>
-        <sphereGeometry args={[0.9, 12, 12]} />
-        <meshBasicMaterial color="#ffffff" transparent opacity={0.08} blending={THREE.AdditiveBlending} depthWrite={false} />
-      </mesh>
-
-      {/* Removed yellow/orange indicator meshes for a cleaner star-only look */}
+        {/* Subtle glow effect */}
+        <mesh ref={glowRef} scale={[scale * 1.3, scale * 1.3, scale * 1.3]} raycast={null}>
+          <sphereGeometry args={[0.9, 16, 16]} />
+          <meshBasicMaterial 
+            color={paper.color || '#FF6B6B'} 
+            transparent 
+            opacity={0.08} 
+            blending={THREE.AdditiveBlending} 
+            depthWrite={false} 
+          />
+        </mesh>
+        {/* Text inside sphere - very short and centered */}
+        <Html center position={[0, 0, 0]} zIndexRange={[1000, 0]}>
+          <div 
+            className="pointer-events-none text-center font-bold select-none"
+            style={{ 
+              fontSize: `${Math.max(10, scale * 2)}px`,
+              lineHeight: '1.1',
+              maxWidth: `${Math.max(50, scale * 15)}px`,
+              wordWrap: 'break-word',
+              color: '#ffffff',
+              textShadow: '2px 2px 8px rgba(0,0,0,0.9), 0 0 10px rgba(0,0,0,0.8)',
+              fontWeight: '900',
+              letterSpacing: '0.02em',
+              transform: 'translateZ(0)',
+              filter: 'contrast(1.3)',
+              WebkitTextStroke: '0.5px rgba(0,0,0,0.5)'
+            }}
+          >
+            {/* Show very short title - max 12 chars for better fit */}
+            {paper.title.length > 12 
+              ? paper.title.substring(0, 12).replace(/\s+\S*$/, '') + '...' 
+              : paper.title
+            }
+          </div>
+        </Html>
+      </group>
 
       {/* Research Info Display */}
       {(isSelected || isHovered) && (
@@ -485,7 +637,7 @@ function ResearchStar({ paper, isSelected, isHovered, isHighlighted, onClick, on
               </span>
               
               <div className="text-xs opacity-80">
-                {paper.texture}
+                NCBI Research
               </div>
             </div>
           </motion.div>
@@ -537,16 +689,12 @@ function CitationLink({ connection, isVisible, isPlaying = true }) {
       frustumCulled={true}
       raycast={null}
     >
-      {/* Unit-height slim cylinder aligned on Y, scaled to length */}
-      <cylinderGeometry args={[0.03, 0.03, 1, 16]} />
-      <meshStandardMaterial 
+      {/* Thinner connection line */}
+      <cylinderGeometry args={[0.015, 0.015, 1, 8]} />
+      <meshBasicMaterial 
         color="#ffffff"
-        emissive="#ffffff"
-        emissiveIntensity={0.25}
-        metalness={0.8}
-        roughness={0.2}
         transparent
-        opacity={0.6}
+        opacity={0.2}
       />
     </mesh>
   );

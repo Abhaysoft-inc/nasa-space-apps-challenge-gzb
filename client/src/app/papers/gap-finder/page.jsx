@@ -135,8 +135,8 @@ export default function GapFinder() {
                 <button
                   onClick={() => setViewMode('cards')}
                   className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${viewMode === 'cards'
-                      ? 'bg-white text-gray-900 shadow-sm'
-                      : 'text-gray-600 hover:text-gray-900'
+                    ? 'bg-white text-gray-900 shadow-sm'
+                    : 'text-gray-600 hover:text-gray-900'
                     }`}
                 >
                   <RectangleStackIcon className="h-4 w-4 inline mr-2" />
@@ -145,8 +145,8 @@ export default function GapFinder() {
                 <button
                   onClick={() => setViewMode('visualization')}
                   className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${viewMode === 'visualization'
-                      ? 'bg-white text-gray-900 shadow-sm'
-                      : 'text-gray-600 hover:text-gray-900'
+                    ? 'bg-white text-gray-900 shadow-sm'
+                    : 'text-gray-600 hover:text-gray-900'
                     }`}
                 >
                   <ViewColumnsIcon className="h-4 w-4 inline mr-2" />

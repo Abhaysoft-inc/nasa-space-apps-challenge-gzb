@@ -101,6 +101,7 @@ export default function TimelineExplorer({
               onClick={() => setShowCalendar(v => !v)}
               className="w-7 h-7 rounded-full bg-black/40 border border-white/15 text-white flex items-center justify-center hover:bg-black/50"
               aria-label="Choose era"
+              suppressHydrationWarning={true}
             >
               <Calendar className="w-4 h-4" />
             </button>

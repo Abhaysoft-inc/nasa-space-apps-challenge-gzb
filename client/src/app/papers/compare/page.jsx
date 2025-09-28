@@ -82,14 +82,14 @@ export default function ComparePage() {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-black text-white">
             <style>{`.fade-out { opacity: 0; transition: opacity .25s ease; }`}</style>
             <div className="max-w-7xl mx-auto px-4 py-8">
                 <div className="flex items-center justify-between mb-6">
-                    <h1 className="text-2xl font-bold text-gray-900">Paper Comparison</h1>
+                    <h1 className="text-2xl font-bold text-white">Paper Comparison</h1>
                     <div className="flex items-center gap-2">
-                        <Link href="/papers" className="text-sm px-3 py-2 rounded-lg border border-gray-200 bg-white hover:bg-gray-50">Back to Papers</Link>
-                        <button onClick={clearAll} className="text-sm px-3 py-2 rounded-lg border border-gray-200 bg-white hover:bg-gray-50">Clear All</button>
+                        <Link href="/papers" className="text-sm px-3 py-2 rounded-lg border border-neutral-800 bg-neutral-900 hover:bg-neutral-800 text-gray-200">Back to Papers</Link>
+                        <button onClick={clearAll} className="text-sm px-3 py-2 rounded-lg border border-neutral-800 bg-neutral-900 hover:bg-neutral-800 text-gray-200">Clear All</button>
                     </div>
                 </div>
 
@@ -112,37 +112,37 @@ export default function ComparePage() {
                 )} */}
 
                 {/* Add control */}
-                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 mb-6">
-                    <p className="text-sm text-gray-700 mb-3">Add another paper to compare (paste DOI/PMCID/Title):</p>
+                <div className="bg-neutral-900 rounded-2xl border border-neutral-800 p-4 mb-6">
+                    <p className="text-sm text-gray-300 mb-3">Add another paper to compare (paste DOI/PMCID/Title):</p>
                     <div className="flex gap-2">
-                        <input value={addText} onChange={(e) => setAddText(e.target.value)} className="flex-1 px-3 py-2 border border-gray-300 rounded-lg" placeholder="10.1234/xyz or PMC123456 or Title" />
-                        <button onClick={addItem} className="px-4 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-purple-600 text-white">Add</button>
+                        <input value={addText} onChange={(e) => setAddText(e.target.value)} className="flex-1 px-3 py-2 border border-neutral-800 bg-neutral-900 text-gray-100 placeholder-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500/40 focus:border-neutral-700" placeholder="10.1234/xyz or PMC123456 or Title" />
+                        <button onClick={addItem} className="px-4 py-2 rounded-lg bg-gradient-to-r from-gray-700 to-gray-600 text-white">Add</button>
                     </div>
                 </div>
 
                 {items.length === 0 ? (
-                    <div className="bg-white rounded-2xl border border-dashed border-gray-200 p-12 text-center text-gray-500">
+                    <div className="bg-neutral-900 rounded-2xl border border-dashed border-neutral-800 p-12 text-center text-gray-400">
                         Nothing to compare yet. Go to a paper and click "Compare".
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         {items.map((it, idx) => (
-                            <div key={it.key} className={`rounded-2xl border ${idx === 0 ? 'border-blue-300 bg-blue-50/40' : 'border-gray-200 bg-white'} p-4`}>
+                            <div key={it.key} className={`rounded-2xl border p-4 ${idx === 0 ? 'border-sky-700 bg-sky-950/30' : 'border-neutral-800 bg-neutral-900'}`}>
                                 {idx === 0 && (
-                                    <div className="text-[11px] inline-flex items-center gap-2 px-2 py-1 rounded-full bg-blue-100 text-blue-700 mb-2">Most Recent</div>
+                                    <div className="text-[11px] inline-flex items-center gap-2 px-2 py-1 rounded-full bg-sky-900 text-sky-200 mb-2">Most Recent</div>
                                 )}
                                 <div className="flex items-start justify-between gap-3">
                                     <div>
-                                        <p className="font-semibold text-gray-900 line-clamp-2">{it.title}</p>
-                                        <p className="text-xs text-gray-500">{it.source} • {it.year}</p>
+                                        <p className="font-semibold text-white line-clamp-2">{it.title}</p>
+                                        <p className="text-xs text-gray-400">{it.source} • {it.year}</p>
                                     </div>
-                                    <button onClick={() => removeItem(it.key)} className="text-xs px-2 py-1 rounded border border-gray-200 hover:bg-gray-50">Remove</button>
+                                    <button onClick={() => removeItem(it.key)} className="text-xs px-2 py-1 rounded border border-neutral-800 hover:bg-neutral-800 text-gray-300">Remove</button>
                                 </div>
                                 <div className="mt-3 grid grid-cols-2 gap-2 text-sm">
                                     <Detail label="Citations" value={it.citations ?? '-'} />
                                     <Detail label="DOI" value={it.doi ? (it.doi.split('/').pop()) : '-'} />
                                     <Detail label="PMCID" value={it.pmcid ?? '-'} />
-                                    <Detail label="Link" value={<a href={it.url} target="_blank" rel="noopener" className="text-blue-600 hover:underline">Open</a>} />
+                                    <Detail label="Link" value={<a href={it.url} target="_blank" rel="noopener" className="text-sky-400 hover:underline">Open</a>} />
                                 </div>
                             </div>
                         ))}
@@ -151,17 +151,17 @@ export default function ComparePage() {
 
                 {/* Detailed comparison table */}
                 {items.length > 0 && (
-                    <div className="mt-8 bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                        <div className="p-4 border-b border-gray-100">
-                            <h2 className="text-lg font-semibold text-gray-900">Detailed Comparison</h2>
+                    <div className="mt-8 bg-neutral-900 rounded-2xl border border-neutral-800 overflow-hidden">
+                        <div className="p-4 border-b border-neutral-800">
+                            <h2 className="text-lg font-semibold text-white">Detailed Comparison</h2>
                         </div>
                         <div className="overflow-x-auto">
                             <table className="min-w-full text-sm">
-                                <thead className="bg-gray-50 text-gray-600">
+                                <thead className="bg-neutral-950 text-gray-400">
                                     <tr>
                                         <th className="text-left font-semibold px-4 py-2">Attribute</th>
                                         {items.map((it) => (
-                                            <th key={it.key} className="text-left font-semibold px-4 py-2">{it.title}</th>
+                                            <th key={it.key} className="text-left font-semibold px-4 py-2 text-white">{it.title}</th>
                                         ))}
                                     </tr>
                                 </thead>
@@ -173,10 +173,10 @@ export default function ComparePage() {
                                         { k: 'doi', label: 'DOI' },
                                         { k: 'pmcid', label: 'PMCID' },
                                     ].map((row) => (
-                                        <tr key={row.k} className="border-t border-gray-100">
-                                            <td className="px-4 py-2 font-medium text-gray-700">{row.label}</td>
+                                        <tr key={row.k} className="border-t border-neutral-800">
+                                            <td className="px-4 py-2 font-medium text-gray-300">{row.label}</td>
                                             {items.map((it) => (
-                                                <td key={it.key + row.k} className="px-4 py-2 text-gray-900">{it[row.k] ?? '-'}</td>
+                                                <td key={it.key + row.k} className="px-4 py-2 text-gray-100">{it[row.k] ?? '-'}</td>
                                             ))}
                                         </tr>
                                     ))}
@@ -189,24 +189,24 @@ export default function ComparePage() {
                 {/* Consensus & Disagreement section (hard-coded) */}
                 {items.length > 0 && (
                     <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="rounded-2xl border border-gray-200 bg-white shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-0.5">
-                            <div className="px-4 py-3 border-b border-gray-100 flex items-center gap-2">
-                                <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-emerald-500 text-white text-xs">✓</span>
-                                <h3 className="text-gray-900 font-semibold">Areas of Consensus</h3>
+                        <div className="rounded-2xl border border-neutral-800 bg-neutral-900 hover:border-neutral-700 transition-all duration-200 hover:-translate-y-0.5">
+                            <div className="px-4 py-3 border-b border-neutral-800 flex items-center gap-2">
+                                <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-emerald-600 text-white text-xs">✓</span>
+                                <h3 className="text-white font-semibold">Areas of Consensus</h3>
                             </div>
-                            <ul className="p-4 space-y-2 text-sm text-gray-800">
+                            <ul className="p-4 space-y-2 text-sm text-gray-300">
                                 <li className="flex gap-2"><span className="mt-1 w-1.5 h-1.5 rounded-full bg-emerald-500"></span> All papers acknowledge microgravity as a primary driver of observed physiological changes.</li>
                                 <li className="flex gap-2"><span className="mt-1 w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Use of standardized data collection protocols and ISS-aligned experimental timelines.</li>
                                 <li className="flex gap-2"><span className="mt-1 w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Consensus that long-duration exposure increases the magnitude of effects.</li>
                             </ul>
                         </div>
 
-                        <div className="rounded-2xl border border-gray-200 bg-white shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-0.5">
-                            <div className="px-4 py-3 border-b border-gray-100 flex items-center gap-2">
-                                <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-rose-500 text-white text-xs">!</span>
-                                <h3 className="text-gray-900 font-semibold">Areas of Disagreement</h3>
+                        <div className="rounded-2xl border border-neutral-800 bg-neutral-900 hover:border-neutral-700 transition-all duration-200 hover:-translate-y-0.5">
+                            <div className="px-4 py-3 border-b border-neutral-800 flex items-center gap-2">
+                                <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-rose-600 text-white text-xs">!</span>
+                                <h3 className="text-white font-semibold">Areas of Disagreement</h3>
                             </div>
-                            <ul className="p-4 space-y-2 text-sm text-gray-800">
+                            <ul className="p-4 space-y-2 text-sm text-gray-300">
                                 <li className="flex gap-2"><span className="mt-1 w-1.5 h-1.5 rounded-full bg-rose-500"></span> Divergent interpretations of radiation’s contribution vs. microgravity in total effect size.</li>
                                 <li className="flex gap-2"><span className="mt-1 w-1.5 h-1.5 rounded-full bg-rose-500"></span> Conflicting statistical significance due to small sample sizes and differing controls.</li>
                                 <li className="flex gap-2"><span className="mt-1 w-1.5 h-1.5 rounded-full bg-rose-500"></span> Disagreement on recovery timelines post-landing (days vs. weeks) across studies.</li>
@@ -221,9 +221,9 @@ export default function ComparePage() {
 
 function Detail({ label, value }) {
     return (
-        <div className="rounded-lg border border-gray-100 bg-gray-50/60 p-3">
-            <p className="text-[11px] uppercase tracking-wide text-gray-500">{label}</p>
-            <p className="text-sm text-gray-900">{value}</p>
+        <div className="rounded-lg border border-neutral-800 bg-neutral-900 p-3">
+            <p className="text-[11px] uppercase tracking-wide text-gray-400">{label}</p>
+            <p className="text-sm text-gray-100">{value}</p>
         </div>
     )
 }

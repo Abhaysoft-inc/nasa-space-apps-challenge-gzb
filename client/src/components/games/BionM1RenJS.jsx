@@ -27,7 +27,6 @@ function preload() {
   this.load.image('spark', '/effects/spark-particle.png')
   this.load.image('smoke', '/effects/smoke-particle.png')
 }
-}
 
 function create() {
   // Set the background

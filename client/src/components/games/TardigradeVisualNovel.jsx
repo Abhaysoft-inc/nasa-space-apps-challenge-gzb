@@ -2,13 +2,34 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { 
+  HiVolumeUp, 
+  HiVolumeOff, 
+  HiStop, 
+  HiMicrophone,
+  HiChevronLeft,
+  HiChevronRight,
+  HiFastForward
+} from 'react-icons/hi';
+import { 
+  MdAutoMode,
+  MdVoiceChat,
+  MdPlayArrow,
+  MdPause
+} from 'react-icons/md';
 
-// Character sprites data
+// Character sprites data with voice settings
 const characters = {
   marina: {
     name: "Dr. Marina Petrov",
     role: "Microbiologist",
     sprite: "/tardigrade_images/characters/marina_neutral.jpg",
+    voice: {
+      rate: 0.9,
+      pitch: 1.2,
+      voice: 'female',
+      lang: 'en-US'
+    },
     expressions: {
       neutral: "/tardigrade_images/characters/marina_neutral.jpg",
       excited: "/tardigrade_images/characters/marina_excited.jpg", 
@@ -21,6 +42,12 @@ const characters = {
     name: "Dr. Alex Chen",
     role: "NASA Astrobiologist", 
     sprite: "/tardigrade_images/characters/alex_neutral.jpg",
+    voice: {
+      rate: 0.8,
+      pitch: 0.9,
+      voice: 'male',
+      lang: 'en-US'
+    },
     expressions: {
       neutral: "/tardigrade_images/characters/alex_neutral.jpg",
       excited: "/tardigrade_images/characters/alex_excited.jpg",
@@ -31,6 +58,12 @@ const characters = {
     name: "Dr. Sarah Rodriguez",
     role: "Space Mission Specialist",
     sprite: "/tardigrade_images/characters/sarah_confident.jpg", 
+    voice: {
+      rate: 0.85,
+      pitch: 1.1,
+      voice: 'female',
+      lang: 'en-US'
+    },
     expressions: {
       neutral: "/tardigrade_images/characters/sarah_confident.jpg",
       confident: "/tardigrade_images/characters/sarah_confident.jpg",
@@ -191,12 +224,84 @@ const TardigradeVisualNovel = () => {
   const [autoMode, setAutoMode] = useState(false);
   const [history, setHistory] = useState([]);
   
+  // Voice-related state
+  const [voiceEnabled, setVoiceEnabled] = useState(true);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [availableVoices, setAvailableVoices] = useState([]);
+  const speechSynthRef = useRef(null);
+  
   const scene = storyScript[currentScene];
   const typewriterSpeed = 50;
 
-  // Typewriter effect
+  // Initialize speech synthesis
+  useEffect(() => {
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      speechSynthRef.current = window.speechSynthesis;
+      
+      // Load available voices
+      const loadVoices = () => {
+        const voices = speechSynthRef.current.getVoices();
+        setAvailableVoices(voices);
+      };
+      
+      loadVoices();
+      speechSynthRef.current.onvoiceschanged = loadVoices;
+    }
+  }, []);
+
+  // Speech synthesis function
+  const speakText = (text, character) => {
+    if (!voiceEnabled || !speechSynthRef.current || !text) return;
+    
+    // Cancel any current speech
+    speechSynthRef.current.cancel();
+    
+    const utterance = new SpeechSynthesisUtterance(text);
+    const charConfig = characters[character];
+    
+    // Configure voice settings
+    if (charConfig && charConfig.voice) {
+      utterance.rate = charConfig.voice.rate || 0.8;
+      utterance.pitch = charConfig.voice.pitch || 1;
+      utterance.lang = charConfig.voice.lang || 'en-US';
+      
+      // Try to find a suitable voice
+      const suitableVoice = availableVoices.find(voice => {
+        const isCorrectLang = voice.lang.includes('en');
+        const genderMatch = charConfig.voice.voice === 'female' ? 
+          voice.name.toLowerCase().includes('female') || voice.name.toLowerCase().includes('woman') || voice.name.toLowerCase().includes('zira') || voice.name.toLowerCase().includes('hazel') :
+          voice.name.toLowerCase().includes('male') || voice.name.toLowerCase().includes('man') || voice.name.toLowerCase().includes('david') || voice.name.toLowerCase().includes('mark');
+        return isCorrectLang && genderMatch;
+      }) || availableVoices.find(voice => voice.lang.includes('en'));
+      
+      if (suitableVoice) {
+        utterance.voice = suitableVoice;
+      }
+    }
+    
+    // Event handlers
+    utterance.onstart = () => setIsSpeaking(true);
+    utterance.onend = () => setIsSpeaking(false);
+    utterance.onerror = () => setIsSpeaking(false);
+    
+    // Speak the text
+    speechSynthRef.current.speak(utterance);
+  };
+
+  // Stop current speech
+  const stopSpeaking = () => {
+    if (speechSynthRef.current) {
+      speechSynthRef.current.cancel();
+      setIsSpeaking(false);
+    }
+  };
+
+  // Typewriter effect with voice
   useEffect(() => {
     if (!scene) return;
+    
+    // Stop any current speech when scene changes
+    stopSpeaking();
     
     setIsTyping(true);
     setShowChoices(false);
@@ -205,6 +310,11 @@ const TardigradeVisualNovel = () => {
     
     const fullText = scene.text;
     let currentIndex = 0;
+    
+    // Start speaking the full text if voice is enabled
+    if (voiceEnabled && scene.speaker) {
+      setTimeout(() => speakText(fullText, scene.speaker), 500);
+    }
     
     const typeWriter = () => {
       if (currentIndex < fullText.length) {
@@ -232,9 +342,12 @@ const TardigradeVisualNovel = () => {
     };
     
     typeWriter();
-  }, [currentScene, autoMode]);
+  }, [currentScene, autoMode, voiceEnabled]);
 
   const skipText = () => {
+    // Stop speaking when skipping
+    stopSpeaking();
+    
     if (isTyping) {
       setDisplayText(scene.text);
       setIsTyping(false);
@@ -348,6 +461,18 @@ const TardigradeVisualNovel = () => {
                   {isActive && (
                     <div className="absolute inset-0 rounded-lg shadow-lg ring-4 ring-blue-400/50 ring-opacity-75" />
                   )}
+                  
+                  {/* Speaking indicator */}
+                  {isActive && isSpeaking && (
+                    <motion.div
+                      className="absolute -top-2 -right-2 bg-purple-600 rounded-full p-2 shadow-lg"
+                      animate={{ scale: [1, 1.1, 1] }}
+                      transition={{ duration: 0.8, repeat: Infinity }}
+                      title="Speaking"
+                    >
+                      <HiVolumeUp className="w-4 h-4 text-white" />
+                    </motion.div>
+                  )}
                 </div>
               </motion.div>
             );
@@ -365,14 +490,33 @@ const TardigradeVisualNovel = () => {
         <div className="p-6">
           {/* Speaker Name */}
           <motion.div 
-            className="mb-4"
+            className="mb-4 flex items-center justify-between"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             key={scene.speaker}
           >
-            <span className="bg-gradient-to-r from-blue-500 to-purple-500 px-4 py-2 rounded-full text-white font-semibold text-lg">
-              {characters[scene.speaker]?.name}
-            </span>
+            <div className="flex items-center gap-3">
+              <span className="bg-gradient-to-r from-yellow-600 to-orange-500 px-4 py-2 rounded-full text-white font-semibold text-lg">
+                {characters[scene.speaker]?.name}
+              </span>
+              {isSpeaking && voiceEnabled && (
+                <motion.div
+                  className="flex items-center gap-1 text-purple-400 bg-purple-900/30 px-2 py-1 rounded-full"
+                  animate={{ opacity: [0.7, 1, 0.7] }}
+                  transition={{ duration: 1.5, repeat: Infinity }}
+                >
+                  <MdVoiceChat className="text-sm" />
+                  <span className="text-sm">Speaking</span>
+                </motion.div>
+              )}
+            </div>
+            
+            {voiceEnabled && !isSpeaking && (
+              <div className="text-xs text-gray-400 opacity-60 bg-gray-900/50 px-2 py-1 rounded flex items-center gap-1">
+                <HiVolumeUp className="text-xs" />
+                <span>{characters[scene.speaker]?.voice?.voice || 'auto'} voice</span>
+              </div>
+            )}
           </motion.div>
 
           {/* Dialogue Text */}
@@ -416,26 +560,61 @@ const TardigradeVisualNovel = () => {
           <button
             onClick={goBack}
             disabled={history.length === 0}
-            className="px-4 py-2 bg-gray-600/80 hover:bg-gray-600 rounded-lg text-white font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
+            className="px-4 py-2 bg-gray-600/80 hover:bg-gray-600 rounded-lg text-white font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 flex items-center gap-2"
           >
-            ← Back
+            <HiChevronLeft className="text-lg" />
+            <span className="hidden sm:inline">Back</span>
           </button>
           
           <button
+            onClick={() => setVoiceEnabled(!voiceEnabled)}
+            className={`px-4 py-2 rounded-lg text-white font-medium transition-all duration-300 flex items-center gap-2 ${
+              voiceEnabled ? 'bg-purple-600/80 hover:bg-purple-600' : 'bg-gray-600/80 hover:bg-gray-600'
+            }`}
+            title={voiceEnabled ? 'Voice ON' : 'Voice OFF'}
+          >
+            {voiceEnabled ? <HiVolumeUp className="text-lg" /> : <HiVolumeOff className="text-lg" />}
+            <span className="hidden sm:inline">Voice</span>
+          </button>
+          
+          {isSpeaking && (
+            <button
+              onClick={stopSpeaking}
+              className="px-4 py-2 bg-red-600/80 hover:bg-red-600 rounded-lg text-white font-medium transition-all duration-300 flex items-center gap-2"
+              title="Stop Speaking"
+            >
+              <HiStop className="text-lg" />
+              <span className="hidden sm:inline">Stop</span>
+            </button>
+          )}
+          
+          <button
             onClick={() => setAutoMode(!autoMode)}
-            className={`px-4 py-2 rounded-lg text-white font-medium transition-all duration-300 ${
+            className={`px-4 py-2 rounded-lg text-white font-medium transition-all duration-300 flex items-center gap-2 ${
               autoMode ? 'bg-green-600/80 hover:bg-green-600' : 'bg-gray-600/80 hover:bg-gray-600'
             }`}
+            title={`Auto Mode ${autoMode ? 'ON' : 'OFF'}`}
           >
-            Auto {autoMode ? 'ON' : 'OFF'}
+            <MdAutoMode className="text-lg" />
+            <span className="hidden sm:inline">Auto {autoMode ? 'ON' : 'OFF'}</span>
           </button>
           
           {!showChoices && (
             <button
               onClick={skipText}
-              className="px-4 py-2 bg-blue-600/80 hover:bg-blue-600 rounded-lg text-white font-medium transition-all duration-300"
+              className="px-4 py-2 bg-blue-600/80 hover:bg-blue-600 rounded-lg text-white font-medium transition-all duration-300 flex items-center gap-2"
             >
-              {isTyping ? 'Skip' : 'Next →'}
+              {isTyping ? (
+                <>
+                  <HiFastForward className="text-lg" />
+                  <span className="hidden sm:inline">Skip</span>
+                </>
+              ) : (
+                <>
+                  <span className="hidden sm:inline">Next</span>
+                  <HiChevronRight className="text-lg" />
+                </>
+              )}
             </button>
           )}
         </div>
@@ -447,7 +626,7 @@ const TardigradeVisualNovel = () => {
           <span>Scene {currentScene + 1} / {storyScript.length}</span>
           <div className="flex-1 mx-4 bg-gray-700 rounded-full h-2">
             <div 
-              className="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full transition-all duration-300"
+              className="bg-white h-2 rounded-full transition-all duration-300"
               style={{ width: `${((currentScene + 1) / storyScript.length) * 100}%` }}
             />
           </div>
