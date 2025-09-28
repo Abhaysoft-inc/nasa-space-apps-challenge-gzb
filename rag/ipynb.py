@@ -1,185 +1,276 @@
-# ======================================================
-# 📌 1. Install dependencies
-# ======================================================
-!pip install PyMuPDF langchain-text-splitters sentence-transformers pinecone google-generativeai tqdm
+#  error with gemini
 
-# ======================================================
-# 📌 2. Imports
-# ======================================================
+# =========================
+# 1. Install dependencies (ensure correct versions)
+# =========================
+!pip install --upgrade PyMuPDF langchain langchain_experimental langchain-text-splitters sentence-transformers pinecone-client google-generativeai tqdm pillow
+
+# =========================
+# 2. Imports
+# =========================
 import os
-import fitz  # PyMuPDF
-from pathlib import Path
-from langchain_text_splitters import RecursiveCharacterTextSplitter
-import google.generativeai as genai
-from tqdm.auto import tqdm
-from sentence_transformers import SentenceTransformer
-from pinecone import Pinecone, ServerlessSpec
+import io
 import time
+from pathlib import Path
+import fitz  # PyMuPDF
+from PIL import Image
+from tqdm.auto import tqdm
 
-# ======================================================
-# 📌 3. User Config - API keys and folders
-# ======================================================
-PDF_FOLDER = "/content/pdfs"            # upload PDFs here
+from sentence_transformers import SentenceTransformer
+import google.generativeai as genai
 
-GOOGLE_API_KEY = "AIzaSyBQBigt-xLwws1iNp_i-6gb3XXq8RRVUGA"  # Gemini API key
-PINECONE_API_KEY = "pcsk_73fzGC_EkqGu38kPmvQGKPDv3pcZ4WQ4oDTAorq5uyEYsxsgWB9GaX34MMMCmGvFQiBWJp" # Replace with your Pinecone API key
-PINECONE_INDEX_NAME = "my-rag-index" # Replace with your desired index name
+# Import SemanticChunker from experimental
+from langchain_experimental.text_splitter import SemanticChunker
+from langchain_community.embeddings import HuggingFaceEmbeddings
 
-# ======================================================
-# 📌 4. Extract text from PDFs
-# ======================================================
-texts = []
-pdf_files = list(Path(PDF_FOLDER).glob("*.pdf"))
 
-if not pdf_files:
-    print(f"No PDF files found in {PDF_FOLDER}. Please upload your PDFs to this folder.")
-else:
-    processed_files_count = 0
-    for pdf_path in pdf_files:
-        try:
-            doc = fitz.open(pdf_path)
-            processed_files_count += 1
-            for page_num, page in enumerate(doc):
-                text = page.get_text("text")
-                texts.append({
-                    "paper_id": pdf_path.stem,
-                    "page": page_num + 1,
-                    "text": text
+from pinecone import Pinecone, ServerlessSpec
+
+# =========================
+# 3. Configuration
+# =========================
+PDF_FOLDER = "/content/pdfs"
+
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY", "AIzaSyC5XlpDGwiPOc-cHX1jKtFsMSVYd3xPGGM")
+PINECONE_API_KEY = os.getenv("PINECONE_API_KEY", "pcsk_73fzGC_EkqGu38kPmvQGKPDv3pcZ4WQ4oDTAorq5uyEYsxsgWB9GaX34MMMCmGvFQiBWJp")
+INDEX_BASE = "my-multimodal-rag"
+INDEX_TEXT = INDEX_BASE + "-text"
+INDEX_IMAGE = INDEX_BASE + "-image"
+
+PINECONE_REGION = "us-east-1"
+GEMINI_MODEL_NAME = "gemini-pro"
+
+genai.configure(api_key=GOOGLE_API_KEY)
+
+# =========================
+# 4. Load embedding models & chunker
+# =========================
+# text_model = SentenceTransformer("all-MiniLM-L6-v2")
+clip_model = SentenceTransformer("clip-ViT-B-32")
+
+# Wrap your text model with HuggingFaceEmbeddings
+embedding_model = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+
+# Use semantic chunker with the wrapped embedding model
+semantic_chunker = SemanticChunker(embedding_model)
+
+# =========================
+# 5. PDF extraction of text + images
+# =========================
+def extract_from_pdf(pdf_path: Path):
+    texts = []
+    images = []
+    doc = fitz.open(pdf_path)
+    pid = pdf_path.stem
+    for page_num, page in enumerate(doc, start=1):
+        txt = page.get_text("text")
+        if txt and txt.strip():
+            texts.append({"paper_id": pid, "page": page_num, "text": txt})
+        for img_idx, img in enumerate(page.get_images(full=True)):
+            xref = img[0]
+            try:
+                base = doc.extract_image(xref)
+                img_bytes = base["image"]
+                ext = base.get("ext", "png")
+                pil = Image.open(io.BytesIO(img_bytes)).convert("RGB")
+                images.append({
+                    "paper_id": pid,
+                    "page": page_num,
+                    "image_index": img_idx,
+                    "pil_image": pil,
+                    "ext": ext
                 })
-            print(f"Successfully extracted text from {pdf_path.name}")
-        except Exception as e:
-            print(f"Error extracting text from {pdf_path.name}: {e}")
+            except Exception as e:
+                print("Image extraction failed:", pdf_path, page_num, img_idx, e)
+    doc.close()
+    return texts, images
 
-    print(f"Processed {processed_files_count} out of {len(pdf_files)} files.")
-    print(f"Extracted {len(texts)} pages in total.")
+# =========================
+# 6. Load all PDFs
+# =========================
+pdfs = list(Path(PDF_FOLDER).glob("*.pdf"))
+if not pdfs:
+    raise RuntimeError(f"No PDF files in {PDF_FOLDER}")
 
-    # ======================================================
-    # 📌 5. Chunk text
-    # ======================================================
-    splitter = RecursiveCharacterTextSplitter(chunk_size=600, chunk_overlap=100)
-    chunks = []
-    for record in texts:
-        for i, chunk in enumerate(splitter.split_text(record["text"])):
-            chunks.append({
-                "id": f"{record['paper_id']}_{record['page']}_{i}",
-                "text": chunk,
-                "metadata": {
-                    "paper_id": record["paper_id"],
-                    "page": record["page"],
-                    "text": chunk # Store text in metadata for retrieval
-                }
-            })
+all_texts = []
+all_images = []
+for p in tqdm(pdfs, desc="Extracting PDFs"):
+    t, im = extract_from_pdf(p)
+    all_texts.extend(t)
+    all_images.extend(im)
 
-    print(f"Total chunks created: {len(chunks)}")
+print("Text pages:", len(all_texts), "Images:", len(all_images))
 
+# =========================
+# 7. Semantic chunking of texts
+# =========================
+text_chunks = []
+for rec in all_texts:
+    # semantic_chunker.split_text() returns list of string chunks
+    for i, c in enumerate(semantic_chunker.split_text(rec["text"])):
+        cid = f"{rec['paper_id']}_p{rec['page']}_c{i}"
+        text_chunks.append({
+            "id": cid,
+            "text": c,
+            "metadata": {
+                "paper_id": rec["paper_id"],
+                "page": rec["page"],
+                "chunk_index": i,
+                "type": "text"
+            }
+        })
 
-    # Load a pre-trained model for embeddings
-    embedding_model = SentenceTransformer('all-MiniLM-L6-v2')
+print("Total semantic text chunks:", len(text_chunks))
 
-    # Get embedding dimension
-    if chunks:
-        dimension = len(embedding_model.encode(chunks[0]["text"]))
-    else:
-        dimension = 384 # Default dimension for 'all-MiniLM-L6-v2'
+# =========================
+# 8. Prepare image items
+# =========================
+image_items = []
+for itm in all_images:
+    iid = f"{itm['paper_id']}_p{itm['page']}_img{itm['image_index']}"
+    image_items.append({
+        "id": iid,
+        "pil_image": itm["pil_image"],
+        "metadata": {
+            "paper_id": itm["paper_id"],
+            "page": itm["page"],
+            "image_index": itm["image_index"],
+            "type": "image"
+        }
+    })
 
+print("Total images:", len(image_items))
 
-    # ======================================================
-    # 📌 6. Initialize Pinecone and Create Index
-    # ======================================================
-    pc = Pinecone(api_key=PINECONE_API_KEY)
+# =========================
+# 9. Initialize Pinecone indexes
+# =========================
+pc = Pinecone(api_key=PINECONE_API_KEY)
 
-    # Check if index exists, if not create it
-    if PINECONE_INDEX_NAME not in pc.list_indexes():
-        print(f"Creating index '{PINECONE_INDEX_NAME}'...")
+def ensure_index(name: str, dim: int):
+    existing = [i["name"] for i in pc.list_indexes().get("indexes", [])]
+    if name not in existing:
+        print("Creating index:", name)
         pc.create_index(
-            name=PINECONE_INDEX_NAME,
-            dimension=dimension,
-            metric="cosine", # or "euclidean", "dotproduct"
-            spec=ServerlessSpec(cloud='aws', region='us-east-1') # Choose appropriate cloud and region
+            name=name,
+            dimension=dim,
+            metric="cosine",
+            spec=ServerlessSpec(cloud="aws", region=PINECONE_REGION)
         )
-        # wait for index to be initialized
-        while not pc.describe_index(PINECONE_INDEX_NAME).status['ready']:
+        while not pc.describe_index(name).status["ready"]:
             time.sleep(1)
-        print("✅ Index created.")
     else:
-        print(f"Index '{PINECONE_INDEX_NAME}' already exists.")
+        print("Index exists:", name)
 
-    index = pc.Index(PINECONE_INDEX_NAME)
-    print(f"Index stats: {index.describe_index_stats()}")
+dim_text = len(embedding_model.embed_query("test")) # Use embed_query for dimension
+dim_img = len(clip_model.encode([Image.new("RGB", (10,10))])[0])
 
+ensure_index(INDEX_TEXT, dim_text)
+ensure_index(INDEX_IMAGE, dim_img)
 
-    # ======================================================
-    # 📌 7. Generate Embeddings and Upload to Pinecone
-    # ======================================================
-    batch_size = 100 # Adjust batch size as needed
-    # Ensure there are chunks to process before generating embeddings
-    if chunks:
-        for i in tqdm(range(0, len(chunks), batch_size)):
-            batch = chunks[i:i + batch_size]
-            # Prepare data for upserting
-            vectors_to_upsert = []
-            for chunk in batch:
-                embedding = embedding_model.encode(chunk["text"]).tolist() # Convert to list for Pinecone
-                vectors_to_upsert.append({
-                    "id": chunk["id"],
-                    "values": embedding,
-                    "metadata": chunk["metadata"]
-                })
-            # Upsert to Pinecone
-            index.upsert(vectors=vectors_to_upsert)
+index_text = pc.Index(INDEX_TEXT)
+index_image = pc.Index(INDEX_IMAGE)
 
-        print("✅ Finished generating embeddings and uploading to Pinecone")
+print("Index stats (text):", index_text.describe_index_stats())
+print("Index stats (image):", index_image.describe_index_stats())
+
+# =========================
+# 10. Upsert embeddings
+# =========================
+BATCH = 64
+
+# Text embeddings
+for i in tqdm(range(0, len(text_chunks), BATCH), desc="Upserting text"):
+    batch = text_chunks[i:i+BATCH]
+    texts_to_enc = [c["text"] for c in batch]
+    embs = embedding_model.embed_documents(texts_to_enc) # Use embed_documents
+    vectors = []
+    for j, c in enumerate(batch):
+        vectors.append({
+            "id": c["id"],
+            "values": embs[j],
+            "metadata": c["metadata"] | {"text": c["text"]}
+        })
+    index_text.upsert(vectors=vectors)
+
+# Image embeddings
+for i in tqdm(range(0, len(image_items), BATCH), desc="Upserting images"):
+    batch = image_items[i:i+BATCH]
+    imgs = [itm["pil_image"] for itm in batch]
+    embs = clip_model.encode(imgs, show_progress_bar=False)
+    vectors = []
+    for j, itm in enumerate(batch):
+        vectors.append({
+            "id": itm["id"],
+            "values": embs[j].tolist(),
+            "metadata": itm["metadata"]
+        })
+    index_image.upsert(vectors=vectors)
+
+print("Finished upserts")
+
+# =========================
+# 11. Retrieval + answer generation
+# =========================
+def retrieve_multimodal(query: str, topk_t: int = 5, topk_i: int = 5):
+    results = []
+    # text side
+    q_emb_t = embedding_model.embed_query(query) # Use embed_query
+    res_t = index_text.query(vector=q_emb_t, top_k=topk_t, include_metadata=True)
+    for m in getattr(res_t, "matches", res_t.get("matches", [])):
+        meta = m.metadata if hasattr(m, "metadata") else m.get("metadata")
+        sc = m.score if hasattr(m, "score") else m.get("score")
+        mid = m.id if hasattr(m, "id") else m.get("id")
+        results.append({"id": mid, "score": sc, "metadata": meta, "source": "text"})
+
+    # image (cross-modal) side
+    q_emb_i = clip_model.encode([query], show_progress_bar=False)[0].tolist()
+    res_i = index_image.query(vector=q_emb_i, top_k=topk_i, include_metadata=True)
+    for m in getattr(res_i, "matches", res_i.get("matches", [])):
+        meta = m.metadata if hasattr(m, "metadata") else m.get("metadata")
+        sc = m.score if hasattr(m, "score") else m.get("score")
+        mid = m.id if hasattr(m, "id") else m.get("id")
+        results.append({"id": mid, "score": sc, "metadata": meta, "source": "image"})
+
+    # sort by score descending
+    results = [r for r in results if r["score"] is not None]
+    results.sort(key=lambda x: x["score"], reverse=True)
+    return results
+
+gem = genai.GenerativeModel(GEMINI_MODEL_NAME)
+
+def answer_from_query(query: str, topk_text: int = 5, topk_img: int = 3):
+    matches = retrieve_multimodal(query, topk_text, topk_img)
+    # build context from text matches
+    text_ctx = []
+    for m in matches:
+        if m["source"] == "text":
+            txt = m["metadata"].get("text", "")
+            pid = m["metadata"].get("paper_id", "")
+            pg = m["metadata"].get("page", "")
+            ci = m["metadata"].get("chunk_index", "")
+            text_ctx.append(f"Source: {pid}, page {pg}, chunk {ci}\n{txt}")
+    context = "\n\n".join(text_ctx) if text_ctx else "No context found."
+
+    prompt = f"""
+You are a helpful research assistant. Use only the context below to answer the question. If no answer is found, respond “I don’t know.”
+
+Context:
+{context}
+
+Question: {query}
+"""
+    resp = gem.generate_content(prompt)
+    if hasattr(resp, "text"):
+        return resp.text, matches
     else:
-        print("No chunks to generate embeddings for.")
+        return resp.candidates[0].content.parts[0].text, matches
 
-
-    # ======================================================
-    # 📌 8. Initialize Google Gemini client
-    # ======================================================
-    genai.configure(api_key=GOOGLE_API_KEY)
-    gemini_model = genai.GenerativeModel('gemini-pro-latest') # Using gemini-pro-latest
-
-
-    # ======================================================
-    # 📌 9. Retrieval function (using Pinecone)
-    # ======================================================
-    def retrieve_chunks(query, k=5):
-        # Generate embedding for the query
-        q_emb = embedding_model.encode(query).tolist()
-        # Query Pinecone index
-        results = index.query(vector=q_emb, top_k=k, include_metadata=True)
-        # Extract the text from the results
-        retrieved_texts = [match['metadata']['text'] for match in results['matches']]
-        return retrieved_texts
-
-
-    # ======================================================
-    # 📌 10. Generate answer with Gemini
-    # ======================================================
-    def generate_answer(query, k=5):
-        top_chunks_text = retrieve_chunks(query, k)
-        context = "\n\n".join(top_chunks_text)
-
-        prompt = f"""
-        You are an expert research assistant. Use only the context below to answer the question.
-
-        Context:
-        {context}
-
-        Question: {query}
-        """
-
-        response = gemini_model.generate_content(prompt)
-        return response.text
-
-    # ======================================================
-    # 📌 11. Test it!
-    # ======================================================
-    query = "tell me about the Stem Cell Health and Tissue Regeneration in Microgravity"
-    # Ensure there are chunks before attempting to generate an answer
-    if chunks:
-        answer = generate_answer(query)
-        print("\n💡 Answer from Gemini:\n")
-        print(answer)
-    else:
-        print("\nNo text extracted from PDFs to generate an answer.")
+# =========================
+# 12. Test
+# =========================
+q = "Stem cell regeneration in microgravity"
+ans, mm = answer_from_query(q, topk_text=5, topk_img=3)
+print("Answer:\n", ans)
+print("\nTop matches:")
+for m in mm[:8]:
+    print(m["source"], m["id"], m["score"], m["metadata"])
