@@ -14,15 +14,15 @@ export default function LearningPathways({ stages = [], completedIds = [], onSel
   const isUnlocked = (stage) => (stage.requires || []).every((r) => completedIds.includes(r))
 
   return (
-  <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
+  <div className="bg-neutral-900 rounded-2xl shadow-sm border border-neutral-800 p-5">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-semibold text-gray-900">Learning Pathways</h2>
-        <p className="text-xs text-gray-500">Prerequisites gate advanced topics</p>
+        <h2 className="text-lg font-semibold text-white">Learning Pathways</h2>
+        <p className="text-xs text-gray-400">Prerequisites gate advanced topics</p>
       </div>
 
       <div className="relative">
         {/* connector line - send behind cards */}
-        <div className="absolute left-6 right-6 top-8 h-0.5 bg-gray-200 -z-10" />
+        <div className="absolute left-6 right-6 top-8 h-0.5 bg-neutral-800 -z-10" />
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 relative z-0">
           {stages.map((s, idx) => {
@@ -33,7 +33,7 @@ export default function LearningPathways({ stages = [], completedIds = [], onSel
                 key={s.id}
                 onClick={() => unlocked && onSelect(s.id)}
                 className={`text-left rounded-xl border p-4 transition focus:outline-none focus:ring-2 focus:ring-indigo-300 ${
-                  unlocked ? 'bg-white hover:shadow-md border-gray-200' : 'bg-gray-50 border-dashed border-gray-200 opacity-70 cursor-not-allowed'
+                  unlocked ? 'bg-neutral-900 hover:shadow-md border-neutral-800' : 'bg-neutral-900/60 border-dashed border-neutral-800 opacity-70 cursor-not-allowed'
                 }`}
               >
                 <div className="flex items-center gap-3">
@@ -43,13 +43,13 @@ export default function LearningPathways({ stages = [], completedIds = [], onSel
                     {done ? '✓' : idx + 1}
                   </div>
                   <div>
-                    <p className="font-semibold text-gray-900">{s.title}</p>
-                    <p className="text-xs text-gray-500">{s.blurb}</p>
+                    <p className="font-semibold text-white">{s.title}</p>
+                    <p className="text-xs text-gray-400">{s.blurb}</p>
                   </div>
                 </div>
 
                 {/* progress bar */}
-                <div className="mt-3 h-2 bg-gray-100 rounded-full overflow-hidden">
+                <div className="mt-3 h-2 bg-neutral-800 rounded-full overflow-hidden">
                   <div className={`h-full rounded-full ${done ? 'bg-emerald-500' : 'bg-indigo-500'}`} style={{ width: `${Math.min(100, Math.round((s.progress || 0) * 100))}%` }} />
                 </div>
 

@@ -1,10 +1,15 @@
-# 🌟 NASA Space Biology Knowledge Engine
+# Biolore - A Space Bio Research Knowledge Engine
 ### *Transforming 30 Years of Space Research into an Interactive Universe*
 
 [![NASA Space Apps Challenge 2025](https://img.shields.io/badge/NASA%20Space%20Apps-2025-blue?style=for-the-badge&logo=nasa)](https://spaceappschallenge.org)
 [![Next.js](https://img.shields.io/badge/Next.js-15-black?style=for-the-badge&logo=next.js)](https://nextjs.org)
 [![Three.js](https://img.shields.io/badge/Three.js-WebGL-orange?style=for-the-badge&logo=three.js)](https://threejs.org)
 [![AI Powered](https://img.shields.io/badge/AI-Powered-green?style=for-the-badge&logo=openai)](https://openai.com)
+
+<div align="center">
+  <img src="https://i.ibb.co/5hDDBVSM/Generated-Image-September-28-2025-12-41-PM.png" alt="NASA Space Biology Knowledge Engine - 3D Interactive Universe" width="800" style="border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);" />
+  <p><em>Explore 30 years of NASA space biology research in an immersive 3D universe</em></p>
+</div>
 
 ## 🚀 **Project Overview**
 
