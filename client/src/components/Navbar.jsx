@@ -4,8 +4,8 @@ import { usePathname } from "next/navigation";
 
 export default function Navbar() {
     const pathname = usePathname();
-    // Hide navbar on home (galaxy) and landing pages
-    const hide = pathname === "/" || pathname === "/landing" || pathname?.startsWith("/landing/");
+    // Hide navbar on home (galaxy), landing pages, and visual novel games
+    const hide = pathname === "/" || pathname === "/landing" || pathname?.startsWith("/landing/") || pathname?.startsWith("/games/tardigrade-visual-novel");
     if (hide) return null;
 
     return (

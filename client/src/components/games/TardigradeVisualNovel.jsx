@@ -8,43 +8,44 @@ const characters = {
   marina: {
     name: "Dr. Marina Petrov",
     role: "Microbiologist",
-    sprite: "/api/placeholder/300/400", // We'll replace with real character images
+    sprite: "/tardigrade_images/characters/marina_neutral.jpg",
     expressions: {
-      neutral: "/api/placeholder/300/400",
-      excited: "/api/placeholder/300/400", 
-      surprised: "/api/placeholder/300/400",
-      concerned: "/api/placeholder/300/400"
+      neutral: "/tardigrade_images/characters/marina_neutral.jpg",
+      excited: "/tardigrade_images/characters/marina_excited.jpg", 
+      surprised: "/tardigrade_images/characters/marina_amazed.jpg",
+      concerned: "/tardigrade_images/characters/marina_concerned.jpg",
+      amazed: "/tardigrade_images/characters/marina_amazed.jpg"
     }
   },
   alex: {
     name: "Dr. Alex Chen",
     role: "NASA Astrobiologist", 
-    sprite: "/api/placeholder/300/400",
+    sprite: "/tardigrade_images/characters/alex_neutral.jpg",
     expressions: {
-      neutral: "/api/placeholder/300/400",
-      excited: "/api/placeholder/300/400",
-      thinking: "/api/placeholder/300/400"
+      neutral: "/tardigrade_images/characters/alex_neutral.jpg",
+      excited: "/tardigrade_images/characters/alex_excited.jpg",
+      thinking: "/tardigrade_images/characters/alex_thinking.jpg"
     }
   },
   sarah: {
     name: "Dr. Sarah Rodriguez",
     role: "Space Mission Specialist",
-    sprite: "/api/placeholder/300/400", 
+    sprite: "/tardigrade_images/characters/sarah_confident.jpg", 
     expressions: {
-      neutral: "/api/placeholder/300/400",
-      confident: "/api/placeholder/300/400",
-      amazed: "/api/placeholder/300/400"
+      neutral: "/tardigrade_images/characters/sarah_confident.jpg",
+      confident: "/tardigrade_images/characters/sarah_confident.jpg",
+      amazed: "/tardigrade_images/characters/sarah_amazed.jpg"
     }
   }
 };
 
 // Background scenes
 const backgrounds = {
-  laboratory: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1200&h=800&fit=crop",
-  university: "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=1200&h=800&fit=crop", 
-  nasa_center: "https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=1200&h=800&fit=crop",
-  space_station: "https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?w=1200&h=800&fit=crop",
-  mars_surface: "https://images.unsplash.com/photo-1607799279861-4dd421887fb3?w=1200&h=800&fit=crop"
+  laboratory: "/tardigrade_images/backgrounds/university_lab.jpg",
+  university: "/tardigrade_images/backgrounds/university_lab.jpg", 
+  nasa_center: "/tardigrade_images/backgrounds/nasa_facility.jpg",
+  space_station: "/tardigrade_images/backgrounds/space_station.jpg",
+  mars_surface: "/tardigrade_images/backgrounds/mars_surface.jpg"
 };
 
 // Story script
@@ -233,11 +234,36 @@ const TardigradeVisualNovel = () => {
     typeWriter();
   }, [currentScene, autoMode]);
 
+  const skipText = () => {
+    if (isTyping) {
+      setDisplayText(scene.text);
+      setIsTyping(false);
+      if (scene.choices) {
+        setShowChoices(true);
+      }
+    } else if (!scene.choices) {
+      // Advance to next scene
+      if (scene.next !== undefined) {
+        advanceScene(scene.next);
+      } else if (currentScene < storyScript.length - 1) {
+        setCurrentScene(currentScene + 1);
+      } else {
+        // Story finished
+        console.log('Story completed!');
+      }
+    }
+  };
+
   const advanceScene = (nextSceneId) => {
     setHistory(prev => [...prev, currentScene]);
-    if (typeof nextSceneId === 'number' && nextSceneId < storyScript.length) {
-      setCurrentScene(nextSceneId);
+    
+    if (typeof nextSceneId === 'number') {
+      // If it's a direct scene index
+      if (nextSceneId < storyScript.length) {
+        setCurrentScene(nextSceneId);
+      }
     } else {
+      // If it's a scene ID, find the corresponding index
       const nextIndex = storyScript.findIndex(s => s.id === nextSceneId);
       if (nextIndex !== -1) {
         setCurrentScene(nextIndex);
@@ -248,22 +274,6 @@ const TardigradeVisualNovel = () => {
   const handleChoice = (choice) => {
     setShowChoices(false);
     advanceScene(choice.nextScene);
-  };
-
-  const skipText = () => {
-    if (isTyping) {
-      setDisplayText(scene.text);
-      setIsTyping(false);
-      if (scene.choices) {
-        setShowChoices(true);
-      }
-    } else if (!scene.choices) {
-      if (scene.next) {
-        advanceScene(scene.next);
-      } else if (currentScene < storyScript.length - 1) {
-        advanceScene(currentScene + 1);
-      }
-    }
   };
 
   const goBack = () => {
@@ -289,7 +299,7 @@ const TardigradeVisualNovel = () => {
       </div>
 
       {/* Characters */}
-      <div className="absolute inset-0 flex items-end justify-center pb-80">
+      <div className="absolute inset-0 flex items-end justify-center pb-60">
         <AnimatePresence>
           {scene.characters.map((charKey, index) => {
             const char = characters[charKey];
@@ -303,21 +313,41 @@ const TardigradeVisualNovel = () => {
                   opacity: isActive ? 1 : 0.7,
                   y: 0, 
                   scale: isActive ? 1 : 0.9,
-                  x: index === 0 ? -100 : index === 1 ? 0 : 100
+                  x: scene.characters.length === 1 ? 0 : 
+                     scene.characters.length === 2 ? (index === 0 ? -200 : 200) :
+                     index === 0 ? -250 : index === 1 ? 0 : 250
                 }}
                 exit={{ opacity: 0, y: 100, scale: 0.8 }}
                 transition={{ duration: 0.5, ease: "easeOut" }}
                 className="absolute"
               >
-                {/* Character Sprite Placeholder */}
-                <div className="w-64 h-96 bg-gradient-to-b from-blue-500/20 to-purple-500/20 rounded-lg border border-white/20 flex items-center justify-center backdrop-blur-sm">
-                  <div className="text-center text-white">
-                    <div className="w-24 h-24 bg-white/20 rounded-full mx-auto mb-4 flex items-center justify-center text-4xl">
-                      {charKey === 'marina' ? '👩‍🔬' : charKey === 'alex' ? '👨‍🚀' : '👩‍🚀'}
-                    </div>
-                    <h3 className="font-bold text-lg">{char.name}</h3>
+                {/* Real Character Image */}
+                <div className="w-72 h-96 relative">
+                  <img 
+                    src={char.expressions[scene.expression] || char.sprite}
+                    alt={char.name}
+                    className="w-full h-full object-cover rounded-xl shadow-2xl border-4 border-white/10"
+                    style={{
+                      filter: isActive ? 'brightness(1.1) saturate(1.2) contrast(1.1)' : 'brightness(0.6) saturate(0.7) contrast(0.9)',
+                      transition: 'all 0.5s ease',
+                      objectPosition: 'center top'
+                    }}
+                    onError={(e) => {
+                      // Fallback if image fails to load
+                      e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(char.name)}&size=400&background=random&color=ffffff&format=png&rounded=true`;
+                    }}
+                  />
+                  
+                  {/* Character name overlay */}
+                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4 rounded-b-lg">
+                    <h3 className="font-bold text-lg text-white">{char.name}</h3>
                     <p className="text-sm text-gray-300">{char.role}</p>
                   </div>
+                  
+                  {/* Active speaker glow effect */}
+                  {isActive && (
+                    <div className="absolute inset-0 rounded-lg shadow-lg ring-4 ring-blue-400/50 ring-opacity-75" />
+                  )}
                 </div>
               </motion.div>
             );

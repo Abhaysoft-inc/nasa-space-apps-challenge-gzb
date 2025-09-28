@@ -1,0 +1,36 @@
+{
+  "characters": {
+    "marina": {
+      "neutral": "/tardigrade_images/characters/marina_neutral.jpg",
+      "excited": "/tardigrade_images/characters/marina_excited.jpg",
+      "amazed": "/tardigrade_images/characters/marina_amazed.jpg",
+      "concerned": "/tardigrade_images/characters/marina_concerned.jpg"
+    },
+    "alex": {
+      "neutral": "/tardigrade_images/characters/alex_neutral.jpg",
+      "excited": "/tardigrade_images/characters/alex_excited.jpg",
+      "thinking": "/tardigrade_images/characters/alex_thinking.jpg"
+    },
+    "sarah": {
+      "neutral": "/tardigrade_images/characters/sarah_neutral.jpg",
+      "confident": "/tardigrade_images/characters/sarah_confident.jpg",
+      "amazed": "/tardigrade_images/characters/sarah_amazed.jpg"
+    }
+  },
+  "backgrounds": {
+    "university_lab": "/tardigrade_images/backgrounds/university_lab.jpg",
+    "microscope_lab": "/tardigrade_images/backgrounds/microscope_lab.jpg",
+    "nasa_facility": "/tardigrade_images/backgrounds/nasa_facility.jpg",
+    "mission_control": "/tardigrade_images/backgrounds/mission_control.jpg",
+    "space_station": "/tardigrade_images/backgrounds/space_station.jpg",
+    "space_view": "/tardigrade_images/backgrounds/space_view.jpg",
+    "mars_surface": "/tardigrade_images/backgrounds/mars_surface.jpg",
+    "mars_colony": "/tardigrade_images/backgrounds/mars_colony.jpg"
+  },
+  "effects": {
+    "tardigrade_microscope": "/tardigrade_images/effects/tardigrade_microscope.jpg",
+    "space_experiment": "/tardigrade_images/effects/space_experiment.jpg",
+    "dna_strand": "/tardigrade_images/effects/dna_strand.jpg",
+    "space_tardigrade": "/tardigrade_images/effects/space_tardigrade.jpg"
+  }
+}
