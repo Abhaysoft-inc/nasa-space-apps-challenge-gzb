@@ -1,8 +1,8 @@
 "use client"
-import React from 'react'
+import React, { Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 
-export default function GapFinderPage() {
+function GapFinderContent() {
   const params = useSearchParams()
   const title = params.get('title')
   const doi = params.get('doi')
@@ -114,5 +114,18 @@ export default function GapFinderPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function GapFinderPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="text-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+        <p className="text-gray-600">Loading Gap Finder...</p>
+      </div>
+    </div>}>
+      <GapFinderContent />
+    </Suspense>
   )
 }
