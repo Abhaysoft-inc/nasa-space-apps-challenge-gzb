@@ -175,24 +175,24 @@ export default function PapersIndexPage() {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-black text-white">
             <div className="max-w-7xl mx-auto px-4 py-10">
                 <div className="mb-8">
-                    <h1 className="text-2xl sm:text-3xl font-semibold text-gray-900">Research Papers</h1>
-                    <p className="text-gray-600 mt-1">Browse papers as cards. Click any card to open the paper page.</p>
+                    <h1 className="text-2xl sm:text-3xl font-semibold text-white">Research Papers</h1>
+                    <p className="text-gray-400 mt-1">Browse papers as cards. Click any card to open the paper page.</p>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
                     {/* Sidebar */}
                     <aside className="lg:col-span-3">
-                        <div className="sticky top-6 bg-white rounded-xl border border-gray-200 shadow-sm p-4 md:p-5">
+                        <div className="sticky top-6 bg-neutral-900 rounded-xl border border-neutral-800 p-4 md:p-5">
                             <div className="mb-5 flex items-center justify-between">
-                                <h2 className="text-base font-semibold text-gray-900">Filters</h2>
+                                <h2 className="text-base font-semibold text-white">Filters</h2>
                                 {(activeDomains.length > 0 || sortBy !== 'year-desc' || (allYears.length > 0 && (yearFrom !== allYears[allYears.length - 1]))) && (
                                     <button
                                         type="button"
                                         onClick={clearFilters}
-                                        className="text-xs text-blue-600 hover:underline"
+                                        className="text-xs text-sky-400 hover:underline"
                                     >
                                         Clear filters
                                     </button>
@@ -201,8 +201,8 @@ export default function PapersIndexPage() {
 
                             {/* Year filter (single slider) */}
                             <div className="mb-6">
-                                <h3 className="text-sm font-medium text-gray-900 mb-2">Year</h3>
-                                <div className="mb-2 text-xs text-gray-600 flex items-center justify-between">
+                                <h3 className="text-sm font-medium text-gray-100 mb-2">Year</h3>
+                                <div className="mb-2 text-xs text-gray-400 flex items-center justify-between">
                                     <span>{allYears[allYears.length - 1] ?? ''}</span>
                                     <span className="font-medium">From {yearFrom} → {allYears[0] ?? ''}</span>
                                     <span>{allYears[0] ?? ''}</span>
@@ -220,11 +220,11 @@ export default function PapersIndexPage() {
 
                             {/* Sort */}
                             <div className="mb-6">
-                                <h3 className="text-sm font-medium text-gray-900 mb-2">Sort by</h3>
+                                <h3 className="text-sm font-medium text-gray-100 mb-2">Sort by</h3>
                                 <select
                                     value={sortBy}
                                     onChange={(e) => setSortBy(e.target.value)}
-                                    className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    className="w-full border border-neutral-800 bg-neutral-900 text-gray-100 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500/40 focus:border-neutral-700"
                                 >
                                     <option value="year-desc">Newest (Year ↓)</option>
                                     <option value="year-asc">Oldest (Year ↑)</option>
@@ -236,13 +236,13 @@ export default function PapersIndexPage() {
 
                             {/* Domain filter (checkbox list) */}
                             <div className="mb-6">
-                                <h3 className="text-sm font-medium text-gray-900 mb-2">Domain</h3>
-                                <div className="max-h-60 overflow-auto pr-1 space-y-2">
+                                <h3 className="text-sm font-medium text-gray-100 mb-2">Domain</h3>
+                                <div className="max-h-60 overflow-auto pr-1 space-y-2 scrollbar-thin-dark">
                                     {allDomains.map(domain => (
-                                        <label key={domain} className="flex items-center gap-2 text-sm text-gray-700">
+                                        <label key={domain} className="flex items-center gap-2 text-sm text-gray-300">
                                             <input
                                                 type="checkbox"
-                                                className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                                                className="h-4 w-4 rounded border-neutral-700 text-sky-500 focus:ring-sky-500/40 bg-neutral-900"
                                                 checked={activeDomains.includes(domain)}
                                                 onChange={() => toggleDomain(domain)}
                                             />
@@ -271,32 +271,32 @@ export default function PapersIndexPage() {
                                     value={query}
                                     onChange={(e) => setQuery(e.target.value)}
                                     placeholder="Search by title..."
-                                    className="w-full rounded-lg border border-gray-300 px-4 py-2.5 pl-10 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    className="w-full rounded-lg border border-neutral-800 bg-neutral-900 text-gray-100 placeholder-gray-500 px-4 py-2.5 pl-10 text-sm focus:ring-2 focus:ring-sky-500/40 focus:border-neutral-700"
                                 />
-                                <svg className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <svg className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-500" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1010.5 18.5a7.5 7.5 0 006.15-3.85z" />
                                 </svg>
                             </div>
                         </div>
 
-                        <div className="mb-4 text-sm text-gray-600">{filtered.length} result{filtered.length !== 1 ? 's' : ''}</div>
+                        <div className="mb-4 text-sm text-gray-400">{filtered.length} result{filtered.length !== 1 ? 's' : ''}</div>
                         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
                             {filtered.map(paper => (
                                 <Link key={paper.id} href={`/papers/${paper.id}`} className="group">
-                                    <div className="h-full bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow">
+                                    <div className="h-full bg-neutral-900 border border-neutral-800 rounded-xl p-4 hover:border-neutral-700 transition-colors">
                                         {/* Image header */}
                                         <div className="mb-3">
                                             <PaperCardImage paper={paper} />
                                         </div>
 
                                         {/* Title */}
-                                        <h3 className="text-base font-semibold text-gray-900 group-hover:text-blue-700">{paper.title}</h3>
+                                        <h3 className="text-base font-semibold text-white group-hover:text-sky-400">{paper.title}</h3>
 
                                         {/* Tags */}
                                         {paper.tags?.length > 0 && (
                                             <div className="mt-3 flex flex-wrap gap-1.5">
                                                 {paper.tags.slice(0, 3).map(t => (
-                                                    <span key={t} className="text-[10px] px-2 py-0.5 rounded-full bg-gray-100 text-gray-600 border border-gray-200">{t}</span>
+                                                    <span key={t} className="text-[10px] px-2 py-0.5 rounded-full bg-neutral-800 text-neutral-300 border border-neutral-700">{t}</span>
                                                 ))}
                                             </div>
                                         )}
