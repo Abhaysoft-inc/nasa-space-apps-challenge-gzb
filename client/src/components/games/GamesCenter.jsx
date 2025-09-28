@@ -5,7 +5,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
 import Link from "next/link"
 
-export default function GamesCenter(){
+export default function GamesCenter() {
   const router = useRouter()
   const pathname = usePathname()
   const search = useSearchParams()
@@ -13,7 +13,7 @@ export default function GamesCenter(){
   const [tab, setTab] = useState(initialTab)
   const [expandedCard, setExpandedCard] = useState(null)
 
-  useEffect(()=>{ setTab(initialTab) }, [initialTab])
+  useEffect(() => { setTab(initialTab) }, [initialTab])
 
   const setRouteTab = (t) => {
     const sp = new URLSearchParams(Array.from(search.entries()))
@@ -83,10 +83,10 @@ export default function GamesCenter(){
     <div className="min-h-screen relative overflow-hidden">
       {/* Video Background */}
       <div className="absolute inset-0 z-0">
-        <video 
-          autoPlay 
-          loop 
-          muted 
+        <video
+          autoPlay
+          loop
+          muted
           playsInline
           className="w-full h-full object-cover"
         >
@@ -98,7 +98,7 @@ export default function GamesCenter(){
       {/* NASA-Style Header */}
       <div className="relative overflow-hidden z-10">
         <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/60" />
-        
+
         <div className="relative max-w-7xl mx-auto px-4 py-20 text-center text-white z-10">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -111,7 +111,7 @@ export default function GamesCenter(){
             <p className="text-xl md:text-2xl text-blue-100 mb-8 max-w-3xl mx-auto leading-relaxed">
               Immerse yourself in cutting-edge space biology missions. Experience real NASA research through interactive storytelling and scientific discovery.
             </p>
-            
+
             {/* NASA Mission Categories */}
             <div className="flex flex-wrap justify-center gap-4 mb-8">
               {['Biology', 'Space Research', 'Exploration', 'Research', 'Training'].map((category) => (
@@ -129,7 +129,7 @@ export default function GamesCenter(){
 
       {/* Mission Cards Grid */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 py-12">
-        <motion.div 
+        <motion.div
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
           layout
         >
@@ -170,41 +170,40 @@ function MissionCard({ mission, index, isExpanded, onExpand }) {
     <motion.div
       layout
       initial={{ opacity: 0, y: 30 }}
-      animate={{ 
-        opacity: 1, 
+      animate={{
+        opacity: 1,
         y: 0,
         scale: isExpanded ? 1.02 : 1,
         zIndex: isExpanded ? 10 : 1
       }}
-      transition={{ 
-        duration: 0.5, 
+      transition={{
+        duration: 0.5,
         delay: index * 0.1,
         type: "spring",
         stiffness: 300,
         damping: 30
       }}
-      className={`relative bg-black/20 backdrop-blur-md rounded-2xl overflow-hidden border border-white/10 hover:border-blue-400/50 transition-all duration-300 cursor-pointer hover:bg-black/30 ${
-        isExpanded ? 'col-span-full' : ''
-      }`}
+      className={`relative bg-black/20 backdrop-blur-md rounded-2xl overflow-hidden border border-white/10 hover:border-blue-400/50 transition-all duration-300 cursor-pointer hover:bg-black/30 ${isExpanded ? 'col-span-full' : ''
+        }`}
       onClick={onExpand}
     >
       <div className={`flex ${isExpanded ? 'flex-row' : 'flex-col'}`}>
         {/* Mission Image */}
         <div className={`relative ${isExpanded ? 'w-1/2' : 'w-full h-48'} overflow-hidden`}>
-          <img 
-            src={mission.image} 
+          <img
+            src={mission.image}
             alt={mission.title}
             className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
-          
+
           {/* Status Badge */}
           <div className="absolute top-4 left-4">
             <span className={`px-3 py-1 rounded-full text-xs font-medium text-white backdrop-blur-sm ${statusColors[mission.status]}`}>
               {mission.status}
             </span>
           </div>
-          
+
           {/* Category Badge */}
           <div className="absolute top-4 right-4">
             <span className="px-3 py-1 bg-blue-600/80 backdrop-blur-sm rounded-full text-xs font-medium text-white">
@@ -223,11 +222,11 @@ function MissionCard({ mission, index, isExpanded, onExpand }) {
               {mission.difficulty}
             </span>
           </div>
-          
+
           <p className="text-cyan-200 text-sm mb-4 font-medium">
             {mission.subtitle}
           </p>
-          
+
           <p className="text-blue-100 text-sm mb-4 leading-relaxed">
             {mission.description}
           </p>
@@ -285,7 +284,7 @@ function MissionCard({ mission, index, isExpanded, onExpand }) {
                     </motion.button>
                   </Link>
                 )}
-                
+
                 {mission.status === 'Coming Soon' && (
                   <button
                     disabled
