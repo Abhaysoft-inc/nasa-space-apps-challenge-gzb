@@ -18,10 +18,13 @@ export default function NavigationPanel({
     erasExplored: new Set()
   };
   const categories = [
-    { id: 'all', name: 'All Research', color: 'text-white', count: 608 },
-    { id: 'Plant Biology', name: 'Plant Biology', color: 'text-emerald-400', count: 76 },
-    { id: 'Microbiology', name: 'Microbiology', color: 'text-purple-400', count: 92 },
-    { id: 'Cell Biology', name: 'Cell Biology', color: 'text-blue-400', count: 83 }
+    { id: 'all', name: 'All Research', color: '#FFFFFF', bgColor: '#fda600', count: 45 },
+    { id: 'Human Biology', name: 'Human Biology', color: '#FF6B6B', bgColor: '#FF6B6B', count: 12 },
+    { id: 'Plant Biology', name: 'Plant Biology', color: '#4ECDC4', bgColor: '#4ECDC4', count: 10 },
+    { id: 'Microbiology', name: 'Microbiology', color: '#45B7D1', bgColor: '#45B7D1', count: 8 },
+    { id: 'Cell Biology', name: 'Cell Biology', color: '#96CEB4', bgColor: '#96CEB4', count: 7 },
+    { id: 'Radiation Effects', name: 'Radiation Effects', color: '#FECA57', bgColor: '#FECA57', count: 5 },
+    { id: 'Gravity Studies', name: 'Gravity Studies', color: '#FF9FF3', bgColor: '#FF9FF3', count: 3 }
   ];
 
   return (
@@ -51,6 +54,7 @@ export default function NavigationPanel({
               onChange={(e) => onSearchChange(e.target.value)}
               className="w-full pl-10 pr-4 py-3 rounded-lg focus:outline-none"
               style={{ backgroundColor:'#00000055', border:'1px solid #f0e7e733', color:'#f0e7e7' }}
+              suppressHydrationWarning={true}
             />
           </div>
 
@@ -85,15 +89,15 @@ export default function NavigationPanel({
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="w-3 h-3 rounded-full" style={{backgroundColor:'#fda600'}} />
+                    <div className="w-3 h-3 rounded-full" style={{backgroundColor: category.bgColor}} />
                     <span className={`font-medium ${
                       selectedCategory === category.id ? 'text-white' : ''
-                    }`} style={{color:'#f0e7e7'}}>
+                    }`} style={{color: selectedCategory === category.id ? '#FFFFFF' : category.color}}>
                       {category.name}
                     </span>
                   </div>
                   <div className="flex items-center gap-1">
-                    <Zap className="w-3 h-3" style={{color:'#fda600'}} />
+                    <Zap className="w-3 h-3" style={{color: category.bgColor}} />
                     <span className="text-sm" style={{color:'#f0e7e7aa'}}>{category.count}</span>
                   </div>
                 </div>
@@ -113,6 +117,7 @@ export default function NavigationPanel({
               onClick={onResetView}
               className="w-full p-3 rounded-lg font-medium transition-all"
               style={{ backgroundColor:'rgba(4,4,4,0.1)', border:'1px solid #f0e7e744', color:'#f0e7e7' }}
+              suppressHydrationWarning={true}
             >
               <div className="flex items-center gap-2 justify-center">
                 <RotateCcw className="w-4 h-4" />
@@ -125,6 +130,7 @@ export default function NavigationPanel({
               whileTap={{ scale: 0.98 }}
               className="w-full p-3 rounded-lg font-medium transition-all"
               style={{ backgroundColor:'#00000055', border:'1px solid #f0e7e733', color:'#f0e7e7' }}
+              suppressHydrationWarning={true}
             >
               <div className="flex items-center gap-2 justify-center">
                 <SortAsc className="w-4 h-4" />

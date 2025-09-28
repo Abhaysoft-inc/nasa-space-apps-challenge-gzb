@@ -27,6 +27,13 @@ export default function SpaceExplorationLanding() {
   });
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
+  // Ensure DOM is ready to prevent addEventListener errors
+  useEffect(() => {
+    if (typeof window !== 'undefined' && mainCanvasContainerRef.current) {
+      // Canvas container is ready
+    }
+  }, []);
+
   const handlePaperDiscovery = useCallback((paper) => {
     setSelectedPaper(paper);
     setExplorerStats(prev => ({
@@ -67,7 +74,8 @@ export default function SpaceExplorationLanding() {
       />
       
       {/* Main 3D Galaxy */}
-      <div ref={mainCanvasContainerRef} className="absolute inset-0 z-10">
+      {typeof window !== 'undefined' && (
+        <div ref={mainCanvasContainerRef} className="absolute inset-0 z-10">
         <Canvas
           eventSource={mainCanvasContainerRef}
           eventPrefix="client"
@@ -135,7 +143,8 @@ export default function SpaceExplorationLanding() {
         </div>
 
         {/* Mission briefing removed per request */}
-      </div>
+        </div>
+      )}
 
       {/* Navigation Panel - Fixed Sidebar */}
       <AnimatePresence>
